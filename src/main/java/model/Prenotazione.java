@@ -1,37 +1,22 @@
-package org.example;
+package model;
 
 import java.util.Random;
 
 public class Prenotazione {
 
-    protected int numBiglietto;
-    protected String posto;
-    protected StatoPrenotazione stato;
-    protected ClasseVolo classeVolo;
-    protected Passeggero passeggero;
-    protected Volo volo;
-    protected Bagaglio bagaglio;
+    private int numBiglietto;
+    private String posto;
+    private StatoPrenotazione stato;
+    private ClasseVolo classeVolo;
+    private Passeggero passeggero;
+    private Volo volo;
+    private Bagaglio bagaglio;
 
-    //COSTRUTTORE MANUALE
-    public Prenotazione(int numBiglietto, String posto, StatoPrenotazione stato, ClasseVolo classeVolo) {
-
-        this.numBiglietto = numBiglietto;
-        this.posto = posto;
-        this.stato = stato;
-        this.classeVolo = classeVolo;
-    }
-
-    //COSTRUTTORE AUTOMATICO
+    //COSTRUTTORE
     public Prenotazione(String posto, ClasseVolo classe){
 
-        Random r = new Random();
-
-        this.numBiglietto = r.nextInt(100)+1;
-
         this.stato = StatoPrenotazione.InAttesa;
-
         this.posto = posto;
-
         this.classeVolo = classe;
     }
 
@@ -66,5 +51,37 @@ public class Prenotazione {
 
     public void setClasseVolo(ClasseVolo classeVolo) {
         this.classeVolo = classeVolo;
+    }
+
+    public StatoPrenotazione getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoPrenotazione stato) {
+        this.stato = stato;
+    }
+
+    public Passeggero getPasseggero() {
+        return passeggero;
+    }
+
+    public void setPasseggero(Passeggero passeggero) {
+        this.passeggero = passeggero;
+    }
+
+    public Volo getVolo() {
+        return volo;
+    }
+
+    public void setVolo(Volo volo) {
+        this.volo = volo;
+    }
+
+    public Bagaglio getBagaglio() {
+        return bagaglio;
+    }
+
+    public void setBagaglio(Bagaglio bagaglio) {
+        this.bagaglio = bagaglio;
     }
 }

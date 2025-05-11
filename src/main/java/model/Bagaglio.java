@@ -1,26 +1,16 @@
-package org.example;
+package model;
 
 import java.util.Random;
 
 public class Bagaglio {
 
-    protected int codice;
-    protected StatoBagaglio statoBagaglio;
+    private int codice;
+    private StatoBagaglio statoBagaglio;
 
     public Bagaglio(int codice, StatoBagaglio statoBagaglio) {
 
         this.codice = codice;
         this.statoBagaglio = statoBagaglio;
-    }
-
-    public Bagaglio(){
-
-        Random r = new Random();
-
-        this.codice = r.nextInt(100)+1;
-
-        this.statoBagaglio = StatoBagaglio.Caricato;
-
     }
 
     public void setCodice(int codice) {

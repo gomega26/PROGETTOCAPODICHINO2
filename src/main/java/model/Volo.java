@@ -1,21 +1,27 @@
-package org.example;
+package model;
 
 import java.util.ArrayList;
 
 public class Volo {
 
-    protected int prezzo;
+
     protected String codice;
     protected String origine;
     protected String destinazione;
+    protected String durata;
+    protected String compagniaAerea;
+
     protected String orarioPartenza;
     protected String orarioArrivo;
+
     protected String dataPartenza;
     protected String dataArrivo;
-    protected String durata;
+
+    protected int prezzo;
     protected int ritardo;
-    protected String compagniaAerea;
+
     protected StatoVolo stato;
+
     protected ArrayList<Prenotazione> prenotazioni;
 
     public Volo(int prezzo, String compagniaAerea, String codice, String orarioPartenza, String orarioArrivo, String dataPartenza, String dataArrivo, String durata, int ritardo, StatoVolo statoDelVolo) {
@@ -135,6 +141,14 @@ public class Volo {
 
     public void setStato(StatoVolo stato) {
         this.stato = stato;
+    }
+
+    public ArrayList<Prenotazione> getPrenotazioni() {
+        return prenotazioni;
+    }
+
+    public void setPrenotazioni(ArrayList<Prenotazione> prenotazioni) {
+        this.prenotazioni = prenotazioni;
     }
 }
 

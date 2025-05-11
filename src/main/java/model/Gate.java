@@ -1,9 +1,9 @@
-package org.example;
+package model;
 
 public class Gate {
 
-    protected int num;
-    protected int terminal;
+    private int num;
+    private int terminal;
 
     public Gate(int num, int terminal) {
 

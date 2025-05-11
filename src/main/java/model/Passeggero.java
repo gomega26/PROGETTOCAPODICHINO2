@@ -1,21 +1,18 @@
-package org.example;
+package model;
 
 import java.util.ArrayList;
 
 public class Passeggero {
 
-    //DATI PERSONALI
-    protected String nome;
-    protected String cognome;
-    protected String numTelefono;
-    protected String numDocumento;
-    protected char sesso;
-    protected String dataNascita;
+    private String nome;
+    private String cognome;
+    private String numTelefono;
+    private String numDocumento;
+    private char sesso;
+    private String dataNascita;
 
-    //COSTRUTTORE SENZA DATI
-    public Passeggero() {}
 
-    //COSTRUTTORE CON DATI
+    //COSTRUTTORE
     public Passeggero(String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita) {
 
         this.nome = nome;
