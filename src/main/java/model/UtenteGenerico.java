@@ -1,5 +1,7 @@
 package model;
 
+import interfaces.Volo;
+
 import java.util.ArrayList;
 import java.util.Random;
 

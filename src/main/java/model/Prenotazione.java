@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Random;
+import interfaces.Volo;
 
 public class Prenotazione {
 

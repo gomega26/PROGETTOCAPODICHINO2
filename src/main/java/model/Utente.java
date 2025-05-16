@@ -1,5 +1,7 @@
 package model;
 
+import interfaces.Volo;
+
 import java.util.ArrayList;
 
 public class Utente {
@@ -19,10 +21,13 @@ public class Utente {
         }
 
         //LOG-IN
-        public void login(String login, String password) {
+        public boolean logIn(String login, String password) {
 
                 if (this.login.equals(login) || this.email.equals(login) && this.password.equals(password))
-                        this.autenticato = true;
+                      return true;
+
+                else
+                        return false;
         }
 
         //VISUALIZZA TUTTI I VOLI ?? (Da vedere con la GUI)
