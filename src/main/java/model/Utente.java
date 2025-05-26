@@ -1,7 +1,5 @@
 package model;
 
-import interfaces.Volo;
-
 import java.util.ArrayList;
 
 public class Utente {
@@ -36,12 +34,14 @@ public class Utente {
         }
 
         //RICERCA VOLO
-        public ArrayList<Volo> ricercaVolo(ArrayList<Volo> voli, String compagniaAerea, String codice, String dataPartenza, String destinazione){
+        public ArrayList<Volo> ricercaVolo(ArrayList<Volo> voli, String tipo, String compagniaAerea, String codice, String dataPartenza, String destinazione){
 
                 ArrayList<Volo> voliTrovati = new ArrayList<Volo>();
 
                 for(Volo v : voli){
 
+                        if(!tipo.isEmpty() && !v.getClass().getSimpleName().equals(tipo))
+                                continue;
                         if(!compagniaAerea.isEmpty() && !v.getCompagniaAerea().equals(compagniaAerea))
                                 continue;
                         if(!codice.isEmpty() && !v.getCodice().equals(codice))

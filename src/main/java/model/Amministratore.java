@@ -1,7 +1,5 @@
 package model;
 
-import interfaces.Volo;
-
 import java.util.ArrayList;
 
 public class Amministratore extends Utente {
@@ -56,7 +54,7 @@ public class Amministratore extends Utente {
 
             for (Volo v : voliGestiti) {
 
-                for (Prenotazione p : v.prenotazioni) {
+                for (Prenotazione p : v.getPrenotazioni()) {
 
                     if (!nome.isEmpty() && !p.getPasseggero().getNome().equals(nome))
                         continue;
@@ -91,7 +89,7 @@ public class Amministratore extends Utente {
     }
 
     //MODIFICA UN VOLO
-    public void aggiornaVolo(Volo volo, String orarioPartenza, String orarioArrivo, String dataPartenza, String dataArrivo, String durata, int ritardo, StatoVolo statoDelVolo) throws NonAutenticato {
+    public void aggiornaVolo(Volo volo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) throws NonAutenticato {
 
         if (this.autenticato) {
 
@@ -104,8 +102,6 @@ public class Amministratore extends Utente {
                         v.setOrarioPartenza(orarioPartenza);
                     if (!orarioArrivo.isEmpty())
                         v.setOrarioArrivo(orarioArrivo);
-                    if (!dataPartenza.isEmpty())
-                        v.setDataArrivo(dataArrivo);
                     if (!durata.isEmpty())
                         v.setDurata(durata);
                     if (ritardo != 0)
@@ -137,7 +133,7 @@ public class Amministratore extends Utente {
     }
 
     //AGGIORNA LO STATO DI UN BAGAGLIO
-    public void aggiornaStatoBagaglio(Bagaglio bagaglio, int codice, StatoBagaglio stato)throws NonAutenticato {
+    public void aggiornaStatoBagaglio(Bagaglio bagaglio, StatoBagaglio stato)throws NonAutenticato {
 
         if (this.autenticato){
 
@@ -182,7 +178,7 @@ public class Amministratore extends Utente {
 
             for (Volo v : voliGestiti) {
                 for(Prenotazione p : v.getPrenotazioni()) {
-                    if (!codiceVolo.isEmpty() && !p.getVolo().codice.equals(codiceVolo))
+                    if (!codiceVolo.isEmpty() && !p.getVolo().getCodice().equals(codiceVolo))
                         continue;
                     if (!dataVolo.isEmpty() && !p.getVolo().getDataPartenza().equals(dataVolo))
                         continue;

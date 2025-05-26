@@ -1,7 +1,5 @@
 package model;
 
-import interfaces.Volo;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -53,7 +51,7 @@ public class UtenteGenerico extends Utente {
         if (this.autenticato) {
 
             for (Prenotazione p : prenotazioniEffetuate) {
-                if (!codiceVolo.isEmpty() && !p.getVolo().codice.equals(codiceVolo))
+                if (!codiceVolo.isEmpty() && !p.getVolo().getCodice().equals(codiceVolo))
                     continue;
                 if(!dataVolo.isEmpty() && !p.getVolo().getDataPartenza().equals(dataVolo))
                     continue;

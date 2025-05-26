@@ -1,5 +1,7 @@
 package gui;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +11,7 @@ public class LogInPage {
     private JTextField textField1;
     private JPasswordField passwordField1;
     private JButton logInButton;
+    private JButton button1;
     private static JFrame frame;
 
 
@@ -18,18 +21,19 @@ public class LogInPage {
     public LogInPage(JFrame frameChiamante, Controller controller) {
 
         frame = new JFrame("LogInPage");
-        frame.setContentPane(new LogInPage(frameChiamante, controller).panel1);
+        frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setSize(500, 500);
 
-        logInButton.addActionListener(new ActionListener() {
+       /* logInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(controller.utente.logIn(textField1.getText(), passwordField1.getPassword())) {
+                if(controller.getUser().logIn(textField1.getText(), passwordField1.getPassword().toString()){
 
-                    if (controller.utente.getClass().toSimpleName().equals("Amministratore")) {
+                    if (controller.getUser().getClass().toString().equals("Amministratore")) {
 
                         HomePageAmministratore frame3 = new HomePageAmministratore(frame, controller);
                         frame.setVisible(false);
@@ -45,6 +49,15 @@ public class LogInPage {
                     JOptionPane.showMessageDialog(logInButton, "Nome utente o password errati");
                 }
             }
+        });*/
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+            }
         });
     }
 }
+

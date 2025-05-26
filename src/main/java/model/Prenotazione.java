@@ -1,7 +1,5 @@
 package model;
 
-import interfaces.Volo;
-
 public class Prenotazione {
 
     private int numBiglietto;
