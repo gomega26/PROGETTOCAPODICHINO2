@@ -47,7 +47,7 @@ public class HomePage {
         controller.getVoli().add(new VoloInArrivo("TAP Air Portugal", "TP851", "Lisbona", "11:50", "14:20", "15/06/2025", "2 ore 30 min", 0, StatoVolo.Cancellato));
         controller.getVoli().add(new VoloInArrivo("Swiss", "LX1712", "Zurigo", "17:30", "19:00", "15/06/2025", "1 ora 30 min", 0, StatoVolo.Programmato));
 
-        controller.inizializzaUtenteGenerico("pippo", "trallallero", "trallalero@gmail.com");
+        controller.inizializzaUtenteGenerico("1", "2", "trallalero@gmail.com");
 
         label2.setFont(new Font("Courier New", Font.PLAIN, 20));
 
@@ -87,8 +87,6 @@ public class HomePage {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                model.setRowCount(0);
-
                 String tipo = comboBox1.getSelectedItem().toString().trim();
                 String compagnia =  textField2.getText().trim();
                 String codice = textField1.getText().trim();
@@ -97,15 +95,21 @@ public class HomePage {
 
                 ArrayList<Volo> voliTrovati = controller.ricercaVoli(tipo, compagnia, codice, data, destinazione);
 
-                for(Volo v : voliTrovati){
-                    if((v.getClass().getSimpleName().equals("VoloInArrivo")))
-                        model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo()});
+                if(voliTrovati.isEmpty())
+                    JOptionPane.showMessageDialog(cercaButton, "Nessun volo trovato");
 
-                    if((v.getClass().getSimpleName().equals("VoloInPartenza")))
-                        model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), ((VoloInPartenza)v).getNumGate()});
+                else {
+
+                    model.setRowCount(0);
+
+                    for (Volo v : voliTrovati) {
+                        if ((v.getClass().getSimpleName().equals("VoloInArrivo")))
+                            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo()});
+
+                        if ((v.getClass().getSimpleName().equals("VoloInPartenza")))
+                            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), ((VoloInPartenza) v).getNumGate()});
+                    }
                 }
-
-                table1.setModel(model);
             }
         });
     }

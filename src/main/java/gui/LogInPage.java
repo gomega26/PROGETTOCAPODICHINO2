@@ -27,17 +27,21 @@ public class LogInPage {
         frame.setVisible(true);
         frame.setSize(500, 500);
 
-       /* logInButton.addActionListener(new ActionListener() {
+       logInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(controller.getUser().logIn(textField1.getText(), passwordField1.getPassword().toString()){
+                String login = textField1.getText();
+                String password = passwordField1.getPassword().toString();
 
-                    if (controller.getUser().getClass().toString().equals("Amministratore")) {
+                if(controller.logIn(login, password)){
+
+                    if (controller.getUser().getClass().getSimpleName().equals("Amministratore")) {
 
                         HomePageAmministratore frame3 = new HomePageAmministratore(frame, controller);
                         frame.setVisible(false);
-                    } else if (controller.utente.getClass().toSimpleName().equals("UtenteGenerico")) {
+
+                    } else if (controller.getUser().getClass().getSimpleName().equals("UtenteGenerico")) {
 
                         HomePageUtenteGenerico frame3 = new HomePageUtenteGenerico(frame, controller);
                         frame.setVisible(false);
@@ -49,7 +53,8 @@ public class LogInPage {
                     JOptionPane.showMessageDialog(logInButton, "Nome utente o password errati");
                 }
             }
-        });*/
+        });
+
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

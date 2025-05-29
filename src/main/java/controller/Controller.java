@@ -29,6 +29,10 @@ public class Controller {
         return user.ricercaVolo(this.voli, tipo, compagniaAerea, codice, dataPartenza, destinazione);
     }
 
+    public boolean logIn(String login, String password) {
+        return user.logIn(login, password);
+    }
+
     public ArrayList<Volo> getVoli() {
         return voli;
     }

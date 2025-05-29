@@ -21,185 +21,140 @@ public class Amministratore extends Utente {
     public Amministratore(String login, String password, String email, String nome, String cognome){
 
         super(login, password, email);
-        this.autenticato = false;
         this.nome = nome;
         this.cognome = cognome;
         this.voliGestiti = new ArrayList<Volo>();
     }
 
     //INSERISCI DATI PERSONALI
-    public void inserisciDati(int stipendio, char sesso, String codiceFiscale, String dataDiNascita, String numTelefono, String dataAssunzione, String indirizzo)throws NonAutenticato{
+    public void inserisciDati(int stipendio, char sesso, String codiceFiscale, String dataDiNascita, String numTelefono, String dataAssunzione, String indirizzo){
 
-        if(this.autenticato) {
-            this.stipendio = stipendio;
-            this.sesso = sesso;
-            this.codiceFiscale = codiceFiscale;
-            this.dataDiNascita = dataDiNascita;
-            this.numTelefono = numTelefono;
-            this.dataAssunzione = dataAssunzione;
-            this.indirizzo = indirizzo;
-        }
 
-        else{
-            throw new NonAutenticato("Eseguire log-in");
-        }
+        this.stipendio = stipendio;
+        this.sesso = sesso;
+        this.codiceFiscale = codiceFiscale;
+        this.dataDiNascita = dataDiNascita;
+        this.numTelefono = numTelefono;
+        this.dataAssunzione = dataAssunzione;
+        this.indirizzo = indirizzo;
     }
 
     //CERCA PASSEGGERO
-    public ArrayList<Passeggero> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso) throws NonAutenticato{
+    public ArrayList<Passeggero> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso){
 
-        if(this.autenticato) {
 
-            ArrayList<Passeggero> passeggeriTrovati = new ArrayList<Passeggero>();
 
-            for (Volo v : voliGestiti) {
+        ArrayList<Passeggero> passeggeriTrovati = new ArrayList<Passeggero>();
 
-                for (Prenotazione p : v.getPrenotazioni()) {
+        for (Volo v : voliGestiti) {
 
-                    if (!nome.isEmpty() && !p.getPasseggero().getNome().equals(nome))
-                        continue;
-                    if (!cognome.isEmpty() && !p.getPasseggero().getCognome().equals(cognome))
-                        continue;
-                    if (!numDocumento.isEmpty() && !p.getPasseggero().getNumDocumento().equals(numDocumento))
-                        continue;
-                    if (sesso != '-' && p.getPasseggero().getSesso() != sesso)
-                        continue;
+            for (Prenotazione p : v.getPrenotazioni()) {
 
-                    passeggeriTrovati.add(p.getPasseggero());
-                }
+                if (!nome.isEmpty() && !p.getPasseggero().getNome().equals(nome))
+                    continue;
+                if (!cognome.isEmpty() && !p.getPasseggero().getCognome().equals(cognome))
+                    continue;
+                if (!numDocumento.isEmpty() && !p.getPasseggero().getNumDocumento().equals(numDocumento))
+                    continue;
+                if (sesso != '-' && p.getPasseggero().getSesso() != sesso)
+                    continue;
+
+                passeggeriTrovati.add(p.getPasseggero());
             }
-
-            return passeggeriTrovati;
         }
 
-        else
-            throw new NonAutenticato("Eseguire log-in");
 
+        return passeggeriTrovati;
     }
 
     //INSERISCE UN NUOVO VOLO NELLA LISTA DEI VOLI
-    public void inserisciVolo(Volo v) throws NonAutenticato {
-
-        if (this.autenticato)
-            voliGestiti.add(v);
-
-        else
-            throw new NonAutenticato("Eseguire log-in");
-
+    public void inserisciVolo(Volo v){
+        voliGestiti.add(v);
     }
 
     //MODIFICA UN VOLO
-    public void aggiornaVolo(Volo volo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) throws NonAutenticato {
+    public void aggiornaVolo(Volo volo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
 
-        if (this.autenticato) {
+        for (Volo v : voliGestiti) {
 
-            for (Volo v : voliGestiti) {
+            if (v.equals(volo)) {
 
-                if (v.equals(volo)) {
-
-
-                    if (!orarioPartenza.isEmpty())
-                        v.setOrarioPartenza(orarioPartenza);
-                    if (!orarioArrivo.isEmpty())
-                        v.setOrarioArrivo(orarioArrivo);
-                    if (!durata.isEmpty())
-                        v.setDurata(durata);
-                    if (ritardo != 0)
-                        v.setRitardo(ritardo);
-                    if (!statoDelVolo.toString().isEmpty())
-                        v.setStato(statoDelVolo);
-                }
+                if (!orarioPartenza.isEmpty())
+                    v.setOrarioPartenza(orarioPartenza);
+                if (!orarioArrivo.isEmpty())
+                    v.setOrarioArrivo(orarioArrivo);
+                if (!durata.isEmpty())
+                    v.setDurata(durata);
+                if (ritardo != 0)
+                    v.setRitardo(ritardo);
+                if (!statoDelVolo.toString().isEmpty())
+                    v.setStato(statoDelVolo);
             }
         }
-
-        else
-            throw new NonAutenticato("Eseguire log-in");
-
     }
 
     //ASSEGNA UN GATE AD UN VOLO IN PARTENZA
-    public void assegnaGate(int gate, VoloInPartenza volo) throws NonAutenticato{
+    public void assegnaGate(int gate, VoloInPartenza volo) {
 
-        if (this.autenticato) {
 
-            for (Volo v : voliGestiti) {
-                if (v.equals(volo))
-                    ((VoloInPartenza) v).setNumGate(gate);
-            }
+        for (Volo v : voliGestiti) {
+            if (v.equals(volo))
+                ((VoloInPartenza) v).setNumGate(gate);
         }
-
-        else
-            throw new NonAutenticato("Eseguire log-in");
     }
 
     //AGGIORNA LO STATO DI UN BAGAGLIO
-    public void aggiornaStatoBagaglio(Bagaglio bagaglio, StatoBagaglio stato)throws NonAutenticato {
+    public void aggiornaStatoBagaglio(Bagaglio bagaglio, StatoBagaglio stato){
 
-        if (this.autenticato){
-
-            for (Volo v : voliGestiti) {
-                for (Prenotazione p : v.getPrenotazioni()) {
-                    if (p.getBagaglio().equals(bagaglio))
-                        p.getBagaglio().setStatoBagaglio(stato);
-                }
+        for (Volo v : voliGestiti) {
+            for (Prenotazione p : v.getPrenotazioni()) {
+                if (p.getBagaglio().equals(bagaglio))
+                    p.getBagaglio().setStatoBagaglio(stato);
             }
         }
-
-        else
-            throw new NonAutenticato("Eseguire log-in");
     }
 
     //VISUALIZZA LA LISTA DEI BAGAGLI SMARRITI
-    public ArrayList<Bagaglio> visualizzaSmarrimenti()throws NonAutenticato{
+    public ArrayList<Bagaglio> visualizzaSmarrimenti(){
 
         ArrayList<Bagaglio> bagagliSmarriti = new ArrayList<Bagaglio>();
 
-        if (this.autenticato) {
-
-            for (Volo v: voliGestiti) {
-                for(Prenotazione p : v.getPrenotazioni()) {
-                    if (p.getBagaglio().getStato() == StatoBagaglio.Smarrito)
-                        bagagliSmarriti.add(p.getBagaglio());
-                }
+        for (Volo v: voliGestiti) {
+            for(Prenotazione p : v.getPrenotazioni()) {
+                if (p.getBagaglio().getStato() == StatoBagaglio.Smarrito)
+                    bagagliSmarriti.add(p.getBagaglio());
             }
-
-            return bagagliSmarriti;
         }
-        else
-            throw new NonAutenticato("Eseguire log-in");
+
+        return bagagliSmarriti;
     }
 
     //CERCA PRENOTAZIONE
-    public ArrayList<Prenotazione> cercaPrenotazione(String codiceVolo, String dataVolo, String orarioPartenza, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero) throws NonAutenticato{
+    public ArrayList<Prenotazione> cercaPrenotazione(String codiceVolo, String dataVolo, String orarioPartenza, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero) {
 
         ArrayList<Prenotazione> prenotazioniTrovate = new ArrayList<Prenotazione>();
 
-        if (this.autenticato) {
 
-            for (Volo v : voliGestiti) {
-                for(Prenotazione p : v.getPrenotazioni()) {
-                    if (!codiceVolo.isEmpty() && !p.getVolo().getCodice().equals(codiceVolo))
-                        continue;
-                    if (!dataVolo.isEmpty() && !p.getVolo().getDataPartenza().equals(dataVolo))
-                        continue;
-                    if (!orarioPartenza.isEmpty() && !p.getVolo().getOrarioPartenza().equals(orarioPartenza))
-                        continue;
-                    if (!nomePasseggero.isEmpty() && !p.getPasseggero().getNome().equals(nomePasseggero))
-                        continue;
-                    if (!cognomePasseggero.isEmpty() && !p.getPasseggero().getCognome().equals(cognomePasseggero))
-                        continue;
-                    if (!numDocumentoPasseggero.isEmpty() && !p.getPasseggero().getNumDocumento().equals(numDocumentoPasseggero))
-                        continue;
+        for (Volo v : voliGestiti) {
+            for(Prenotazione p : v.getPrenotazioni()) {
+                if (!codiceVolo.isEmpty() && !p.getVolo().getCodice().equals(codiceVolo))
+                    continue;
+                if (!dataVolo.isEmpty() && !p.getVolo().getDataPartenza().equals(dataVolo))
+                    continue;
+                if (!orarioPartenza.isEmpty() && !p.getVolo().getOrarioPartenza().equals(orarioPartenza))
+                    continue;
+                if (!nomePasseggero.isEmpty() && !p.getPasseggero().getNome().equals(nomePasseggero))
+                    continue;
+                if (!cognomePasseggero.isEmpty() && !p.getPasseggero().getCognome().equals(cognomePasseggero))
+                    continue;
+                if (!numDocumentoPasseggero.isEmpty() && !p.getPasseggero().getNumDocumento().equals(numDocumentoPasseggero))
+                    continue;
 
-                    prenotazioniTrovate.add(p);
-                }
+                prenotazioniTrovate.add(p);
             }
-
-            return prenotazioniTrovate;
         }
 
-        else
-            throw new NonAutenticato("Eseguire log-in");
+        return prenotazioniTrovate;
     }
 
     //GETTERS

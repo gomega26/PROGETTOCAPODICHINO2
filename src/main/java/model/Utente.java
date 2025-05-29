@@ -7,7 +7,6 @@ public class Utente {
         protected String login;
         protected String password;
         protected String email;
-        protected boolean autenticato;
 
         //COSTRUTTORE
         public Utente(String login, String password, String email){
@@ -15,22 +14,16 @@ public class Utente {
                 this.login = login;
                 this.password = password;
                 this.email = email;
-                this.autenticato = false;
         }
 
         //LOG-IN
         public boolean logIn(String login, String password) {
 
-                if (this.login.equals(login) || this.email.equals(login) && this.password.equals(password))
+                if ((this.login.equals(login) || this.email.equals(login)) && this.password.equals(password))
                       return true;
 
                 else
                         return false;
-        }
-
-        //VISUALIZZA TUTTI I VOLI ?? (Da vedere con la GUI)
-        public ArrayList<Volo> visualizzaVolo(ArrayList<Volo> voli){
-                return voli;
         }
 
         //RICERCA VOLO
@@ -58,23 +51,17 @@ public class Utente {
         }
 
         //MONITORA LO STATO DEL BAGAGLIO
-        public Bagaglio monitoraBagaglio(ArrayList<Bagaglio> bagagli, int codice) throws NonAutenticato{
+        public Bagaglio monitoraBagaglio(ArrayList<Bagaglio> bagagli, int codice) {
 
-                if(autenticato) {
-                        for (Bagaglio b : bagagli) {
+                for (Bagaglio b : bagagli) {
 
-                                if (b.getCodice() == codice) {
+                        if (b.getCodice() == codice) {
 
-                                        return b;
-                                }
+                                return b;
                         }
-
-                        return null;
                 }
 
-                else{
-                        throw new NonAutenticato("Eseguire log-in");
-                }
+                return null;
         }
 
         //SETTERS E GETTERS
@@ -100,14 +87,6 @@ public class Utente {
 
         public String getLogin() {
                 return login;
-        }
-
-        public boolean isAutenticato() {
-                return autenticato;
-        }
-
-        public void setAutenticato(boolean autenticato) {
-                this.autenticato = autenticato;
         }
 }
 
