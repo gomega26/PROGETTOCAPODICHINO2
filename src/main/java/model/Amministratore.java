@@ -52,24 +52,24 @@ public class Amministratore extends Utente {
     }
 
     //MODIFICA UN VOLO
-    public void aggiornaVolo(Volo volo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
+    public void aggiornaVolo(Volo v, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
 
-        for (Volo v : voliGestiti) {
+        if (!orarioPartenza.isEmpty())
+            v.setOrarioPartenza(orarioPartenza);
+        if (!orarioArrivo.isEmpty())
+            v.setOrarioArrivo(orarioArrivo);
+        if (!durata.isEmpty())
+            v.setDurata(durata);
+        if (ritardo != 0)
+            v.setRitardo(ritardo);
+        if (!statoDelVolo.toString().isEmpty())
+            v.setStato(statoDelVolo);
 
-            if (v.equals(volo)) {
+        if(v.getClass().getSimpleName().equals("VoloInPartenza"))
+            v.setDestinazione(luogo);
 
-                if (!orarioPartenza.isEmpty())
-                    v.setOrarioPartenza(orarioPartenza);
-                if (!orarioArrivo.isEmpty())
-                    v.setOrarioArrivo(orarioArrivo);
-                if (!durata.isEmpty())
-                    v.setDurata(durata);
-                if (ritardo != 0)
-                    v.setRitardo(ritardo);
-                if (!statoDelVolo.toString().isEmpty())
-                    v.setStato(statoDelVolo);
-            }
-        }
+        else
+            v.setOrigine(luogo);
     }
 
     //ASSEGNA UN GATE AD UN VOLO IN PARTENZA

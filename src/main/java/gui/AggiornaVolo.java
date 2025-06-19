@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Controller;
+import model.StatoVolo;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,17 +10,17 @@ import java.awt.event.ActionListener;
 public class AggiornaVolo {
 
     private JPanel panel1;
-    private JTextField textField1;
+    private JTextField codicevolotext;
     private JComboBox<String> comboBox1; // Usare String invece di StatoVolo
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JButton indietroButton;
+    private JTextField luogotext;
+    private JTextField duratatext;
+    private JTextField orariopartenzatext;
+    private JTextField orarioarrivotext;
+    private JButton button1;
     private JButton modificaButton;
-    private JTextField textField7;
-    private JTextField textField8;
-    private JTextField textField9;
+    private JTextField ritardotext;
+    private JTextField datatext;
+    private JComboBox comboBox2;
     private static JFrame frame;
     private static JFrame frameChiamante;
     private Controller controller;
@@ -40,44 +41,39 @@ public class AggiornaVolo {
         comboBox1.addItem("Atterrato");
         comboBox1.addItem("Cancellato");
 
-        indietroButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setVisible(false);
-                frameChiamante.setVisible(true);
-            }
-        });
+        comboBox2.addItem("Origine");
+        comboBox2.addItem("Destinazione");
 
         modificaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String codiceVolo = textField1.getText();
+                String codiceVolo = codicevolotext.getText();
 
                 if (codiceVolo.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Errore: Inserisci il codice del volo.");
                     return;
                 }
 
-                if (!controller.verificaVolo(codiceVolo)) {
-                    JOptionPane.showMessageDialog(frame, "Errore: Codice volo non valido!");
-                    return;
-                }
+                String orarioPartenza = orariopartenzatext.getText();
+                String orarioArrivo = orarioarrivotext.getText();
+                String dataPartenza = datatext.getText();
+                String durata = duratatext.getText();
+                int ritardo = Integer.parseInt(ritardotext.getText());
+                StatoVolo statoDelVolo = StatoVolo.valueOf(comboBox1.getSelectedItem().toString());
+                String luogo = luogotext.getText();
 
-                try {
-                    String orarioPartenza = textField2.getText();
-                    String orarioArrivo = textField3.getText();
-                    String dataPartenza = textField4.getText();
-                    String durata = textField5.getText();
-                    int ritardo = Integer.parseInt(textField7.getText());
-                    String statoDelVolo = comboBox1.getSelectedItem().toString(); // Ora è una stringa
+                controller.aggiornaVolo(codiceVolo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
 
-                    // Chiamata al Controller per aggiornare il volo
-                    controller.aggiornaVolo(codiceVolo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
+                JOptionPane.showMessageDialog(frame, "Volo aggiornato con successo!");
+            }
+        });
 
-                    JOptionPane.showMessageDialog(frame, "Volo aggiornato con successo!");
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Errore: Inserisci un valore numerico corretto per il ritardo.");
-                }
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
             }
         });
     }

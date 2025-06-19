@@ -4,17 +4,19 @@ import model.Bagaglio;
 import controller.Controller;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MonitoraBagaglio {
     private JTextField textField1;
     private JPanel panel1;
-    private JButton buttonIndietro;
+    private JButton button1;
     private JButton monitoraBagaglioButton;
-    private JTextArea textAreaRisultato;
+    private JTextArea textArea1;
+    private JButton modificaButton;
+    private Bagaglio b = null;
 
     private JFrame frame;
-    private JFrame frameChiamante;
-    private Controller controller;
 
     public MonitoraBagaglio(JFrame frameChiamante, Controller controller) {
 
@@ -25,35 +27,47 @@ public class MonitoraBagaglio {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        monitoraBagaglioButton.addActionListener(e -> {
-            String codiceText = textField1.getText().trim();
-            if (codiceText.isEmpty()) {
-                JOptionPane.showMessageDialog(panel1, "Inserisci il codice del bagaglio!");
-                return;
-            }
+        modificaButton.setVisible(false);
 
-            try {
+        if(controller.getUser().getClass().getSimpleName().equals("Amministratore")){
+
+            modificaButton.setVisible(true);
+        }
+
+        monitoraBagaglioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String codiceText = textField1.getText().trim();
                 int codice = Integer.parseInt(codiceText);
 
-                // Chiamata al Controller con il tipo corretto
-                Bagaglio bagaglio = controller.monitoraBagaglioUtenteGenerico(codice);
+                if(controller.getUser().getClass().getSimpleName().equals("UtenteGenerico"))
+                    b = controller.monitoraBagaglioUtenteGenerico(codice);
 
-                if (bagaglio != null) {
-                    textAreaRisultato.setText("Bagaglio trovato! Codice: " + bagaglio.getCodice() +
-                            ", Stato: " + bagaglio.getStato());
-                } else {
-                    JOptionPane.showMessageDialog(panel1, "Errore: Bagaglio non trovato!");
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(panel1, "Inserisci un numero valido per il codice del bagaglio!");
+                else
+                    b = controller.monitoraBagaglioAmministratore(codice);
+
+
+                textArea1.setText("Bagaglio trovato! Codice: " + b.getCodice() + " - " + b.getStato());
+
             }
         });
 
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-        buttonIndietro.addActionListener(e -> {
-            frame.dispose();
-            if (frameChiamante != null) {
+                frame.setVisible(false);
                 frameChiamante.setVisible(true);
+            }
+        });
+
+        modificaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                AggiornaStatoBagaglio frame7 = new AggiornaStatoBagaglio(frame, controller, b);
+                frame.setVisible(false);
             }
         });
     }

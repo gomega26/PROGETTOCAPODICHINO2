@@ -208,11 +208,9 @@ public class Controller {
 
     //MODIFICA VOLO
 
-    public void aggiornaVolo(String codiceVolo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoVoloString) {
+    public void aggiornaVolo(String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
 
         Volo volo=null;
-
-        StatoVolo statoDelVolo = StatoVolo.valueOf(statoVoloString); // Conversione stringa → enum
 
         for(Volo v: ((Amministratore)user).getVoliGestiti()){
 
@@ -220,7 +218,7 @@ public class Controller {
                 volo=v;
         }
 
-        ((Amministratore)user).aggiornaVolo(volo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
+        ((Amministratore)user).aggiornaVolo(volo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
     }
 
     //ASSEGNA GATE
@@ -240,20 +238,9 @@ public class Controller {
 
     //AGGIORNA STATO BAGAGLIO
 
-    public void aggiornaStatoBagaglio(int codiceBagaglio, String statoBagaglio) {
+    public void aggiornaStatoBagaglio(Bagaglio bagaglio, StatoBagaglio statoBagaglio) {
 
-        StatoBagaglio stato = StatoBagaglio.valueOf(statoBagaglio);
-
-        Bagaglio bagaglio=null;
-
-        for (Volo v : ((Amministratore) user).getVoliGestiti()) {
-            for (Prenotazione p : v.getPrenotazioni()) {
-                if(p.getBagaglio().getCodice()==codiceBagaglio)
-                    bagaglio = p.getBagaglio();
-            }
-        }
-
-        ((Amministratore)user).aggiornaStatoBagaglio(bagaglio, stato);
+        ((Amministratore)user).aggiornaStatoBagaglio(bagaglio, statoBagaglio);
     }
 
     //VISUALIZZA SMARRIMENTI

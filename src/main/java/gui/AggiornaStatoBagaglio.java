@@ -1,6 +1,8 @@
 package gui;
 
 import controller.Controller;
+import model.Bagaglio;
+import model.StatoBagaglio;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,15 +11,12 @@ import java.awt.event.ActionListener;
 public class AggiornaStatoBagaglio {
 
     private JPanel panel1;
-    private JButton indietroButton;
+    private JButton button1;
     private JButton aggiornaButton;
-    private JTextField textField1;
     private JComboBox comboBox1;
     private static JFrame frame;
-    private static JFrame frameChiamante;
-    private Controller controller;
 
-    public AggiornaStatoBagaglio(JFrame frameChiamante, Controller controller) {
+    public AggiornaStatoBagaglio(JFrame frameChiamante, Controller controller, Bagaglio b) {
         frame = new JFrame("AggiornaStatoBagaglio");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,7 +24,11 @@ public class AggiornaStatoBagaglio {
         frame.setVisible(true);
         frame.setSize(1000, 1000);
 
-        indietroButton.addActionListener(new ActionListener() {
+        comboBox1.addItem("Caricato");
+        comboBox1.addItem("Ritirabile");
+        comboBox1.addItem("Smarrito");
+
+        button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -38,21 +41,9 @@ public class AggiornaStatoBagaglio {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                try {
-                    int codiceBagaglio = Integer.parseInt(textField1.getText()); // Ottieni il codice del bagaglio
-                    String statoBagaglio = (String) comboBox1.getSelectedItem(); // Stato selezionato nella combobox
+                StatoBagaglio stato = StatoBagaglio.valueOf(comboBox1.getSelectedItem().toString());
 
-                    boolean aggiornato = controller.aggiornaStatoBagaglio(codiceBagaglio, statoBagaglio);
-
-                    if (aggiornato) {
-                        JOptionPane.showMessageDialog(frame, "Stato del bagaglio aggiornato con successo!");
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Errore: Bagaglio non trovato o stato non valido!", "Errore", JOptionPane.ERROR_MESSAGE);
-                    }
-
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Inserisci un numero valido per il codice bagaglio!", "Errore", JOptionPane.ERROR_MESSAGE);
-                }
+                controller.aggiornaStatoBagaglio(b, stato);
             }
         });
     }

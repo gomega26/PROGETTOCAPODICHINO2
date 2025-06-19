@@ -47,7 +47,7 @@ public class HomePage {
         controller.getVoli().add(new VoloInArrivo("TAP Air Portugal", "TP851", "Lisbona", "11:50", "14:20", "15/06/2025", "2 ore 30 min", 0, StatoVolo.Cancellato));
         controller.getVoli().add(new VoloInArrivo("Swiss", "LX1712", "Zurigo", "17:30", "19:00", "15/06/2025", "1 ora 30 min", 0, StatoVolo.Programmato));
 
-        controller.inizializzaAmministratore("1", "2", "trallalero@gmail.com", "Piero", "ESposito");
+        controller.inizializzaAmministratore("1", "2", "trallalero@gmail.com", "Piero", "Esposito");
 
         label2.setFont(new Font("Courier New", Font.PLAIN, 20));
 

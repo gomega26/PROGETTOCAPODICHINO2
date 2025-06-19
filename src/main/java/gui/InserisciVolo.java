@@ -8,21 +8,23 @@ import java.awt.event.ActionListener;
 public class InserisciVolo {
 
     private JPanel panel1;
+    private JButton button1;
     private JTextField textField1;
     private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField codicetextfield;
+    private JTextField originetextField;
+    private JTextField destinazionetextField;
+    private JTextField compagniatextField;
     private JTextField textField5;
     private JTextField textField6;
     private JTextField textField7;
     private JComboBox comboBox1;
-    private JButton indietroButton;
+    private JTextField textField3;
+    private JTextField textField4;
     private JButton aggiungiButton;
     private JTextField textField8;
     private JTextField textField9;
     private static JFrame frame;
-    private static JFrame frameChiamante;
-    private Controller controller;
 
     public InserisciVolo(JFrame frameChiamante, Controller controller) {
         frame = new JFrame("InserisciVolo");
@@ -33,7 +35,7 @@ public class InserisciVolo {
         frame.setSize(1000, 1000);
 
 
-        indietroButton.addActionListener(new ActionListener() {
+        button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -42,15 +44,14 @@ public class InserisciVolo {
             }
         });
 
-
         aggiungiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String codice = textField1.getText().trim();
-                String origine = textField2.getText().trim();
-                String destinazione = textField3.getText().trim();
-                String compagnia = textField4.getText().trim();
+                String codice = codicetextfield.getText().trim();
+                String origine = originetextField.getText().trim();
+                String destinazione = destinazionetextField.getText().trim();
+                String compagnia = compagniatextField.getText().trim();
                 String partenza = textField5.getText().trim();
                 String arrivo = textField6.getText().trim();
                 String durata = textField7.getText().trim();

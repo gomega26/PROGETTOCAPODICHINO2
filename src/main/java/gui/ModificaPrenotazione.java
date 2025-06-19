@@ -5,6 +5,8 @@ import model.ClasseVolo;
 import model.Bagaglio;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ModificaPrenotazione {
 
@@ -23,9 +25,6 @@ public class ModificaPrenotazione {
 
     public ModificaPrenotazione(JFrame frameChiamante, Controller controller) {
 
-
-        comboBox1.setModel(new DefaultComboBoxModel<>(new String[]{"", "Maschio", "Femmina"}));
-
         frame = new JFrame("Modifica Prenotazione");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -33,39 +32,37 @@ public class ModificaPrenotazione {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        buttonModificaPrenotazione.addActionListener(e -> {
-            String numeroPrenotazioneText = numeroPrenotazioneTextField.getText().trim();
-            if (numeroPrenotazioneText.isEmpty()) {
-                JOptionPane.showMessageDialog(panel1, "Inserisci il numero della prenotazione.");
-                return;
-            }
+        comboBox1.setModel(new DefaultComboBoxModel<>(new String[]{" ", "M", "F"}));
 
-            try {
-                int numeroPrenotazione = Integer.parseInt(numeroPrenotazioneText);
+        buttonModificaPrenotazione.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int numeroPrenotazione = Integer.parseInt(numeroPrenotazioneTextField.getText());
                 String nome = nomePasseggeroTextField.getText().trim();
                 String cognome = cognomePasseggeroTextField.getText().trim();
                 String posto = postoTextField.getText().trim();
                 ClasseVolo classeVolo = ClasseVolo.valueOf(classeVoloTextField.getText().trim());
-                Bagaglio bagaglio = new Bagaglio();
                 String numDocumento = numeroDocumentoPasseggeroTextField.getText().trim();
                 char sesso = comboBox1.getSelectedItem().toString().charAt(0);
 
-                // Chiamata diretta al Controller (ora il Controller cerca la prenotazione)
-                boolean esito = controller.modificaPrenotazione(numeroPrenotazione, posto, classeVolo, nome, cognome, numDocumento, sesso, bagaglio);
+                boolean bagaglio = false;
 
-                if (esito) {
-                    JOptionPane.showMessageDialog(panel1, "Prenotazione modificata con successo!");
-                } else {
-                    JOptionPane.showMessageDialog(panel1, "Errore: Prenotazione non trovata!");
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(panel1, "Inserisci un numero valido per la prenotazione!");
+                if(bagaglioRadioButton.isSelected())
+                    bagaglio=true;
+
+
+                controller.modificaPrenotazione(numeroPrenotazione, posto, classeVolo, nome, cognome, numDocumento, sesso, bagaglio);
             }
         });
 
-        buttonIndietro.addActionListener(e -> {
-            frame.dispose();
-            if (frameChiamante != null) {
+
+
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                frame.setVisible(false);
                 frameChiamante.setVisible(true);
             }
         });

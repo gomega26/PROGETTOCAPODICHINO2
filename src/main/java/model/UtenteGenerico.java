@@ -6,13 +6,12 @@ import java.util.Random;
 public class UtenteGenerico extends Utente {
 
     private ArrayList<Prenotazione> prenotazioniEffetuate;
-    private static int count;
+    private static int count=101;
 
     public UtenteGenerico(String login, String password, String email) {
 
         super(login, password, email);
         this.prenotazioniEffetuate = new ArrayList<Prenotazione>();
-        count=101;
     }
 
     //PRENOTA UN VOLO
@@ -85,7 +84,7 @@ public class UtenteGenerico extends Utente {
                 count++;
 
                 if(bagaglio) {
-                    p.setBagaglio(new Bagaglio(count+1000, StatoBagaglio.Caricato));
+                    p.setBagaglio(new Bagaglio());
                     count++;
                 }
             }

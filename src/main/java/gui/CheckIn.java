@@ -38,11 +38,8 @@ public class CheckIn {
 
                 boolean bagaglio=false;
 
-                if (bagaglioRadioButton.isSelected()) {
+                if (bagaglioRadioButton.isSelected())
                     bagaglio = true;
-                } else if (bagaglioRadioButton.isSelected()) {
-                    bagaglio = false;
-                }
 
                 controller.checkIn(prenotazione, bagaglio);
             }

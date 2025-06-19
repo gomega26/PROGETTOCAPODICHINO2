@@ -84,15 +84,6 @@ public class HomePageAmministratore {
             }
         });
 
-        aggiornaStatoBagaglioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                AggiornaStatoBagaglio frame7 = new AggiornaStatoBagaglio(frame, controller);
-                frame.setVisible(false);
-            }
-        });
-
         indietroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
