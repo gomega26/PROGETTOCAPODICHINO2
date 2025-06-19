@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class HomePage {
 
-    private JButton logInButton;
+    private JButton homePageButton;
     private JPanel panel1;
     private JTable table1;
     private JLabel label2;
@@ -47,7 +47,7 @@ public class HomePage {
         controller.getVoli().add(new VoloInArrivo("TAP Air Portugal", "TP851", "Lisbona", "11:50", "14:20", "15/06/2025", "2 ore 30 min", 0, StatoVolo.Cancellato));
         controller.getVoli().add(new VoloInArrivo("Swiss", "LX1712", "Zurigo", "17:30", "19:00", "15/06/2025", "1 ora 30 min", 0, StatoVolo.Programmato));
 
-        controller.inizializzaUtenteGenerico("1", "2", "trallalero@gmail.com");
+        controller.inizializzaAmministratore("1", "2", "trallalero@gmail.com", "Piero", "ESposito");
 
         label2.setFont(new Font("Courier New", Font.PLAIN, 20));
 
@@ -73,11 +73,27 @@ public class HomePage {
 
         table1.setModel(model);
 
-        logInButton.addActionListener(new ActionListener() {
+        homePageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                LogInPage frame2 = new LogInPage(frame, controller);
+                if(!controller.isAutenticato()) {
+                    LogInPage frame2 = new LogInPage(frame, controller);
+                }
+
+                else{
+
+                    if (controller.getUser().getClass().getSimpleName().equals("Amministratore")) {
+
+                        HomePageAmministratore frame3 = new HomePageAmministratore(frame, controller);
+                        frame.setVisible(false);
+
+                    } else if (controller.getUser().getClass().getSimpleName().equals("UtenteGenerico")) {
+
+                        HomePageUtenteGenerico frame3 = new HomePageUtenteGenerico(frame, controller);
+                        frame.setVisible(false);
+                    }
+                }
 
                 frame.setVisible(false);
             }

@@ -5,33 +5,264 @@ import model.*;
 import java.util.ArrayList;
 
 public class Controller {
-    // Ho inserito tutte le classi dentro l'entità Controller
+
+    //LISTA VOLI
     private ArrayList<Volo> voli;
-    private Utente user;
+
+    //LISTA UTENTI
+    private ArrayList<Utente> utenti;
+
+    Utente user;
 
     public Controller () {
-        // ISTANZIO I MODELLI(ENTITA')
         voli = new ArrayList<Volo>();
+        utenti = new ArrayList<Utente>();
+        user = new Utente(null, null, null);
     }
 
     public void inizializzaUtenteGenerico(String login, String password, String email) {
 
-        user = new UtenteGenerico(login, password, email);
+        UtenteGenerico user = new UtenteGenerico(login, password, email);
+
+        utenti.add(user);
     }
 
     public void inizializzaAmministratore(String login, String password, String email, String nome, String cognome) {
 
-        user = new Amministratore(login, password, email, nome, cognome);
+        Amministratore user = new Amministratore(login, password, email, nome, cognome);
+
+        utenti.add(user);
     }
 
-    // Cerca voli disponibili tra due città
+    //UTENTE
+
+    //LOG-IN
+
+    public boolean logIn(String login, String password) {
+
+        for(Utente u: utenti){
+
+            if(u.logIn(login, password)) {
+                user = u;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isAutenticato() {
+        return user.isAutenticato();
+    }
+
+    //RICERCA VOLO
+
     public ArrayList<Volo> ricercaVoli(String tipo, String compagniaAerea, String codice, String dataPartenza, String destinazione) {
         return user.ricercaVolo(this.voli, tipo, compagniaAerea, codice, dataPartenza, destinazione);
     }
 
-    public boolean logIn(String login, String password) {
-        return user.logIn(login, password);
+    //MONITORA BAGAGLIO
+
+    public Bagaglio monitoraBagaglioUtenteGenerico(int codice){ //UTENTE GENERICO
+
+        ArrayList<Bagaglio> bagagli= new ArrayList<>();
+
+        for (Prenotazione p: ((UtenteGenerico)user).getPrenotazioniEffetuate()) {
+            bagagli.add(p.getBagaglio());
+        }
+
+        return user.monitoraBagaglio(bagagli, codice);
     }
+
+    public Bagaglio monitoraBagaglioAmministratore(int codice){ //AMMINISTRATORE
+
+        ArrayList<Bagaglio> bagagli= new ArrayList<>();
+
+        for(Volo v: ((Amministratore)user).getVoliGestiti()) {
+            for (Prenotazione p : v.getPrenotazioni()) {
+                bagagli.add(p.getBagaglio());
+            }
+        }
+
+        return user.monitoraBagaglio(bagagli, codice);
+    }
+
+    //CERCA PRENOTAZIONE
+
+    public ArrayList<Prenotazione> cercaPrenotazioneUtenteGenerico(String codiceVolo, String dataVolo, String orarioPartenza) {
+
+        ArrayList<Prenotazione> prenotazioni = ((UtenteGenerico)user).getPrenotazioniEffetuate();
+
+        return user.cercaPrenotazione(prenotazioni, codiceVolo, dataVolo, orarioPartenza);
+    }
+
+    public ArrayList<Prenotazione> cercaPrenotazioneAmministratore(String codiceVolo, String dataVolo, String orarioPartenza){
+
+        ArrayList<Prenotazione> prenotazioni = null;
+
+        for(Volo v: ((Amministratore)user).getVoliGestiti()){
+
+            prenotazioni=v.getPrenotazioni();
+        }
+
+        return user.cercaPrenotazione(prenotazioni, codiceVolo, dataVolo, orarioPartenza);
+    }
+
+
+    //UTENTE GENERICO
+
+    //PRENOTA UN VOLO
+
+    public void prenotaVolo(String codiceVolo, String posto, ClasseVolo classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita){
+
+        Volo volo=null;
+
+        for (Volo v : voli) {
+            if (v.getCodice().equals(codiceVolo)) {
+                volo = v;
+            }
+        }
+
+        ((UtenteGenerico)user).prenotaVolo(volo, posto,classe,nome,cognome,numTelefono,numDocumento, sesso,dataNascita);
+    }
+
+    //CHECK IN
+
+    public void checkIn(int codicePrenotazione, boolean bagaglio) {
+
+        Prenotazione prenotazione = null;
+
+        for(Prenotazione p : ((UtenteGenerico)user).getPrenotazioniEffetuate()){
+
+            if(p.getId()==codicePrenotazione)
+                prenotazione = p;
+        }
+
+        ((UtenteGenerico)user).checkIn(prenotazione, bagaglio);
+    }
+
+    //SEGNALA SMARRIMENTO
+
+    public void segnalaSmarrimento(int numeroBagaglio) {
+
+        Bagaglio bagaglio = null;
+
+        for(Prenotazione p : ((UtenteGenerico)user).getPrenotazioniEffetuate()){
+
+            if(p.getBagaglio().getCodice()==numeroBagaglio)
+                bagaglio=p.getBagaglio();
+        }
+
+        ((UtenteGenerico)user).segnalaSmarrimento(bagaglio);
+    }
+
+    //MODIFICA PRENOTAZIONE
+
+    public void modificaPrenotazione(int codicePrenotazione, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, boolean bagaglio ) {
+
+        Prenotazione prenotazione = null;
+
+        Bagaglio b = null;
+
+        for(Prenotazione p : ((UtenteGenerico)user).getPrenotazioniEffetuate()){
+
+            if(p.getId()==codicePrenotazione)
+                prenotazione = p;
+        }
+
+        if(bagaglio) {
+            b = new Bagaglio();
+        }
+
+        ((UtenteGenerico)user).modificaPrenotazione(prenotazione,posto, classeVolo, nomePasseggero,cognomePasseggero,numDocumentoPasseggero, sessoPasseggero, b);
+    }
+
+
+    //AMMINISTRATORE
+
+    //CERCA PASSEGGERO
+
+    public ArrayList<Passeggero> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso) {
+
+        return ((Amministratore) user).cercaPasseggero(nome, cognome, numDocumento, sesso);
+    }
+
+    //INSERISCI VOLO
+
+    public void inserisciVolo(String compagniaAerea, String codice, String origine, String destinazione, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoVoloString) {
+
+        StatoVolo stato = StatoVolo.valueOf(statoVoloString);
+
+        Volo nuovoVolo;
+
+        if (origine.equals("Napoli"))
+            nuovoVolo = new VoloInPartenza(compagniaAerea, codice, destinazione, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato, 0);
+
+        else
+            nuovoVolo = new VoloInArrivo(compagniaAerea, codice, origine, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato);
+
+        voli.add(nuovoVolo);
+
+        ((Amministratore) user).inserisciVolo(nuovoVolo);
+    }
+
+    //MODIFICA VOLO
+
+    public void aggiornaVolo(String codiceVolo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoVoloString) {
+
+        Volo volo=null;
+
+        StatoVolo statoDelVolo = StatoVolo.valueOf(statoVoloString); // Conversione stringa → enum
+
+        for(Volo v: ((Amministratore)user).getVoliGestiti()){
+
+            if(v.getCodice().equals(codiceVolo))
+                volo=v;
+        }
+
+        ((Amministratore)user).aggiornaVolo(volo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
+    }
+
+    //ASSEGNA GATE
+
+    public void assegnaGate(String codiceVolo, int gate) {
+
+        Volo volo = null;
+
+        for(Volo v: ((Amministratore)user).getVoliGestiti()){
+
+            if(v.getCodice().equals(codiceVolo))
+                volo=v;
+        }
+
+        ((Amministratore)user).assegnaGate(gate, (VoloInPartenza) volo);
+    }
+
+    //AGGIORNA STATO BAGAGLIO
+
+    public void aggiornaStatoBagaglio(int codiceBagaglio, String statoBagaglio) {
+
+        StatoBagaglio stato = StatoBagaglio.valueOf(statoBagaglio);
+
+        Bagaglio bagaglio=null;
+
+        for (Volo v : ((Amministratore) user).getVoliGestiti()) {
+            for (Prenotazione p : v.getPrenotazioni()) {
+                if(p.getBagaglio().getCodice()==codiceBagaglio)
+                    bagaglio = p.getBagaglio();
+            }
+        }
+
+        ((Amministratore)user).aggiornaStatoBagaglio(bagaglio, stato);
+    }
+
+    //VISUALIZZA SMARRIMENTI
+
+    public ArrayList<Bagaglio> visualizzaBagagliSmarriti() {
+
+        return ((Amministratore) user).visualizzaSmarrimenti();
+    }
+
 
     public ArrayList<Volo> getVoli() {
         return voli;
@@ -48,125 +279,4 @@ public class Controller {
     public void setUser(Utente user) {
         this.user = user;
     }
-
-
 }
-
-
-
-    //  UTENTE
-    /*
-    // Restituisce i voli prenotati da un determinato utente
-    public ArrayList<Volo> visualizzaVolo(String loginUtente) {
-        return Utente.getVoloPrenotato(loginUtente);
-    }
-
-    // Cerca voli disponibili tra due città
-    public ArrayList<Volo> ricercaVolo(String origine, String compagniaAerea, String codice, String dataPartenza, String destinazione) {
-        return Utente(origine, destinazione, compagniaAerea, codice);
-    }
-
-    // Restituisce lo stato attuale di un bagaglio
-    public StatoDelBagaglio monitoraBagaglio(String codiceBagaglio) {
-        return Bagaglio.getStato(codiceBagaglio);
-    }
-
-    // Verifica le credenziali dell'utente per il login
-    public boolean login(String email, String password) {
-        return Utente.autentica(email, password);
-    }
-
-    // Cerca i passeggeri in base al nome e cognome
-    public ArrayList<Passeggero> cercaPasseggero(String nome, String cognome) {
-        return Passeggero.cerca(nome, cognome);
-    }
-
-    //  UTENTE GENERICO
-
-    // Effettua una prenotazione per un volo
-    public void prenotaVolo(String loginUtente, String codiceVolo, int numeroPosto, ClasseVolo classe) {
-        UtenteGenerico.creaPrenotazione(loginUtente, codiceVolo, numeroPosto, classe);
-    }
-
-    // Cerca una prenotazione tramite il numero di biglietto
-    public Prenotazione cercaPrenotazione(int numBiglietto) {
-        return Prenotazione.getPrenotazione(numBiglietto);
-    }
-
-    // Modifica il posto di una prenotazione esistente
-    public void modificaPrenotazione(int numBiglietto, int nuovoPosto) {
-        Prenotazione.modifica(numBiglietto, nuovoPosto);
-    }
-
-    // Segnala un bagaglio come smarrito
-    public void segnalaSmarrimento(String codiceBagaglio) {
-        Bagaglio.segnalaSmarrimento(codiceBagaglio);
-    }
-
-    // Esegue il check-in per un biglietto
-    public void checkIn(int numBiglietto) {
-        Prenotazione.checkIn(numBiglietto);
-    }
-
-    // AMMINISTRATORE
-
-    private static ArrayList<Volo> voli = new ArrayList<>();
-    private static ArrayList<Gate> gates = new ArrayList<>();
-
-    // Inserisce un volo
-    public static void inserisciVolo(Volo volo) {
-        voli.add(volo);
-    }
-
-    // Aggiorna un volo cercandolo per codice
-    public static void aggiornaVolo(String codiceVolo, Volo nuovoVolo) {
-        Volo daSostituire = null;
-
-        for (Volo v : voli) {
-            if (v.getCodice().equals(codiceVolo)) {
-                daSostituire = v;
-                break;
-            }
-        }
-
-        if (daSostituire != null) {
-            voli.remove(daSostituire);
-            voli.add(nuovoVolo);
-        }
-    }
-
-    // Assegna un gate (lo aggiunge solo se non è già presente)
-    public static void assegnaGate(Gate gate) {
-        boolean trovato = false;
-
-        for (Gate g : gates) {
-            if (g.equals(gate)) {
-                trovato = true;
-                break;
-            }
-        }
-
-        if (!trovato) {
-            gates.add(gate);
-        }
-    }
-
-    // Aggiorna lo stato del bagaglio
-    public static void aggiornaStatoBagaglio(Bagaglio bagaglio, StatoBagaglio nuovoStato) {
-        bagaglio.setStato(nuovoStato);
-    }
-
-    // Restituisce l'elenco dei bagagli smarriti
-    public static ArrayList<Bagaglio> visualizzaSmarrimenti(ArrayList<Bagaglio> tuttiIBagagli) {
-        ArrayList<Bagaglio> smarriti = new ArrayList<>();
-
-        for (Bagaglio b : tuttiIBagagli) {
-            if (b.getStato() == StatoDelBagaglio.smarrito) {
-                smarriti.add(b);
-            }
-        }
-
-        return smarriti;
-    }
-}
-*/

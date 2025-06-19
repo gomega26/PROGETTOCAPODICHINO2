@@ -39,29 +39,8 @@ public class UtenteGenerico extends Utente {
         return null;
     }
 
-    //CERCA UNA PRENOTAZIONE GIA' EFFETTUATA
-    public ArrayList<Prenotazione> cercaPrenotazione(String codiceVolo, String dataVolo, String orarioPartenza) {
-
-        ArrayList<Prenotazione> prenotazioniTrovate = new ArrayList<Prenotazione>();
-
-        for (Prenotazione p : prenotazioniEffetuate) {
-            if (!codiceVolo.isEmpty() && !p.getVolo().getCodice().equals(codiceVolo))
-                continue;
-            if(!dataVolo.isEmpty() && !p.getVolo().getDataPartenza().equals(dataVolo))
-                continue;
-            if(!orarioPartenza.isEmpty() && !p.getVolo().getOrarioPartenza().equals(orarioPartenza))
-                continue;
-
-            prenotazioniTrovate.add(p);
-        }
-
-        return prenotazioniTrovate;
-    }
-
     //MODIFICA UNA PRENOTAZIONE GIA' EFFETTUATA
     public void modificaPrenotazione(Prenotazione prenotazione, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, Bagaglio bagaglio ) {
-
-
 
         for(Prenotazione p : prenotazioniEffetuate) {
 
@@ -96,7 +75,7 @@ public class UtenteGenerico extends Utente {
     }
 
     //EFFETTUAT L'OPERAZIONE DI CHECK-IN
-    public void chekIn(Prenotazione prenotazione, boolean bagaglio) {
+    public void checkIn(Prenotazione prenotazione, boolean bagaglio) {
 
         for (Prenotazione p : prenotazioniEffetuate) {
             if (p.equals(prenotazione)) {

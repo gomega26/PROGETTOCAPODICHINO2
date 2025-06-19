@@ -2,6 +2,8 @@ package model;
 
 public class Prenotazione {
 
+    private static int cont;
+    private int id;
     private int numBiglietto;
     private String posto;
     private StatoPrenotazione stato;
@@ -13,9 +15,12 @@ public class Prenotazione {
     //COSTRUTTORE
     public Prenotazione(String posto, ClasseVolo classe){
 
+        this.id = cont;
         this.stato = StatoPrenotazione.InAttesa;
         this.posto = posto;
         this.classeVolo = classe;
+
+        cont++;
     }
 
     //GETTERS E SETTERS
@@ -81,5 +86,9 @@ public class Prenotazione {
 
     public void setBagaglio(Bagaglio bagaglio) {
         this.bagaglio = bagaglio;
+    }
+
+    public int getId() {
+        return id;
     }
 }

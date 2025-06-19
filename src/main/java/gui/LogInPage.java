@@ -27,12 +27,12 @@ public class LogInPage {
         frame.setVisible(true);
         frame.setSize(500, 500);
 
-       logInButton.addActionListener(new ActionListener() {
+        logInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 String login = textField1.getText();
-                String password = passwordField1.getPassword().toString();
+                String password = new String(passwordField1.getPassword());
 
                 if(controller.logIn(login, password)){
 
@@ -54,6 +54,8 @@ public class LogInPage {
                 }
             }
         });
+
+        //BOTTONE PER TORNARE INDIETRO
 
         button1.addActionListener(new ActionListener() {
             @Override

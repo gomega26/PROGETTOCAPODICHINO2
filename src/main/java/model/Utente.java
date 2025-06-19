@@ -7,6 +7,7 @@ public class Utente {
         protected String login;
         protected String password;
         protected String email;
+        protected boolean autenticato;
 
         //COSTRUTTORE
         public Utente(String login, String password, String email){
@@ -14,16 +15,16 @@ public class Utente {
                 this.login = login;
                 this.password = password;
                 this.email = email;
+                this.autenticato=false;
         }
 
         //LOG-IN
         public boolean logIn(String login, String password) {
 
                 if ((this.login.equals(login) || this.email.equals(login)) && this.password.equals(password))
-                      return true;
+                      autenticato= true;
 
-                else
-                        return false;
+                return autenticato;
         }
 
         //RICERCA VOLO
@@ -64,6 +65,25 @@ public class Utente {
                 return null;
         }
 
+        //CERCA UNA PRENOTAZIONE
+        public ArrayList<Prenotazione> cercaPrenotazione(ArrayList<Prenotazione> prenotazioni, String codiceVolo, String dataVolo, String orarioPartenza) {
+
+                ArrayList<Prenotazione> prenotazioniTrovate = new ArrayList<Prenotazione>();
+
+                for (Prenotazione p : prenotazioni) {
+                        if (!codiceVolo.isEmpty() && !p.getVolo().getCodice().equals(codiceVolo))
+                                continue;
+                        if(!dataVolo.isEmpty() && !p.getVolo().getDataPartenza().equals(dataVolo))
+                                continue;
+                        if(!orarioPartenza.isEmpty() && !p.getVolo().getOrarioPartenza().equals(orarioPartenza))
+                                continue;
+
+                        prenotazioniTrovate.add(p);
+                }
+
+                return prenotazioniTrovate;
+        }
+
         //SETTERS E GETTERS
         public void setEmail(String email) {
                 this.email = email;
@@ -87,6 +107,14 @@ public class Utente {
 
         public String getLogin() {
                 return login;
+        }
+
+        public boolean isAutenticato() {
+                return autenticato;
+        }
+
+        public void setAutenticato(boolean autenticato) {
+                this.autenticato = autenticato;
         }
 }
 

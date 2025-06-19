@@ -4,17 +4,16 @@ import java.util.Random;
 
 public class Bagaglio {
 
+    private static int cont=101;
     private int codice;
     private StatoBagaglio statoBagaglio;
 
-    public Bagaglio(int codice, StatoBagaglio statoBagaglio) {
+    public Bagaglio() {
 
-        this.codice = codice;
-        this.statoBagaglio = statoBagaglio;
-    }
+        this.codice = cont;
+        this.statoBagaglio = StatoBagaglio.Ritirabile;
 
-    public void setCodice(int codice) {
-        this.codice = codice;
+        cont++;
     }
 
     public void setStato(StatoBagaglio stato) {

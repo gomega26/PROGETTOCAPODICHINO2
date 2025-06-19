@@ -8,14 +8,6 @@ public class Amministratore extends Utente {
     private String cognome;
     private ArrayList<Volo> voliGestiti;
 
-    //DATI PERSONALI
-    private String codiceFiscale;
-    private String dataDiNascita;
-    private int stipendio;
-    private char sesso;
-    private String numTelefono;
-    private String dataAssunzione;
-    private String indirizzo;
 
     //COSTRUTTORE
     public Amministratore(String login, String password, String email, String nome, String cognome){
@@ -24,19 +16,6 @@ public class Amministratore extends Utente {
         this.nome = nome;
         this.cognome = cognome;
         this.voliGestiti = new ArrayList<Volo>();
-    }
-
-    //INSERISCI DATI PERSONALI
-    public void inserisciDati(int stipendio, char sesso, String codiceFiscale, String dataDiNascita, String numTelefono, String dataAssunzione, String indirizzo){
-
-
-        this.stipendio = stipendio;
-        this.sesso = sesso;
-        this.codiceFiscale = codiceFiscale;
-        this.dataDiNascita = dataDiNascita;
-        this.numTelefono = numTelefono;
-        this.dataAssunzione = dataAssunzione;
-        this.indirizzo = indirizzo;
     }
 
     //CERCA PASSEGGERO
@@ -166,34 +145,6 @@ public class Amministratore extends Utente {
         return cognome;
     }
 
-    public String getCodiceFiscale() {
-        return codiceFiscale;
-    }
-
-    public String getDataDiNascita() {
-        return dataDiNascita;
-    }
-
-    public int getStipendio() {
-        return stipendio;
-    }
-
-    public char getSesso() {
-        return sesso;
-    }
-
-    public String getNumTelefono() {
-        return numTelefono;
-    }
-
-    public String getDataAssunzione() {
-        return dataAssunzione;
-    }
-
-    public String getIndirizzo() {
-        return indirizzo;
-    }
-
     //SETTERS
     public void setNome(String nome) {
         this.nome = nome;
@@ -203,31 +154,11 @@ public class Amministratore extends Utente {
         this.cognome = cognome;
     }
 
-    public void setCodiceFiscale(String codiceFiscale) {
-        this.codiceFiscale = codiceFiscale;
+    public ArrayList<Volo> getVoliGestiti() {
+        return voliGestiti;
     }
 
-    public void setDataDiNascita(String dataDiNascita) {
-        this.dataDiNascita = dataDiNascita;
-    }
-
-    public void setStipendio(int stipendio) {
-        this.stipendio = stipendio;
-    }
-
-    public void setSesso(char sesso) {
-        this.sesso = sesso;
-    }
-
-    public void setNumTelefono(String numTelefono) {
-        this.numTelefono = numTelefono;
-    }
-
-    public void setDataAssunzione(String dataAssunzione) {
-        this.dataAssunzione = dataAssunzione;
-    }
-
-    public void setIndirizzo(String indirizzo) {
-        this.indirizzo = indirizzo;
+    public void setVoliGestiti(ArrayList<Volo> voliGestiti) {
+        this.voliGestiti = voliGestiti;
     }
 }
