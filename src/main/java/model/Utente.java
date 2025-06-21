@@ -7,7 +7,7 @@ public class Utente {
         protected String login;
         protected String password;
         protected String email;
-        protected boolean autenticato;
+        private boolean autenticato;
 
         //COSTRUTTORE
         public Utente(String login, String password, String email){
@@ -21,10 +21,19 @@ public class Utente {
         //LOG-IN
         public boolean logIn(String login, String password) {
 
-                if ((this.login.equals(login) || this.email.equals(login)) && this.password.equals(password))
-                      autenticato= true;
+                if((this.login.equals(login) || this.email.equals(login)) && this.password.equals(password))
+                        this.autenticato=true;
 
-                return autenticato;
+                return this.autenticato;
+        }
+
+        //LOG OUT
+
+        public boolean logOut(){
+
+                this.autenticato=false;
+
+                return this.autenticato;
         }
 
         //RICERCA VOLO

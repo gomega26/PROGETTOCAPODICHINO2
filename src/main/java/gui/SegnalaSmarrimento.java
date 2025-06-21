@@ -21,6 +21,7 @@ public class SegnalaSmarrimento {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setSize(300, 300);
 
         buttonSegnalaSmarrimento.addActionListener(new ActionListener() {
             @Override
@@ -29,7 +30,12 @@ public class SegnalaSmarrimento {
                 String numeroBagaglioText = textFieldBagaglio.getText().trim();
                 int numeroBagaglio = Integer.parseInt(numeroBagaglioText);
 
-                controller.segnalaSmarrimento(numeroBagaglio);
+                boolean esito = controller.segnalaSmarrimento(numeroBagaglio);
+
+                if(esito)
+                    JOptionPane.showMessageDialog(buttonSegnalaSmarrimento, "Smarrimento segnalato");
+                else
+                    JOptionPane.showMessageDialog(buttonSegnalaSmarrimento, "Inserire codice bagaglio valido!");
             }
         });
 

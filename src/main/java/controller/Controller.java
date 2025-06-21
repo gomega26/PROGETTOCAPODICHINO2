@@ -12,29 +12,46 @@ public class Controller {
     //LISTA UTENTI
     private ArrayList<Utente> utenti;
 
+    int codice; //CODICE DI SICUREZZA PER AMMINISTRATORI
+
     Utente user;
 
     public Controller () {
         voli = new ArrayList<Volo>();
         utenti = new ArrayList<Utente>();
         user = new Utente(null, null, null);
+        codice = 123;
     }
 
     public void inizializzaUtenteGenerico(String login, String password, String email) {
 
-        UtenteGenerico user = new UtenteGenerico(login, password, email);
+        user = new UtenteGenerico(login, password, email);
 
         utenti.add(user);
     }
 
-    public void inizializzaAmministratore(String login, String password, String email, String nome, String cognome) {
+    public boolean inizializzaAmministratore(int codice, String login, String password, String email) {
 
-        Amministratore user = new Amministratore(login, password, email, nome, cognome);
+        if(codice==this.codice) {
 
-        utenti.add(user);
+            user = new Amministratore(login, password, email);
+
+            utenti.add(user);
+
+            return true;
+        }
+
+        else
+            return false;
     }
+
 
     //UTENTE
+
+    public boolean isAutenticato(){
+
+        return user.isAutenticato();
+    }
 
     //LOG-IN
 
@@ -51,8 +68,11 @@ public class Controller {
         return false;
     }
 
-    public boolean isAutenticato() {
-        return user.isAutenticato();
+    //LOG-OUT
+
+    public boolean logOut(){
+
+        return user.logOut();
     }
 
     //RICERCA VOLO
@@ -68,7 +88,9 @@ public class Controller {
         ArrayList<Bagaglio> bagagli= new ArrayList<>();
 
         for (Prenotazione p: ((UtenteGenerico)user).getPrenotazioniEffetuate()) {
-            bagagli.add(p.getBagaglio());
+            for(Bagaglio b: p.getBagagli()){
+                bagagli.add(b);
+            }
         }
 
         return user.monitoraBagaglio(bagagli, codice);
@@ -80,7 +102,10 @@ public class Controller {
 
         for(Volo v: ((Amministratore)user).getVoliGestiti()) {
             for (Prenotazione p : v.getPrenotazioni()) {
-                bagagli.add(p.getBagaglio());
+                for(Bagaglio b: p.getBagagli()){
+
+                    bagagli.add(b);
+                }
             }
         }
 
@@ -113,22 +138,29 @@ public class Controller {
 
     //PRENOTA UN VOLO
 
-    public void prenotaVolo(String codiceVolo, String posto, ClasseVolo classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita){
+    public int prenotaVolo(String codiceVolo, String posto, ClasseVolo classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita, int NumBagagli){
 
         Volo volo=null;
+        int codice=0;
 
         for (Volo v : voli) {
-            if (v.getCodice().equals(codiceVolo)) {
+            if (v.getCodice().equals(codiceVolo))
                 volo = v;
-            }
         }
 
-        ((UtenteGenerico)user).prenotaVolo(volo, posto,classe,nome,cognome,numTelefono,numDocumento, sesso,dataNascita);
+        if(volo!=null) {
+
+            System.out.println("VOlo trovato");
+
+            codice = ((UtenteGenerico) user).prenotaVolo(volo, posto, classe, nome, cognome, numTelefono, numDocumento, sesso, dataNascita, NumBagagli);
+        }
+
+        return codice;
     }
 
     //CHECK IN
 
-    public void checkIn(int codicePrenotazione, boolean bagaglio) {
+    public String checkIn(int codicePrenotazione) {
 
         Prenotazione prenotazione = null;
 
@@ -138,31 +170,44 @@ public class Controller {
                 prenotazione = p;
         }
 
-        ((UtenteGenerico)user).checkIn(prenotazione, bagaglio);
+        if(prenotazione!=null)
+            return ((UtenteGenerico)user).checkIn(prenotazione);
+
+        else
+            return " ";
     }
 
     //SEGNALA SMARRIMENTO
 
-    public void segnalaSmarrimento(int numeroBagaglio) {
+    public boolean segnalaSmarrimento(int numeroBagaglio) {
 
         Bagaglio bagaglio = null;
 
         for(Prenotazione p : ((UtenteGenerico)user).getPrenotazioniEffetuate()){
 
-            if(p.getBagaglio().getCodice()==numeroBagaglio)
-                bagaglio=p.getBagaglio();
+            for(Bagaglio b: p.getBagagli()){
+
+                if(b.getCodice()==numeroBagaglio)
+                    bagaglio=b;
+            }
         }
 
-        ((UtenteGenerico)user).segnalaSmarrimento(bagaglio);
+        if(bagaglio!=null) {
+            ((UtenteGenerico) user).segnalaSmarrimento(bagaglio);
+            return true;
+        }
+
+        else
+            return false;
     }
 
     //MODIFICA PRENOTAZIONE
 
-    public void modificaPrenotazione(int codicePrenotazione, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, boolean bagaglio ) {
+    public boolean modificaPrenotazione(int codicePrenotazione, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, int Numbagagli ) {
 
         Prenotazione prenotazione = null;
 
-        Bagaglio b = null;
+        ArrayList<Bagaglio> bagagli = new ArrayList<>();
 
         for(Prenotazione p : ((UtenteGenerico)user).getPrenotazioniEffetuate()){
 
@@ -170,11 +215,17 @@ public class Controller {
                 prenotazione = p;
         }
 
-        if(bagaglio) {
-            b = new Bagaglio();
+        for(int i=0; i<Numbagagli; i++) {
+            bagagli.add(new Bagaglio());
         }
 
-        ((UtenteGenerico)user).modificaPrenotazione(prenotazione,posto, classeVolo, nomePasseggero,cognomePasseggero,numDocumentoPasseggero, sessoPasseggero, b);
+        if(prenotazione!=null) {
+            ((UtenteGenerico) user).modificaPrenotazione(prenotazione, posto, classeVolo, nomePasseggero, cognomePasseggero, numDocumentoPasseggero, sessoPasseggero, bagagli);
+            return true;
+        }
+
+        else
+            return false;
     }
 
 
@@ -182,7 +233,7 @@ public class Controller {
 
     //CERCA PASSEGGERO
 
-    public ArrayList<Passeggero> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso) {
+    public ArrayList<Prenotazione> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso) {
 
         return ((Amministratore) user).cercaPasseggero(nome, cognome, numDocumento, sesso);
     }
@@ -208,7 +259,7 @@ public class Controller {
 
     //MODIFICA VOLO
 
-    public void aggiornaVolo(String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
+    public boolean aggiornaVolo(String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
 
         Volo volo=null;
 
@@ -218,12 +269,18 @@ public class Controller {
                 volo=v;
         }
 
-        ((Amministratore)user).aggiornaVolo(volo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
+        if(volo!=null) {
+            ((Amministratore)user).aggiornaVolo(volo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
+            return true;
+        }
+
+        else
+            return false;
     }
 
     //ASSEGNA GATE
 
-    public void assegnaGate(String codiceVolo, int gate) {
+    public boolean assegnaGate(String codiceVolo, int gate) {
 
         Volo volo = null;
 
@@ -233,7 +290,13 @@ public class Controller {
                 volo=v;
         }
 
-        ((Amministratore)user).assegnaGate(gate, (VoloInPartenza) volo);
+        if(volo!=null) {
+            ((Amministratore)user).assegnaGate(gate, (VoloInPartenza) volo);
+            return true;
+        }
+
+        else
+            return false;
     }
 
     //AGGIORNA STATO BAGAGLIO
@@ -249,7 +312,6 @@ public class Controller {
 
         return ((Amministratore) user).visualizzaSmarrimenti();
     }
-
 
     public ArrayList<Volo> getVoli() {
         return voli;

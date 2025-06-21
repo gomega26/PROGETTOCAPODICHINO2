@@ -3,6 +3,8 @@ package gui;
 import controller.Controller;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class HomePageUtenteGenerico {
     private JPanel panel1;
@@ -14,6 +16,7 @@ public class HomePageUtenteGenerico {
     private JButton buttonIndietro;
     private JButton buttonMonitoraBagaglio;
     private JLabel label1;
+    private JButton logOutButton;
 
     private JFrame frame;
 
@@ -28,6 +31,7 @@ public class HomePageUtenteGenerico {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setSize(800, 800);
 
         // Listener bottoni
         prenotaVoloButton.addActionListener(e -> {
@@ -64,6 +68,17 @@ public class HomePageUtenteGenerico {
 
             frame.setVisible(false);
             frameChiamante.setVisible(true);
+        });
+
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                controller.logOut();
+
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+            }
         });
     }
 }

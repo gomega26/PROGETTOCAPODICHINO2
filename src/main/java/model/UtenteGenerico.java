@@ -15,7 +15,9 @@ public class UtenteGenerico extends Utente {
     }
 
     //PRENOTA UN VOLO
-    public Prenotazione prenotaVolo(Volo v, String posto, ClasseVolo classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita) {
+    public int prenotaVolo(Volo v, String posto, ClasseVolo classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita, int NumBagagli) {
+
+        int codice= -1;
 
         if (v.getStato().equals(StatoVolo.Programmato)) {
 
@@ -27,70 +29,60 @@ public class UtenteGenerico extends Utente {
 
             p.setVolo(v);
 
+            for(int i=0; i<NumBagagli; i++)
+                p.getBagagli().add(new Bagaglio());
+
             prenotazioniEffetuate.add(p);
 
             v.getPrenotazioni().add(p);
 
-            return p;
+            codice=p.getId();
 
             }
 
-        return null;
+        return codice;
     }
 
     //MODIFICA UNA PRENOTAZIONE GIA' EFFETTUATA
-    public void modificaPrenotazione(Prenotazione prenotazione, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, Bagaglio bagaglio ) {
+    public void modificaPrenotazione(Prenotazione p, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, ArrayList<Bagaglio> bagagli ) {
 
-        for(Prenotazione p : prenotazioniEffetuate) {
+        if (!posto.isEmpty())
+            p.setPosto(posto);
+        if (!classeVolo.toString().isEmpty())
+            p.setClasseVolo(classeVolo);
+        if (!nomePasseggero.isEmpty())
+            p.getPasseggero().setNome(nomePasseggero);
+        if (!cognomePasseggero.isEmpty())
+            p.getPasseggero().setCognome(cognomePasseggero);
+        if (!numDocumentoPasseggero.isEmpty())
+            p.getPasseggero().setNumDocumento(numDocumentoPasseggero);
+        if (sessoPasseggero != ' ')
+            p.getPasseggero().setSesso(sessoPasseggero);
+        if (!bagagli.isEmpty()){
 
-            if (p.equals(prenotazione)) {
-                if (!posto.isEmpty())
-                    p.setPosto(posto);
-                if (!classeVolo.toString().isEmpty())
-                    p.setClasseVolo(classeVolo);
-                if (!nomePasseggero.isEmpty())
-                    p.getPasseggero().setNome(nomePasseggero);
-                if (!cognomePasseggero.isEmpty())
-                    p.getPasseggero().setCognome(cognomePasseggero);
-                if (!numDocumentoPasseggero.isEmpty())
-                    p.getPasseggero().setNumDocumento(numDocumentoPasseggero);
-                if (sessoPasseggero != ' ')
-                    p.getPasseggero().setSesso(sessoPasseggero);
-                if (!bagaglio.toString().isEmpty())
-                    p.setBagaglio(bagaglio);
-            }
+            p.getBagagli().clear();
+
+            for(Bagaglio b: bagagli)
+                p.getBagagli().add(b);
         }
     }
 
     //SEGNALA LO SMARRIMENTO DI UN BAGAGLIO
     public void segnalaSmarrimento(Bagaglio b) {
 
-        for (Prenotazione p : prenotazioniEffetuate) {
+        b.setStato(StatoBagaglio.Smarrito);
 
-            if (p.getBagaglio().equals(b))
-                p.getBagaglio().setStato(StatoBagaglio.Smarrito);
-
-        }
     }
 
     //EFFETTUAT L'OPERAZIONE DI CHECK-IN
-    public void checkIn(Prenotazione prenotazione, boolean bagaglio) {
+    public String checkIn(Prenotazione p) {
 
-        for (Prenotazione p : prenotazioniEffetuate) {
-            if (p.equals(prenotazione)) {
+            p.setNumBiglietto(count);
+            p.setStato(StatoPrenotazione.Confermata);
+            count++;
 
-                p.setNumBiglietto(count);
-                p.setStato(StatoPrenotazione.Confermata);
-                count++;
-
-                if(bagaglio) {
-                    p.setBagaglio(new Bagaglio());
-                    count++;
-                }
-            }
-        }
+            return p.toString();
     }
-
 
     //GETTERS E SETTERS
     public ArrayList<Prenotazione> getPrenotazioniEffetuate() {

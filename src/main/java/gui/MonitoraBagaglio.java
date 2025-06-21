@@ -26,13 +26,7 @@ public class MonitoraBagaglio {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        modificaButton.setVisible(false);
-
-        if(controller.getUser().getClass().getSimpleName().equals("Amministratore")){
-
-            modificaButton.setVisible(true);
-        }
+        frame.setSize(400, 400);
 
         monitoraBagaglioButton.addActionListener(new ActionListener() {
             @Override
@@ -48,7 +42,12 @@ public class MonitoraBagaglio {
                     b = controller.monitoraBagaglioAmministratore(codice);
 
 
-                textArea1.setText("Bagaglio trovato! Codice: " + b.getCodice() + " - " + b.getStato());
+                if(b==null)
+                    JOptionPane.showMessageDialog(monitoraBagaglioButton, "Bagaglio non trovato");
+
+                else
+                    textArea1.setText("Bagaglio trovato! Codice: " + b.getCodice() + " - " + b.getStato());
+
 
             }
         });
@@ -61,6 +60,19 @@ public class MonitoraBagaglio {
                 frameChiamante.setVisible(true);
             }
         });
+
+        modificaButton.setVisible(false);
+
+        //DISPONIBILE SOLO SE USER E' UN AMMINISTRATORE
+
+        if(controller.getUser().getClass().getSimpleName().equals("Amministratore")){
+
+            modificaButton.setVisible(true);
+            modificaButton.setEnabled(false);
+
+            if(b!=null)
+                modificaButton.setEnabled(true);
+        }
 
         modificaButton.addActionListener(new ActionListener() {
             @Override

@@ -11,8 +11,6 @@ public class CheckIn {
     private JTextField textFieldNumeroPrenotazione;
     private JButton buttonCheckIn;
     private JButton button1;
-    private JRadioButton bagaglioRadioButton;
-
     private JFrame frame;
 
     public CheckIn(JFrame frameChiamante, Controller controller) {
@@ -23,25 +21,21 @@ public class CheckIn {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setSize(200, 200);
 
         buttonCheckIn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String numeroPrenotazione = textFieldNumeroPrenotazione.getText().trim();
-                int prenotazione = Integer.parseInt(numeroPrenotazione);
+                int prenotazione = Integer.parseInt(textFieldNumeroPrenotazione.getText().trim());
 
-                if (numeroPrenotazione.isEmpty()) {
-                    JOptionPane.showMessageDialog(panel1, "Inserisci il numero prenotazione!");
-                    return;
-                }
+                String messaggio= controller.checkIn(prenotazione);
 
-                boolean bagaglio=false;
+                if(!messaggio.isEmpty())
+                    JOptionPane.showMessageDialog(buttonCheckIn, messaggio);
 
-                if (bagaglioRadioButton.isSelected())
-                    bagaglio = true;
-
-                controller.checkIn(prenotazione, bagaglio);
+                else
+                    JOptionPane.showMessageDialog(buttonCheckIn, "Operazione fallita");
             }
         });
 

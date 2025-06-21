@@ -21,7 +21,7 @@ public class AssegnaGate {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(800, 800);
 
         button1.addActionListener(new ActionListener() {
             @Override
@@ -41,7 +41,12 @@ public class AssegnaGate {
 
                 numeroGate = Integer.parseInt(textField2.getText());
 
-                controller.assegnaGate(codiceVolo, numeroGate);
+                boolean esito = controller.assegnaGate(codiceVolo, numeroGate);
+
+                if(esito)
+                    JOptionPane.showMessageDialog(assegnaButton, "Gate assegnato!");
+                else
+                    JOptionPane.showMessageDialog(assegnaButton, "Inserire codice di un volo esistente!");
             }
         });
     }

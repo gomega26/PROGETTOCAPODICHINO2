@@ -18,6 +18,7 @@ public class HomePageAmministratore {
     private JButton aggiornaStatoBagaglioButton;
     private JButton indietroButton;
     private JLabel lable1;
+    private JButton logOutButton;
     private static JFrame frame;
 
     public HomePageAmministratore(JFrame frameChiamante, Controller controller) {
@@ -28,7 +29,7 @@ public class HomePageAmministratore {
         frame.setVisible(true);
         frame.setSize(1000, 1000);
 
-        lable1.setText("BENVENUTO " + ((Amministratore)controller.getUser()).getNome());
+        lable1.setText("BENVENUTO " + ((Amministratore)controller.getUser()).getLogin());
 
         cercaPasseggeroButton.addActionListener(new ActionListener() {
             @Override
@@ -87,6 +88,17 @@ public class HomePageAmministratore {
         indietroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+            }
+        });
+
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                controller.logOut();
 
                 frame.setVisible(false);
                 frameChiamante.setVisible(true);

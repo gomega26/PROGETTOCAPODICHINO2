@@ -12,11 +12,8 @@ public class LogInPage {
     private JPasswordField passwordField1;
     private JButton logInButton;
     private JButton button1;
+    private JButton signInButton;
     private static JFrame frame;
-
-
-    private JFrame frameChiamante;
-    private Controller controller;
 
     public LogInPage(JFrame frameChiamante, Controller controller) {
 
@@ -26,6 +23,9 @@ public class LogInPage {
         frame.pack();
         frame.setVisible(true);
         frame.setSize(500, 500);
+
+        textField1.setText("");
+        passwordField1.setText("");
 
         logInButton.addActionListener(new ActionListener() {
             @Override
@@ -52,6 +52,9 @@ public class LogInPage {
 
                     JOptionPane.showMessageDialog(logInButton, "Nome utente o password errati");
                 }
+
+                textField1.setText("");
+                passwordField1.setText("");
             }
         });
 
@@ -63,6 +66,15 @@ public class LogInPage {
 
                 frame.setVisible(false);
                 frameChiamante.setVisible(true);
+            }
+        });
+
+        signInButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                SignIn frame3=new SignIn(frameChiamante, controller);
+                frame.setVisible(false);
             }
         });
     }

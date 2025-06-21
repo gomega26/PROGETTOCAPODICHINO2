@@ -1,8 +1,10 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Prenotazione {
 
-    private static int cont;
+    private static int cont=101;
     private int id;
     private int numBiglietto;
     private String posto;
@@ -10,7 +12,7 @@ public class Prenotazione {
     private ClasseVolo classeVolo;
     private Passeggero passeggero;
     private Volo volo;
-    private Bagaglio bagaglio;
+    private ArrayList<Bagaglio> bagagli;
 
     //COSTRUTTORE
     public Prenotazione(String posto, ClasseVolo classe){
@@ -19,8 +21,16 @@ public class Prenotazione {
         this.stato = StatoPrenotazione.InAttesa;
         this.posto = posto;
         this.classeVolo = classe;
+        this.bagagli=new ArrayList<>();
 
         cont++;
+    }
+
+    public String toString(){
+
+        return "Prenotazione: " + this.id + " " +this.stato+"\n\nMr./Ms. " + this.passeggero.getNome() +" " +this.passeggero.getCognome()+ "\n\n"+
+        this.volo.toString()+"\n\nCLASSE: " + this.classeVolo + "  POSTO: " + this.posto+
+        "\n\nNumero bagagli: "+this.bagagli.size()+"\n\nNUMERO BIGLIETTO :" +this.numBiglietto;
     }
 
     //GETTERS E SETTERS
@@ -64,14 +74,6 @@ public class Prenotazione {
         this.stato = stato;
     }
 
-    public Passeggero getPasseggero() {
-        return passeggero;
-    }
-
-    public void setPasseggero(Passeggero passeggero) {
-        this.passeggero = passeggero;
-    }
-
     public Volo getVolo() {
         return volo;
     }
@@ -80,15 +82,23 @@ public class Prenotazione {
         this.volo = volo;
     }
 
-    public Bagaglio getBagaglio() {
-        return bagaglio;
-    }
-
-    public void setBagaglio(Bagaglio bagaglio) {
-        this.bagaglio = bagaglio;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public Passeggero getPasseggero() {
+        return passeggero;
+    }
+
+    public void setPasseggero(Passeggero passeggero) {
+        this.passeggero = passeggero;
+    }
+
+    public ArrayList<Bagaglio> getBagagli() {
+        return bagagli;
+    }
+
+    public void setBagagli(ArrayList<Bagaglio> bagagli) {
+        this.bagagli = bagagli;
     }
 }

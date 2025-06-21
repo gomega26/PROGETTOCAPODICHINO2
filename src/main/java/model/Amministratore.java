@@ -4,26 +4,20 @@ import java.util.ArrayList;
 
 public class Amministratore extends Utente {
 
-    private String nome;
-    private String cognome;
     private ArrayList<Volo> voliGestiti;
 
 
     //COSTRUTTORE
-    public Amministratore(String login, String password, String email, String nome, String cognome){
+    public Amministratore(String login, String password, String email){
 
         super(login, password, email);
-        this.nome = nome;
-        this.cognome = cognome;
         this.voliGestiti = new ArrayList<Volo>();
     }
 
     //CERCA PASSEGGERO
-    public ArrayList<Passeggero> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso){
+    public ArrayList<Prenotazione> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso){
 
-
-
-        ArrayList<Passeggero> passeggeriTrovati = new ArrayList<Passeggero>();
+        ArrayList<Prenotazione> passeggeriPerPrenotazioni = new ArrayList<>();
 
         for (Volo v : voliGestiti) {
 
@@ -38,12 +32,12 @@ public class Amministratore extends Utente {
                 if (sesso != '-' && p.getPasseggero().getSesso() != sesso)
                     continue;
 
-                passeggeriTrovati.add(p.getPasseggero());
+                passeggeriPerPrenotazioni.add(p);
             }
         }
 
 
-        return passeggeriTrovati;
+        return passeggeriPerPrenotazioni;
     }
 
     //INSERISCE UN NUOVO VOLO NELLA LISTA DEI VOLI
@@ -85,23 +79,20 @@ public class Amministratore extends Utente {
     //AGGIORNA LO STATO DI UN BAGAGLIO
     public void aggiornaStatoBagaglio(Bagaglio bagaglio, StatoBagaglio stato){
 
-        for (Volo v : voliGestiti) {
-            for (Prenotazione p : v.getPrenotazioni()) {
-                if (p.getBagaglio().equals(bagaglio))
-                    p.getBagaglio().setStatoBagaglio(stato);
-            }
-        }
+        bagaglio.setStatoBagaglio(stato);
     }
 
     //VISUALIZZA LA LISTA DEI BAGAGLI SMARRITI
     public ArrayList<Bagaglio> visualizzaSmarrimenti(){
 
-        ArrayList<Bagaglio> bagagliSmarriti = new ArrayList<Bagaglio>();
+        ArrayList<Bagaglio> bagagliSmarriti = new ArrayList<>();
 
         for (Volo v: voliGestiti) {
             for(Prenotazione p : v.getPrenotazioni()) {
-                if (p.getBagaglio().getStato() == StatoBagaglio.Smarrito)
-                    bagagliSmarriti.add(p.getBagaglio());
+                for(Bagaglio b: p.getBagagli()) {
+                    if (b.getStato() == StatoBagaglio.Smarrito)
+                        bagagliSmarriti.add(b);
+                }
             }
         }
 
@@ -137,22 +128,6 @@ public class Amministratore extends Utente {
     }
 
     //GETTERS
-    public String getNome() {
-        return nome;
-    }
-
-    public String getCognome() {
-        return cognome;
-    }
-
-    //SETTERS
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
-    }
 
     public ArrayList<Volo> getVoliGestiti() {
         return voliGestiti;

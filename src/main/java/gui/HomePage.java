@@ -32,6 +32,10 @@ public class HomePage {
     private static JFrame frame;
     private Controller controller;
 
+    private String tipologia;
+    private String localita;
+    private String numGate;
+
     public HomePage() {
 
         controller = new Controller();
@@ -47,28 +51,31 @@ public class HomePage {
         controller.getVoli().add(new VoloInArrivo("TAP Air Portugal", "TP851", "Lisbona", "11:50", "14:20", "15/06/2025", "2 ore 30 min", 0, StatoVolo.Cancellato));
         controller.getVoli().add(new VoloInArrivo("Swiss", "LX1712", "Zurigo", "17:30", "19:00", "15/06/2025", "1 ora 30 min", 0, StatoVolo.Programmato));
 
-        controller.inizializzaAmministratore("1", "2", "trallalero@gmail.com", "Piero", "Esposito");
-
-        label2.setFont(new Font("Courier New", Font.PLAIN, 20));
-
-        comboBox1.addItem(" ");
-        comboBox1.addItem("VoloInPartenza");
-        comboBox1.addItem("VoloInArrivo");
-
-
+        comboBox1.setModel(new DefaultComboBoxModel(new Object[]{" ", "VoloInPartenza", "VoloInArrivo"}));
 
         //INIZIALIZZA TABELLA
 
-        String[] colonne = {"Volo", "compagnia aerea", "origine", "destinaizone", "data", "orario partenza", "orario arrivo", "durata", "stato", "R", "Gate"};
+        String[] colonne = {"Volo", "compagnia aerea", "tipologia", "località", "data", "orario partenza", "orario arrivo", "durata", "stato", "R", "Gate"};
 
         model = new DefaultTableModel(colonne, 0);
 
         for(Volo v : controller.getVoli()){
-            if(v.getClass().getSimpleName().equals("VoloInArrivo"))
-                model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo()});
 
-            if(v.getClass().getSimpleName().equals("VoloInPartenza"))
-                model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), ((VoloInPartenza)v).getNumGate()});
+            if(v.getClass().getSimpleName().equals("VoloInPartenza")){
+
+                tipologia = "in partenza per";
+                localita = v.getDestinazione();
+                numGate = String.valueOf(((VoloInPartenza)v).getNumGate());
+            }
+
+            else {
+
+                tipologia = "in arrivo da";
+                localita = v.getOrigine();
+                numGate= "-";
+            }
+
+                model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
         }
 
         table1.setModel(model);
@@ -119,15 +126,29 @@ public class HomePage {
                     model.setRowCount(0);
 
                     for (Volo v : voliTrovati) {
-                        if ((v.getClass().getSimpleName().equals("VoloInArrivo")))
-                            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo()});
+                        if(v.getClass().getSimpleName().equals("VoloInPartenza")){
 
-                        if ((v.getClass().getSimpleName().equals("VoloInPartenza")))
-                            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getOrigine(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), ((VoloInPartenza) v).getNumGate()});
+                            tipologia = "in partenza per";
+                            localita = v.getDestinazione();
+                            numGate = String.valueOf(((VoloInPartenza)v).getNumGate());
+                        }
+
+                        else {
+
+                            tipologia = "in arrivo da";
+                            localita = v.getOrigine();
+                            numGate= "-";
+                        }
+
+                        model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
                     }
                 }
             }
         });
+    }
+
+    public static JFrame getFrame() {
+        return frame;
     }
 
     public static void main(String[] args) {
@@ -136,6 +157,6 @@ public class HomePage {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(1300, 800);
     }
 }

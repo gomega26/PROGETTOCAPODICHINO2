@@ -3,6 +3,7 @@ package gui; //finito
 import controller.Controller;
 import model.ClasseVolo;
 import model.Bagaglio;
+import model.Prenotazione;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -10,8 +11,7 @@ import java.awt.event.ActionListener;
 
 public class ModificaPrenotazione {
 
-    private JPanel panel1;;
-    private JRadioButton bagaglioRadioButton;
+    private JPanel panel1;
     private JTextField numeroPrenotazioneTextField;
     private JTextField postoTextField;
     private JTextField classeVoloTextField;
@@ -21,6 +21,8 @@ public class ModificaPrenotazione {
     private JButton buttonModificaPrenotazione;
     private JComboBox comboBox1;
     private JButton button1;
+    private JComboBox comboBox2;
+    private JTextField textField1;
     private JFrame frame;
 
     public ModificaPrenotazione(JFrame frameChiamante, Controller controller) {
@@ -31,32 +33,35 @@ public class ModificaPrenotazione {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setSize(400, 1000);
 
         comboBox1.setModel(new DefaultComboBoxModel<>(new String[]{" ", "M", "F"}));
+
+        comboBox2.setModel(new DefaultComboBoxModel<>(new String[]{"Economy", "Business", "FirstClass"}));
 
         buttonModificaPrenotazione.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 int numeroPrenotazione = Integer.parseInt(numeroPrenotazioneTextField.getText());
+
                 String nome = nomePasseggeroTextField.getText().trim();
                 String cognome = cognomePasseggeroTextField.getText().trim();
                 String posto = postoTextField.getText().trim();
-                ClasseVolo classeVolo = ClasseVolo.valueOf(classeVoloTextField.getText().trim());
+                ClasseVolo classeVolo = ClasseVolo.valueOf(comboBox2.getSelectedItem().toString());
                 String numDocumento = numeroDocumentoPasseggeroTextField.getText().trim();
                 char sesso = comboBox1.getSelectedItem().toString().charAt(0);
+                int bagaglio = Integer.parseInt(textField1.getText());
 
-                boolean bagaglio = false;
+                boolean esito = controller.modificaPrenotazione(numeroPrenotazione, posto, classeVolo, nome, cognome, numDocumento, sesso, bagaglio);
 
-                if(bagaglioRadioButton.isSelected())
-                    bagaglio=true;
+                if(esito)
+                    JOptionPane.showMessageDialog(buttonModificaPrenotazione, "Modifica effettuata");
+                else
+                    JOptionPane.showMessageDialog(buttonModificaPrenotazione, "Inserire una prenotazione esistente!");
 
-
-                controller.modificaPrenotazione(numeroPrenotazione, posto, classeVolo, nome, cognome, numDocumento, sesso, bagaglio);
             }
         });
-
-
 
         button1.addActionListener(new ActionListener() {
             @Override

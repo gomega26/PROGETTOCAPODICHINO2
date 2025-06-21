@@ -22,7 +22,7 @@ public class AggiornaStatoBagaglio {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(500, 450);
 
         comboBox1.addItem("Caricato");
         comboBox1.addItem("Ritirabile");

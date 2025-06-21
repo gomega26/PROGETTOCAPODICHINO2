@@ -35,6 +35,14 @@ public class Volo {
 
     }
 
+    public String toString(){
+
+        return "VOLO: " + this.codice +" " + this.compagniaAerea+
+                "\n\nIn Partenza da " + this.origine+ " in data "+this.dataPartenza+" alle "+this.orarioPartenza+
+                "\n\nIn arrivo a" + this.destinazione+" alle " +this.orarioArrivo+
+                "\n\n(" + this.durata+")";
+    }
+
     public String getCodice() {
         return codice;
     }

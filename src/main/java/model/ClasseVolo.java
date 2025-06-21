@@ -4,6 +4,5 @@ public enum ClasseVolo {
 
     Economy,
     Business,
-    FirstClass,
-    NessunaClasse;
+    FirstClass;
 }

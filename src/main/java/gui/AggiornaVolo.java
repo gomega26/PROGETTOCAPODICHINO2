@@ -62,9 +62,12 @@ public class AggiornaVolo {
                 StatoVolo statoDelVolo = StatoVolo.valueOf(comboBox1.getSelectedItem().toString());
                 String luogo = luogotext.getText();
 
-                controller.aggiornaVolo(codiceVolo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
+                boolean esito = controller.aggiornaVolo(codiceVolo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
 
-                JOptionPane.showMessageDialog(frame, "Volo aggiornato con successo!");
+                if(esito)
+                    JOptionPane.showMessageDialog(modificaButton, "Volo aggiornato con successo!");
+                else
+                    JOptionPane.showMessageDialog(modificaButton, "Inserire codice di un volo esistente");
             }
         });
 
