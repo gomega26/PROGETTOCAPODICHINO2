@@ -46,7 +46,7 @@ public class MonitoraBagaglio {
                     JOptionPane.showMessageDialog(monitoraBagaglioButton, "Bagaglio non trovato");
 
                 else
-                    textArea1.setText("Bagaglio trovato! Codice: " + b.getCodice() + " - " + b.getStato());
+                    textArea1.setText("Codice bagaglio: " + b.getCodice() + " - " + b.getStato());
 
 
             }

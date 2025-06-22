@@ -68,10 +68,13 @@ public class PrenotaVolo {
                 int esito = controller.prenotaVolo(codiceVolo, posto, classe, nome, cognome, telefono, documento, sesso.charAt(0), dataNascita, NumBagagli);
 
                 if(esito ==-1)
-                    JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Il volo non è programmato");
+                    JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Il volo non è disponibile, spiacenti");
 
-                else if(esito==0)
+                else if(esito==0) {
                     JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Inserire Volo esistente");
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
 
                 else
                     JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Prenotazione effettuata - Codice :" + esito);

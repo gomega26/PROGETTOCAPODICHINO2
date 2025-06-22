@@ -9,21 +9,17 @@ public class InserisciVolo {
 
     private JPanel panel1;
     private JButton button1;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField codicetextfield;
-    private JTextField originetextField;
-    private JTextField destinazionetextField;
-    private JTextField compagniatextField;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
+    private JTextField ritardoTextField;
+    private JTextField dataTextField;
+    private JTextField orarioArrivoTextField;
+    private JTextField destinazioneTextField;
+    private JTextField origineTextField;
     private JComboBox comboBox1;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField durataTextField;
+    private JTextField orarioPartenzaTextField;
     private JButton aggiungiButton;
-    private JTextField textField8;
-    private JTextField textField9;
+    private JTextField compagniaAereaTextField;
+    private JTextField codiceVoloTextField;
     private static JFrame frame;
 
     public InserisciVolo(JFrame frameChiamante, Controller controller) {
@@ -33,6 +29,8 @@ public class InserisciVolo {
         frame.pack();
         frame.setVisible(true);
         frame.setSize(1000, 1000);
+
+        comboBox1.setModel(new DefaultComboBoxModel(new Object[]{"Programmato","Decollato", "InRitardo","Atterrato","Cancellato"}));
 
 
         button1.addActionListener(new ActionListener() {
@@ -48,25 +46,29 @@ public class InserisciVolo {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String codice = codicetextfield.getText().trim();
-                String origine = originetextField.getText().trim();
-                String destinazione = destinazionetextField.getText().trim();
-                String compagnia = compagniatextField.getText().trim();
-                String partenza = textField5.getText().trim();
-                String arrivo = textField6.getText().trim();
-                String durata = textField7.getText().trim();
+                String codice = codiceVoloTextField.getText();
+                String origine = origineTextField.getText();
+                String destinazione = destinazioneTextField.getText();
+                String compagnia = compagniaAereaTextField.getText();
+                String partenza = orarioPartenzaTextField.getText();
+                String arrivo = orarioArrivoTextField.getText();
+                String durata = durataTextField.getText();
                 String stato = comboBox1.getSelectedItem().toString();
-                String ritardo = textField8.getText().trim();
-                String dataPartenza = textField9.getText().trim();
+                String ritardo = ritardoTextField.getText();
+                String dataPartenza = dataTextField.getText();
 
                 int ritardoInt = Integer.parseInt(ritardo);
 
-                controller.inserisciVolo(compagnia, codice, origine, destinazione, partenza, arrivo, dataPartenza, durata, ritardoInt, stato);
+                boolean esito = controller.inserisciVolo(compagnia, codice, origine, destinazione, partenza, arrivo, dataPartenza, durata, ritardoInt, stato);
 
-                JOptionPane.showMessageDialog(aggiungiButton, "Volo aggiunto con successo!");
+                if(esito) {
+                    JOptionPane.showMessageDialog(aggiungiButton, "Volo aggiunto con successo!");
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
 
-                frame.setVisible(false);
-                frameChiamante.setVisible(true);
+                else
+                    JOptionPane.showMessageDialog(aggiungiButton, "Operazione fallita");
             }
         });
     }

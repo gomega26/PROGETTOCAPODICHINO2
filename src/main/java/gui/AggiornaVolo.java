@@ -49,11 +49,6 @@ public class AggiornaVolo {
             public void actionPerformed(ActionEvent e) {
                 String codiceVolo = codicevolotext.getText();
 
-                if (codiceVolo.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Errore: Inserisci il codice del volo.");
-                    return;
-                }
-
                 String orarioPartenza = orariopartenzatext.getText();
                 String orarioArrivo = orarioarrivotext.getText();
                 String dataPartenza = datatext.getText();
@@ -64,8 +59,14 @@ public class AggiornaVolo {
 
                 boolean esito = controller.aggiornaVolo(codiceVolo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
 
-                if(esito)
+                if(esito){
+
                     JOptionPane.showMessageDialog(modificaButton, "Volo aggiornato con successo!");
+
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
+
                 else
                     JOptionPane.showMessageDialog(modificaButton, "Inserire codice di un volo esistente");
             }

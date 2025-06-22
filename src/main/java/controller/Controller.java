@@ -2,6 +2,10 @@ package controller;
 
 import model.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class Controller {
@@ -43,6 +47,28 @@ public class Controller {
 
         else
             return false;
+    }
+
+    //CONTROLLI SU DATA E ORARI
+
+    public boolean isDate(String date){
+
+        try {
+            LocalDate.parse(date);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    public boolean isTime(String time){
+
+        try {
+            LocalTime.parse(time);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
 
@@ -240,21 +266,29 @@ public class Controller {
 
     //INSERISCI VOLO
 
-    public void inserisciVolo(String compagniaAerea, String codice, String origine, String destinazione, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoVoloString) {
+    public boolean inserisciVolo(String compagniaAerea, String codice, String origine, String destinazione, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoVoloString) {
 
         StatoVolo stato = StatoVolo.valueOf(statoVoloString);
 
-        Volo nuovoVolo;
+        Volo nuovoVolo=null;
 
-        if (origine.equals("Napoli"))
-            nuovoVolo = new VoloInPartenza(compagniaAerea, codice, destinazione, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato, 0);
+        if(this.isDate(dataPartenza) && this.isTime(orarioPartenza) && this.isTime(orarioArrivo) && (origine.equals("Napoli") || destinazione.equals("Napoli"))) {
+
+            if (origine.equals("Napoli"))
+                nuovoVolo = new VoloInPartenza(compagniaAerea, codice, destinazione, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato, 0);
+
+            else
+                nuovoVolo = new VoloInArrivo(compagniaAerea, codice, origine, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato);
+
+            voli.add(nuovoVolo);
+
+            ((Amministratore) user).inserisciVolo(nuovoVolo);
+
+            return true;
+        }
 
         else
-            nuovoVolo = new VoloInArrivo(compagniaAerea, codice, origine, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato);
-
-        voli.add(nuovoVolo);
-
-        ((Amministratore) user).inserisciVolo(nuovoVolo);
+            return false;
     }
 
     //MODIFICA VOLO

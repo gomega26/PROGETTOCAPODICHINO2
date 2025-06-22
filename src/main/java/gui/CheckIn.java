@@ -31,8 +31,11 @@ public class CheckIn {
 
                 String messaggio= controller.checkIn(prenotazione);
 
-                if(!messaggio.isEmpty())
+                if(!messaggio.isEmpty()) {
                     JOptionPane.showMessageDialog(buttonCheckIn, messaggio);
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
 
                 else
                     JOptionPane.showMessageDialog(buttonCheckIn, "Operazione fallita");

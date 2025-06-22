@@ -55,8 +55,12 @@ public class ModificaPrenotazione {
 
                 boolean esito = controller.modificaPrenotazione(numeroPrenotazione, posto, classeVolo, nome, cognome, numDocumento, sesso, bagaglio);
 
-                if(esito)
+                if(esito) {
                     JOptionPane.showMessageDialog(buttonModificaPrenotazione, "Modifica effettuata");
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
+
                 else
                     JOptionPane.showMessageDialog(buttonModificaPrenotazione, "Inserire una prenotazione esistente!");
 

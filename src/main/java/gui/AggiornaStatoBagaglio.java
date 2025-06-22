@@ -44,6 +44,11 @@ public class AggiornaStatoBagaglio {
                 StatoBagaglio stato = StatoBagaglio.valueOf(comboBox1.getSelectedItem().toString());
 
                 controller.aggiornaStatoBagaglio(b, stato);
+
+                JOptionPane.showMessageDialog(aggiornaButton, "Operazione completata con successo");
+
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
             }
         });
     }

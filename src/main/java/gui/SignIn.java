@@ -56,17 +56,29 @@ public class SignIn {
 
                     boolean esito = controller.inizializzaAmministratore(codice, login, password, email);
 
-                    if(esito)
-                        JOptionPane.showMessageDialog(signInButton, "Sign In effettuato");
-                    else
+                    if(!esito)
+
                         JOptionPane.showMessageDialog(signInButton, "Codice di sicurezza non valido");
+
+                    else{
+
+                        JOptionPane.showMessageDialog(signInButton, "Sign in effettuato!");
+
+                        frame.setVisible(false);
+                        frameChiamante.setVisible(true);
+                    }
+
                 }
 
-                else
+                else{
+
                     controller.inizializzaUtenteGenerico(login, password, email);
 
-                frame.setVisible(false);
-                frameChiamante.setVisible(true);
+                    JOptionPane.showMessageDialog(signInButton, "Sign in effettuato!");
+
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
             }
         });
 

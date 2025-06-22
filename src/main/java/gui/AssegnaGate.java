@@ -43,8 +43,12 @@ public class AssegnaGate {
 
                 boolean esito = controller.assegnaGate(codiceVolo, numeroGate);
 
-                if(esito)
+                if(esito) {
                     JOptionPane.showMessageDialog(assegnaButton, "Gate assegnato!");
+
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
                 else
                     JOptionPane.showMessageDialog(assegnaButton, "Inserire codice di un volo esistente!");
             }
