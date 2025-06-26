@@ -66,13 +66,15 @@ public class HomePage {
                 tipologia = "in partenza per";
                 localita = v.getDestinazione();
                 numGate = String.valueOf(((VoloInPartenza)v).getNumGate());
+                if(numGate.equals("0"))
+                    numGate="-";
             }
 
             else {
 
                 tipologia = "in arrivo da";
                 localita = v.getOrigine();
-                numGate= "-";
+                numGate= "";
             }
 
                 model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});

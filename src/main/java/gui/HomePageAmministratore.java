@@ -27,7 +27,7 @@ public class HomePageAmministratore {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(800, 800);
 
         lable1.setText("BENVENUTO " + ((Amministratore)controller.getUser()).getLogin());
 

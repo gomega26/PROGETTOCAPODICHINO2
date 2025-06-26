@@ -6,7 +6,6 @@ public class Amministratore extends Utente {
 
     private ArrayList<Volo> voliGestiti;
 
-
     //COSTRUTTORE
     public Amministratore(String login, String password, String email){
 

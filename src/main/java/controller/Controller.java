@@ -1,5 +1,7 @@
 package controller;
 
+import ImplementazioneDAO.ImplementazioneAmministratoreDAO;
+import dao.AmministratoreDAO;
 import model.*;
 
 import java.time.LocalDate;
@@ -17,6 +19,9 @@ public class Controller {
     private ArrayList<Utente> utenti;
 
     int codice; //CODICE DI SICUREZZA PER AMMINISTRATORI
+
+
+    protected static int idAmministratori=0;
 
     Utente user;
 
@@ -40,7 +45,8 @@ public class Controller {
 
             user = new Amministratore(login, password, email);
 
-            utenti.add(user);
+            AmministratoreDAO a = new ImplementazioneAmministratoreDAO();
+            a.signIn(email, login, password);
 
             return true;
         }

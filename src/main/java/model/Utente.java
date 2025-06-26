@@ -7,7 +7,7 @@ public class Utente {
         protected String login;
         protected String password;
         protected String email;
-        private boolean autenticato;
+        protected boolean autenticato;
 
         //COSTRUTTORE
         public Utente(String login, String password, String email){
