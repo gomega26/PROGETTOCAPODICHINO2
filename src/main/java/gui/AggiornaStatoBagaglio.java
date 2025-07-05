@@ -41,7 +41,7 @@ public class AggiornaStatoBagaglio {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                StatoBagaglio stato = StatoBagaglio.valueOf(comboBox1.getSelectedItem().toString());
+                String stato = comboBox1.getSelectedItem().toString();
 
                 controller.aggiornaStatoBagaglio(codice, stato);
 

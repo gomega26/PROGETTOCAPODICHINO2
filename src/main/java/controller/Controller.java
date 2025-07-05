@@ -315,32 +315,25 @@ public class Controller {
         for(Prenotazione pr : prenotazioni){
 
             id_volo= prenotazione.getIdVolo(pr.getId());
-            voli.add(volo.getPerId(id_volo);
+            voli.add(volo.getPerId(id_volo);iuggyig
         }
 
 
          */
     }
 
-    //INSERISCI VOLO
+    //INSERISCI VOLO - fatto con DAO
 
     public boolean inserisciVolo(String compagniaAerea, String codice, String origine, String destinazione, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoVoloString) {
 
-        StatoVolo stato = StatoVolo.valueOf(statoVoloString);
+        if(this.isDate(dataPartenza) && this.isTime(orarioPartenza) && this.isTime(orarioArrivo) && (origine.equals("Napoli") || destinazione.equals("Napoli"))){
 
-        Volo nuovoVolo=null;
+            /*VoloDAO v = new ImplementazioneVoloDAO();
+            v.create(compagniaAerea, codice, destinazione, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato)
 
-        if(this.isDate(dataPartenza) && this.isTime(orarioPartenza) && this.isTime(orarioArrivo) && (origine.equals("Napoli") || destinazione.equals("Napoli"))) {
-
-            if (origine.equals("Napoli"))
-                nuovoVolo = new VoloInPartenza(compagniaAerea, codice, destinazione, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato, 0);
-
-            else
-                nuovoVolo = new VoloInArrivo(compagniaAerea, codice, origine, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, stato);
-
-            voli.add(nuovoVolo);
-
-            ((Amministratore) user).inserisciVolo(nuovoVolo);
+            AmministartoreDAO a = new ImplementazioneAmministartoreDAO();
+            a.inserisciVolo(user.getId(), idVolo);
+             */
 
             return true;
         }
@@ -393,7 +386,7 @@ public class Controller {
 
     //AGGIORNA STATO BAGAGLIO - fatto con DAO
 
-    public void aggiornaStatoBagaglio(int codice, StatoBagaglio statoBagaglio) {
+    public void aggiornaStatoBagaglio(int codice, String statoBagaglio) {
 
         /*BagaglioDAO b = new ImplementazioneBagaglioDAO();
 

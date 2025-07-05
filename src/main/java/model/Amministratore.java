@@ -4,13 +4,10 @@ import java.util.ArrayList;
 
 public class Amministratore extends Utente {
 
-    private ArrayList<Volo> voliGestiti;
-
     //COSTRUTTORE
     public Amministratore(String login, String password, String email){
 
         super(login, password, email);
-        this.voliGestiti = new ArrayList<Volo>();
     }
 
     //CERCA PASSEGGERO
@@ -33,11 +30,6 @@ public class Amministratore extends Utente {
         }
 
         return passeggeriTrovati;
-    }
-
-    //INSERISCE UN NUOVO VOLO NELLA LISTA DEI VOLI
-    public void inserisciVolo(Volo v){
-        voliGestiti.add(v);
     }
 
     //MODIFICA UN VOLO
@@ -123,12 +115,4 @@ public class Amministratore extends Utente {
     }
 
     //GETTERS
-
-    public ArrayList<Volo> getVoliGestiti() {
-        return voliGestiti;
-    }
-
-    public void setVoliGestiti(ArrayList<Volo> voliGestiti) {
-        this.voliGestiti = voliGestiti;
-    }
 }

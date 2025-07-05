@@ -9,4 +9,5 @@ public interface AmministratoreDAO {
     void signIn(String email, String login, String password);
     Amministratore logIn(String login, String password);
     void getBagagli(int id, ArrayList<Bagaglio> bagagli);
+    void inserisciVolo(int idUser, String idVolo);
 }
