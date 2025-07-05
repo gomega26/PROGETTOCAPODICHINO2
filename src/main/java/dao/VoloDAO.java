@@ -1,13 +1,13 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import model.*;
 
 public interface VoloDAO {
 
-    Volo findById(int id);
-    List<Volo> findAll();
-    void save(Volo volo);
-    void update(Volo volo);
-    void delete(int id);
+    void getAll(ArrayList<Volo> voli);
+    Volo getVoloPerId(String codiceVolo);
+    void setPrenotazione(int id_prenotazione);
+
 }

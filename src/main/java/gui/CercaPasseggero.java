@@ -3,6 +3,7 @@ package gui;
 import controller.Controller;
 import model.Passeggero;
 import model.Prenotazione;
+import model.Volo;
 import model.VoloInPartenza;
 
 import javax.swing.*;
@@ -58,14 +59,48 @@ public class CercaPasseggero {
                 String numeroDocumento = textField3.getText().trim();
                 char sesso = comboBox1.getSelectedItem().toString().charAt(0);
 
-                ArrayList<Prenotazione> risultati = controller.cercaPasseggero(nome, cognome, numeroDocumento, sesso);
+                ArrayList<Prenotazione> prenotazioni= new ArrayList<>();
+                ArrayList<Volo> voli=new ArrayList<>();
+                ArrayList<Passeggero> passeggeri = new ArrayList<>();
+
+                controller.cercaPasseggero(passeggeri, prenotazioni, voli, nome, cognome, numeroDocumento, sesso);
 
                 model.setRowCount(0);
 
                 String tipologia;
                 String localita;
 
-                for (Prenotazione p : risultati) {
+                for (int i = 0; i < passeggeri.size(); i++) {
+                    Passeggero p = passeggeri.get(i);
+                    Prenotazione pr = prenotazioni.get(i);
+                    Volo v = voli.get(i);
+
+                    if(v.getClass().getSimpleName().equals("VoloInPartenza")){
+
+                        tipologia = "in partenza per";
+                        localita = v.getDestinazione();
+                    }
+
+                    else {
+
+                        tipologia = "in arrivo da";
+                        localita = v.getOrigine();
+                    }
+
+
+                    Object[] riga = {
+                            p.getNome(), p.getCognome(), p.getNumDocumento(), p.getSesso(),
+                            pr.getId(), pr.getStatoPrenotazione(),
+                            v.getCodice(), tipologia, localita, v.getDataPartenza()
+                    };
+
+                    model.addRow(riga);
+                }
+
+
+
+
+                /*for (Prenotazione p : risultati) {
 
                     if(p.getVolo().getClass().getSimpleName().equals("VoloInPartenza")){
 
@@ -89,7 +124,7 @@ public class CercaPasseggero {
                                                 tipologia,
                                                 localita,
                                                 p.getVolo().getDataPartenza()});
-                }
+                }*/
             }
         });
     }

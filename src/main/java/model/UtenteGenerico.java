@@ -15,7 +15,7 @@ public class UtenteGenerico extends Utente {
     }
 
     //PRENOTA UN VOLO
-    public int prenotaVolo(Volo v, String posto, ClasseVolo classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita, int NumBagagli) {
+    /*public int prenotaVolo(Volo v, String posto, ClasseVolo classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita, int NumBagagli) {
 
         int codice= -1;
 
@@ -41,10 +41,10 @@ public class UtenteGenerico extends Utente {
             }
 
         return codice;
-    }
+    }*/
 
     //MODIFICA UNA PRENOTAZIONE GIA' EFFETTUATA
-    public void modificaPrenotazione(Prenotazione p, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, ArrayList<Bagaglio> bagagli ) {
+    /*public void modificaPrenotazione(Prenotazione p, String posto, ClasseVolo classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, ArrayList<Bagaglio> bagagli ) {
 
         if (!posto.isEmpty())
             p.setPosto(posto);
@@ -65,24 +65,14 @@ public class UtenteGenerico extends Utente {
             for(Bagaglio b: bagagli)
                 p.getBagagli().add(b);
         }
-    }
+    }*/
 
     //SEGNALA LO SMARRIMENTO DI UN BAGAGLIO
-    public void segnalaSmarrimento(Bagaglio b) {
+    /*public void segnalaSmarrimento(Bagaglio b) {
 
         b.setStato(StatoBagaglio.Smarrito);
 
-    }
-
-    //EFFETTUAT L'OPERAZIONE DI CHECK-IN
-    public String checkIn(Prenotazione p) {
-
-            p.setNumBiglietto(count);
-            p.setStato(StatoPrenotazione.Confermata);
-            count++;
-
-            return p.toString();
-    }
+    }*/
 
     //GETTERS E SETTERS
     public ArrayList<Prenotazione> getPrenotazioniEffetuate() {

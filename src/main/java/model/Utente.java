@@ -7,7 +7,7 @@ public class Utente {
         protected String login;
         protected String password;
         protected String email;
-        protected boolean autenticato;
+        protected int id;
 
         //COSTRUTTORE
         public Utente(String login, String password, String email){
@@ -15,26 +15,18 @@ public class Utente {
                 this.login = login;
                 this.password = password;
                 this.email = email;
-                this.autenticato=false;
         }
 
+        public Utente(){};
+
         //LOG-IN
-        public boolean logIn(String login, String password) {
+        /*public boolean logIn(String login, String password) {
 
                 if((this.login.equals(login) || this.email.equals(login)) && this.password.equals(password))
                         this.autenticato=true;
 
-                return this.autenticato;
-        }
-
-        //LOG OUT
-
-        public boolean logOut(){
-
-                this.autenticato=false;
-
-                return this.autenticato;
-        }
+                return (this.login.equals(login) || this.email.equals(login)) && this.password.equals(password);
+        }*/
 
         //RICERCA VOLO
         public ArrayList<Volo> ricercaVolo(ArrayList<Volo> voli, String tipo, String compagniaAerea, String codice, String dataPartenza, String destinazione){
@@ -61,7 +53,7 @@ public class Utente {
         }
 
         //MONITORA LO STATO DEL BAGAGLIO
-        public Bagaglio monitoraBagaglio(ArrayList<Bagaglio> bagagli, int codice) {
+        /*public Bagaglio monitoraBagaglio(ArrayList<Bagaglio> bagagli, int codice) {
 
                 for (Bagaglio b : bagagli) {
 
@@ -72,7 +64,7 @@ public class Utente {
                 }
 
                 return null;
-        }
+        }*/
 
         //CERCA UNA PRENOTAZIONE
         public ArrayList<Prenotazione> cercaPrenotazione(ArrayList<Prenotazione> prenotazioni, String codiceVolo, String dataVolo, String orarioPartenza) {
@@ -118,12 +110,12 @@ public class Utente {
                 return login;
         }
 
-        public boolean isAutenticato() {
-                return autenticato;
+        public void setId(int id) {
+                this.id = id;
         }
 
-        public void setAutenticato(boolean autenticato) {
-                this.autenticato = autenticato;
+        public int getId() {
+                return id;
         }
 }
 

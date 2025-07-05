@@ -57,7 +57,12 @@ public class HomePage {
 
         String[] colonne = {"Volo", "compagnia aerea", "tipologia", "località", "data", "orario partenza", "orario arrivo", "durata", "stato", "R", "Gate"};
 
-        model = new DefaultTableModel(colonne, 0);
+        model = new DefaultTableModel(colonne, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         for(Volo v : controller.getVoli()){
 
@@ -86,7 +91,7 @@ public class HomePage {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(!controller.isAutenticato()) {
+                if(controller.getUser()==null) {
                     LogInPage frame2 = new LogInPage(frame, controller);
                 }
 

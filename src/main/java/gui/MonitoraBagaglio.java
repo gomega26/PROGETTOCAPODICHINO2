@@ -78,7 +78,7 @@ public class MonitoraBagaglio {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                AggiornaStatoBagaglio frame7 = new AggiornaStatoBagaglio(frame, controller, b);
+                AggiornaStatoBagaglio frame7 = new AggiornaStatoBagaglio(frame, controller, b.getCodice());
                 frame.setVisible(false);
             }
         });

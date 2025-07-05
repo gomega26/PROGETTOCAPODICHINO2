@@ -16,7 +16,7 @@ public class AggiornaStatoBagaglio {
     private JComboBox comboBox1;
     private static JFrame frame;
 
-    public AggiornaStatoBagaglio(JFrame frameChiamante, Controller controller, Bagaglio b) {
+    public AggiornaStatoBagaglio(JFrame frameChiamante, Controller controller, int codice) {
         frame = new JFrame("AggiornaStatoBagaglio");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,7 +43,7 @@ public class AggiornaStatoBagaglio {
 
                 StatoBagaglio stato = StatoBagaglio.valueOf(comboBox1.getSelectedItem().toString());
 
-                controller.aggiornaStatoBagaglio(b, stato);
+                controller.aggiornaStatoBagaglio(codice, stato);
 
                 JOptionPane.showMessageDialog(aggiornaButton, "Operazione completata con successo");
 

@@ -14,29 +14,25 @@ public class Amministratore extends Utente {
     }
 
     //CERCA PASSEGGERO
-    public ArrayList<Prenotazione> cercaPasseggero(String nome, String cognome, String numDocumento, char sesso){
+    public ArrayList<Passeggero> cercaPasseggero(ArrayList<Passeggero> passeggeri, String nome, String cognome, String numDocumento, char sesso){
 
-        ArrayList<Prenotazione> passeggeriPerPrenotazioni = new ArrayList<>();
+        ArrayList<Passeggero> passeggeriTrovati = new ArrayList<>();
 
-        for (Volo v : voliGestiti) {
+        for (Passeggero p : passeggeri) {
 
-            for (Prenotazione p : v.getPrenotazioni()) {
+            if (!nome.isEmpty() && !p.getNome().equals(nome))
+                continue;
+            if (!cognome.isEmpty() && !p.getCognome().equals(cognome))
+                continue;
+            if (!numDocumento.isEmpty() && !p.getNumDocumento().equals(numDocumento))
+                continue;
+            if (sesso != '-' && p.getSesso() != sesso)
+                continue;
 
-                if (!nome.isEmpty() && !p.getPasseggero().getNome().equals(nome))
-                    continue;
-                if (!cognome.isEmpty() && !p.getPasseggero().getCognome().equals(cognome))
-                    continue;
-                if (!numDocumento.isEmpty() && !p.getPasseggero().getNumDocumento().equals(numDocumento))
-                    continue;
-                if (sesso != '-' && p.getPasseggero().getSesso() != sesso)
-                    continue;
-
-                passeggeriPerPrenotazioni.add(p);
-            }
+            passeggeriTrovati.add(p);
         }
 
-
-        return passeggeriPerPrenotazioni;
+        return passeggeriTrovati;
     }
 
     //INSERISCE UN NUOVO VOLO NELLA LISTA DEI VOLI

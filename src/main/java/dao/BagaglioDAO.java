@@ -5,9 +5,8 @@ import model.*;
 
 public interface BagaglioDAO {
 
-    Bagaglio findById(int id);
-    List<Bagaglio> findAll();
-    void save(Bagaglio bagaglio);
-    void update(Bagaglio bagaglio);
-    void delete(int id);
+    Bagaglio getBagagliPerUtenteGenerico(int idUser, int codiceBagaglio);
+    Bagaglio getBagagliPerAmministartore(int codiceBagaglio);
+    void create(int id_prenotazione);
+    void segnalaSmarrimento(int idAmministratore, int codice); //BISOGNA VERIFICARE CHE IL BAGAGLIO SIA IN UN VOLO MONITORATO DA QUELL'AMMINISTRATORE
 }

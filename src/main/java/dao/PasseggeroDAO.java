@@ -1,13 +1,13 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import model.*;
 
 public interface PasseggeroDAO {
 
-    Passeggero findById(int id);
-    List<Passeggero> findAll();
-    void save(Passeggero passeggero);
-    void update(Passeggero passeggero);
-    void delete(int id);
+    void create(String nome, String cognome, String numTelefono, String numDocumento, String sesso, String dataNascita);
+    void modifica(int codicePrenotazione, String nome, String cognome, String numDocumentoPasseggero, char sesso);
+    void getAll(ArrayList<Passeggero> passeggeri);
+    int getIdPrenotazione(int idPasseggero);
 }

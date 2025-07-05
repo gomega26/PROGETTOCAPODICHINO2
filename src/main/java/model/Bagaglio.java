@@ -20,6 +20,10 @@ public class Bagaglio {
         this.statoBagaglio = stato;
     }
 
+    public void setCodice(int codice) {
+        this.codice = codice;
+    }
+
     public int getCodice() {
         return codice;
     }
