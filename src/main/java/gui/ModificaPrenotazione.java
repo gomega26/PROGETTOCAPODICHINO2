@@ -48,7 +48,7 @@ public class ModificaPrenotazione {
                 String nome = nomePasseggeroTextField.getText().trim();
                 String cognome = cognomePasseggeroTextField.getText().trim();
                 String posto = postoTextField.getText().trim();
-                ClasseVolo classeVolo = ClasseVolo.valueOf(comboBox2.getSelectedItem().toString());
+                String classeVolo = comboBox2.getSelectedItem().toString();
                 String numDocumento = numeroDocumentoPasseggeroTextField.getText().trim();
                 char sesso = comboBox1.getSelectedItem().toString().charAt(0);
                 int bagaglio = Integer.parseInt(textField1.getText());

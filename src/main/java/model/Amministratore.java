@@ -33,7 +33,7 @@ public class Amministratore extends Utente {
     }
 
     //MODIFICA UN VOLO
-    public void aggiornaVolo(Volo v, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
+    /*public void aggiornaVolo(Volo v, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
 
         if (!orarioPartenza.isEmpty())
             v.setOrarioPartenza(orarioPartenza);
@@ -51,17 +51,17 @@ public class Amministratore extends Utente {
 
         else
             v.setOrigine(luogo);
-    }
+    }*/
 
     //ASSEGNA UN GATE AD UN VOLO IN PARTENZA
-    public void assegnaGate(int gate, VoloInPartenza volo) {
+    /*public void assegnaGate(int gate, VoloInPartenza volo) {
 
 
         for (Volo v : voliGestiti) {
             if (v.equals(volo))
                 ((VoloInPartenza) v).setNumGate(gate);
         }
-    }
+    }*/
 
     //AGGIORNA LO STATO DI UN BAGAGLIO
     public void aggiornaStatoBagaglio(Bagaglio bagaglio, StatoBagaglio stato){
@@ -70,7 +70,7 @@ public class Amministratore extends Utente {
     }
 
     //VISUALIZZA LA LISTA DEI BAGAGLI SMARRITI
-    public ArrayList<Bagaglio> visualizzaSmarrimenti(){
+    /*public ArrayList<Bagaglio> visualizzaSmarrimenti(){
 
         ArrayList<Bagaglio> bagagliSmarriti = new ArrayList<>();
 
@@ -84,10 +84,10 @@ public class Amministratore extends Utente {
         }
 
         return bagagliSmarriti;
-    }
+    }*/
 
     //CERCA PRENOTAZIONE
-    public ArrayList<Prenotazione> cercaPrenotazione(String codiceVolo, String dataVolo, String orarioPartenza, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero) {
+    /*public ArrayList<Prenotazione> cercaPrenotazione(String codiceVolo, String dataVolo, String orarioPartenza, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero) {
 
         ArrayList<Prenotazione> prenotazioniTrovate = new ArrayList<Prenotazione>();
 
@@ -112,7 +112,7 @@ public class Amministratore extends Utente {
         }
 
         return prenotazioniTrovate;
-    }
+    }*/
 
     //GETTERS
 }

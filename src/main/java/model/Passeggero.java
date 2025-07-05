@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Passeggero {
 
+    private int id;
     private String nome;
     private String cognome;
     private String numTelefono;
@@ -13,7 +14,7 @@ public class Passeggero {
 
 
     //COSTRUTTORE
-    public Passeggero(String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita) {
+    public Passeggero(int id, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita) {
 
         this.nome = nome;
         this.cognome = cognome;
@@ -72,4 +73,11 @@ public class Passeggero {
         this.dataNascita = dataNascita;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

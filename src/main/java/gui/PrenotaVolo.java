@@ -56,7 +56,7 @@ public class PrenotaVolo {
                 String codiceVolo = textFieldCodiceVolo.getText().trim();
 
                 String posto = textFieldPosto.getText().trim();
-                ClasseVolo classe = ClasseVolo.valueOf(comboBox2.getSelectedItem().toString());
+                String classe = comboBox2.getSelectedItem().toString();
                 String nome = textFieldNome.getText().trim();
                 String cognome = textFieldCognome.getText().trim();
                 String telefono = textFieldNumerodiTelefono.getText().trim();

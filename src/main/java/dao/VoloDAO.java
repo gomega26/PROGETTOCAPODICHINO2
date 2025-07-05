@@ -14,5 +14,9 @@ public interface VoloDAO {
     void create(String compagniaAerea, String codice, String origine, String destinazione, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoVoloString);
     //SE ORIGINE = NAPOLI LA COLONNA TIPOLOGIA = IN PARTENZA, SE DESTINAZIONE = NAPOLI, LA COLONNA TIPOLOGIA = IN ARRIVO
 
+    void getVoloPerAmministratore(int idUser, ArrayList<Volo> voli);
+    void setGate(String codiceVolo, int gate);
 
+    void aggiornaVolo(String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo);
+    //SE LA TIPOLOGIA è IN PARTENZA IL LUOGO VA NELLA COLONNA DESTINAZIONE, SE NO NELLA COLONNA ARRIVO
 }

@@ -4,26 +4,19 @@ import java.util.ArrayList;
 
 public class Prenotazione {
 
-    private static int cont=101;
     private int id;
     private int numBiglietto;
     private String posto;
     private StatoPrenotazione stato;
     private ClasseVolo classeVolo;
-    private Passeggero passeggero;
-    private Volo volo;
-    private ArrayList<Bagaglio> bagagli;
 
     //COSTRUTTORE
-    public Prenotazione(String posto, ClasseVolo classe){
+    public Prenotazione(int id, int numBiglietto, String posto, String classe, String stato){
 
-        this.id = cont;
-        this.stato = StatoPrenotazione.InAttesa;
+        this.id = id;
         this.posto = posto;
-        this.classeVolo = classe;
-        this.bagagli=new ArrayList<>();
-
-        cont++;
+        this.classeVolo = ClasseVolo.valueOf(classe);
+        this.stato = StatoPrenotazione.valueOf(stato);
     }
 
     public String toString(){
