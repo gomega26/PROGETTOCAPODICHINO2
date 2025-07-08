@@ -12,4 +12,5 @@ public interface BagaglioDAO {
     void create(int id_prenotazione);
     void getSmarriti(ArrayList<Bagaglio> bagagliSmarriti);
     boolean segnalaSmarrimento(int idAmministratore, int codice); //BISOGNA VERIFICARE CHE IL BAGAGLIO SIA IN UN VOLO MONITORATO DA QUELL'AMMINISTRATORE
+    void getBagagliPerAmministratore(int idAmministratore, ArrayList<Bagaglio> bagagli);
 }

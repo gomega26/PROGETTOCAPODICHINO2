@@ -11,12 +11,12 @@ import java.sql.*;
 public class ImplementazioneUtenteGenericoDAO implements UtenteGenericoDAO {
 
     private Connection connection;
-    protected static int id=0;
 
     public ImplementazioneUtenteGenericoDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -25,17 +25,17 @@ public class ImplementazioneUtenteGenericoDAO implements UtenteGenericoDAO {
     public void signIn(String login, String password, String email) {
         try {
             PreparedStatement saveUtentePS = connection.prepareStatement(
-                    "INSERT INTO \"utente\" " +
-                            "(\"id\", \"login\", \"email\", \"password\") " +
-                            "VALUES (" + id + ", '" +
+                    "INSERT INTO \"utenti_generici\" " +
+                            "(\"login\", \"email\", \"password\") " +
+                            "VALUES ('" +
                             login + "', '" +
                             email + "', '" +
                             password + "');"
             );
             saveUtentePS.executeUpdate();
             connection.close();
-            id++;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -48,17 +48,18 @@ public class ImplementazioneUtenteGenericoDAO implements UtenteGenericoDAO {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "SELECT * FROM Utenti Generici " +
+                    "SELECT * FROM utenti_generici " +
                             "WHERE \"login\" = '" + login + "' " +
                             "AND \"password\" = '" + password + "';"
             );
 
             if (rs.next())
-                user = new UtenteGenerico(rs.getString("login"), rs.getString("password"), rs.getString("email"));
+                user = new UtenteGenerico(rs.getInt("id"), rs.getString("login"), rs.getString("password"), rs.getString("email"));
 
             connection.close();
 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 

@@ -6,24 +6,26 @@ public class Prenotazione {
 
     private int id;
     private int numBiglietto;
+    private int numBagagli;
     private String posto;
     private StatoPrenotazione stato;
     private ClasseVolo classeVolo;
 
     //COSTRUTTORE
-    public Prenotazione(int id, int numBiglietto, String posto, String classe, String stato){
+    public Prenotazione(int id, int numBagagli, String posto, String classe, String stato){
 
         this.id = id;
         this.posto = posto;
         this.classeVolo = ClasseVolo.valueOf(classe);
         this.stato = StatoPrenotazione.valueOf(stato);
+        this.numBagagli = numBagagli;
     }
 
     public String toString(){
 
-        return "Prenotazione: " + this.id + " " +this.stato+"\n\nMr./Ms. " + this.passeggero.getNome() +" " +this.passeggero.getCognome()+ "\n\n"+
-        this.volo.toString()+"\n\nCLASSE: " + this.classeVolo + "  POSTO: " + this.posto+
-        "\n\nNumero bagagli: "+this.bagagli.size()+"\n\nNUMERO BIGLIETTO :" +this.numBiglietto;
+        return "\n\nPrenotazione: " + this.id + " " +this.stato+
+        "\n\nCLASSE: " + this.classeVolo + "  POSTO: " + this.posto+
+        "\n\nNumero bagagli: "+this.numBagagli+"\n\nNUMERO BIGLIETTO :" +this.numBiglietto;
     }
 
     //GETTERS E SETTERS
@@ -67,31 +69,20 @@ public class Prenotazione {
         this.stato = stato;
     }
 
-    public Volo getVolo() {
-        return volo;
-    }
-
-    public void setVolo(Volo volo) {
-        this.volo = volo;
-    }
 
     public int getId() {
         return id;
     }
 
-    public Passeggero getPasseggero() {
-        return passeggero;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setPasseggero(Passeggero passeggero) {
-        this.passeggero = passeggero;
+    public int getNumBagagli() {
+        return numBagagli;
     }
 
-    public ArrayList<Bagaglio> getBagagli() {
-        return bagagli;
-    }
-
-    public void setBagagli(ArrayList<Bagaglio> bagagli) {
-        this.bagagli = bagagli;
+    public void setNumBagagli(int numBagagli) {
+        this.numBagagli = numBagagli;
     }
 }

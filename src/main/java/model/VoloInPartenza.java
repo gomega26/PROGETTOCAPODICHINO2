@@ -6,6 +6,8 @@ public class VoloInPartenza extends Volo {
 
     private int numGate;
 
+    public VoloInPartenza(){};
+
     public VoloInPartenza(String compagniaAerea, String codice, String destinazione, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo, int numGate) {
 
         super(compagniaAerea,codice,orarioPartenza,orarioArrivo,dataPartenza,durata,ritardo,statoDelVolo);

@@ -20,6 +20,7 @@ public class InserisciVolo {
     private JButton aggiungiButton;
     private JTextField compagniaAereaTextField;
     private JTextField codiceVoloTextField;
+    private JLabel ritardoLable;
     private static JFrame frame;
 
     public InserisciVolo(JFrame frameChiamante, Controller controller) {
@@ -28,9 +29,12 @@ public class InserisciVolo {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(600, 800);
+
+        ritardoTextField.setEditable(false);
 
         comboBox1.setModel(new DefaultComboBoxModel(new Object[]{"Programmato","Decollato", "InRitardo","Atterrato","Cancellato"}));
+
 
 
         button1.addActionListener(new ActionListener() {
@@ -54,10 +58,14 @@ public class InserisciVolo {
                 String arrivo = orarioArrivoTextField.getText();
                 String durata = durataTextField.getText();
                 String stato = comboBox1.getSelectedItem().toString();
-                String ritardo = ritardoTextField.getText();
                 String dataPartenza = dataTextField.getText();
+                int ritardoInt;
 
-                int ritardoInt = Integer.parseInt(ritardo);
+                if(!ritardoTextField.isEditable())
+                    ritardoInt=0;
+
+                else
+                    ritardoInt= Integer.parseInt(ritardoTextField.getText());
 
                 boolean esito = controller.inserisciVolo(compagnia, codice, origine, destinazione, partenza, arrivo, dataPartenza, durata, ritardoInt, stato);
 
@@ -69,6 +77,17 @@ public class InserisciVolo {
 
                 else
                     JOptionPane.showMessageDialog(aggiungiButton, "Operazione fallita");
+            }
+        });
+
+        comboBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(comboBox1.getSelectedItem().toString().equals("InRitardo"))
+                    ritardoTextField.setEditable(true);
+                else
+                    ritardoTextField.setEditable(false);
             }
         });
     }

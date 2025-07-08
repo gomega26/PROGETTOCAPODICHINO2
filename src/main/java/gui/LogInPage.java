@@ -33,11 +33,10 @@ public class LogInPage {
 
                 String login = textField1.getText();
                 String password = new String(passwordField1.getPassword());
-                String classe= controller.getUser().getClass().getSimpleName();
 
-                if(controller.logIn(classe,login, password)){
+                if(controller.logIn(login, password)){
 
-                    if (classe.equals("Amministratore")) {
+                    if (controller.getUser().getClass().getSimpleName().equals("Amministratore")) {
 
                         HomePageAmministratore frame3 = new HomePageAmministratore(frame, controller);
                         frame.setVisible(false);

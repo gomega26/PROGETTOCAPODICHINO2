@@ -21,6 +21,8 @@ public class Volo {
 
     protected ArrayList<Prenotazione> prenotazioni;
 
+    public Volo(){};
+
     public Volo(String compagniaAerea, String codice, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo) {
 
         this.codice = codice;
@@ -37,7 +39,7 @@ public class Volo {
 
     public String toString(){
 
-        return "VOLO: " + this.codice +" " + this.compagniaAerea+
+        return "\n\nVOLO: " + this.codice +" " + this.compagniaAerea+
                 "\n\nIn Partenza da " + this.origine+ " in data "+this.dataPartenza+" alle "+this.orarioPartenza+
                 "\n\nIn arrivo a" + this.destinazione+" alle " +this.orarioArrivo+
                 "\n\n(" + this.durata+")";

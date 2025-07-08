@@ -13,12 +13,12 @@ import java.util.ArrayList;
 public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
 
     private Connection connection;
-    protected static int id=0;
 
     public ImplementazioneAmministratoreDAO() {
         try {
             connection=ConnessioneDatabase.getInstance().connection;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -29,16 +29,16 @@ public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
         try {
             PreparedStatement saveAmministratorePS = connection.prepareStatement(
                     "INSERT INTO amministratori " +
-                            "(\"id\", \"login\", \"email\", \"password\") " +
-                            "VALUES (" + id + ", '" +
+                            "(\"login\", \"email\", \"password\") " +
+                            "VALUES ('" +
                             login + "', '" +
                             email + "', '" +
                             password + "');"
             );
             saveAmministratorePS.executeUpdate();
             connection.close();
-            id++;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -50,17 +50,19 @@ public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "SELECT * FROM Amministratori " +
+                    "SELECT * FROM amministratori " +
                             "WHERE \"login\" = '" + login + "' " +
                             "AND \"password\" = '" + password + "';"
             );
 
             if (rs.next())
-                user = new Amministratore(rs.getString("login"), rs.getString("password"), rs.getString("email"));
+                user = new Amministratore(rs.getInt("id"), rs.getString("login"), rs.getString("password"), rs.getString("email"));
+
 
             connection.close();
 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
@@ -68,30 +70,21 @@ public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
     }
 
     @Override
-    public void getBagagli(int id, ArrayList<Bagaglio> bagagli) {
+    public void inserisciVolo(int idUser, String idVolo) {
 
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(
-                    "SELECT b.* " +
-                            "FROM bagagli b " +
-                            "JOIN prenotazioni p ON b.prenotazione_id = p.id " +
-                            "JOIN voli v ON p.volo_id = v.id " +
-                            "JOIN gestione g ON g.id_volo = v.id " +
-                            "WHERE g.id_amministratore = " + id + ";"
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO gestione " +
+                            "(\"id_amministratore\", \"id_volo\") " +
+                            "VALUES (" + idUser + ", '" +
+                            idVolo + "');"
             );
-
-            while (rs.next()) {
-                Bagaglio b = new Bagaglio();
-                b.setCodice(rs.getInt("id"));
-                b.setStatoBagaglio(StatoBagaglio.valueOf(rs.getString("stato")));
-                bagagli.add(b);
-            }
-
+            ps.executeUpdate();
             connection.close();
+
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
     }
 }

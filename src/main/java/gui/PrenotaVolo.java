@@ -3,10 +3,13 @@ package gui;// finito
 import controller.Controller;
 import model.ClasseVolo;
 import model.Volo;
+import model.VoloInPartenza;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class PrenotaVolo {
     private JPanel panel1;
@@ -23,6 +26,7 @@ public class PrenotaVolo {
     private JButton confermaPrenotazioneButton;
     private JTextField textField1;
     private JComboBox comboBox2;
+    private JTable table1;
 
     private JFrame frame;
 
@@ -38,7 +42,52 @@ public class PrenotaVolo {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(600, 900);
+
+
+
+        //INIZIALIZZA TABELLA
+
+        String[] colonne = {"Volo", "compagnia aerea", "tipologia", "località", "data", "orario partenza", "orario arrivo", "durata", "stato", "R", "Gate"};
+
+        DefaultTableModel model = new DefaultTableModel(colonne, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        String tipologia;
+        String localita;
+        String numGate;
+
+        ArrayList<Volo> voli=new ArrayList<>();
+
+        controller.getVoli(voli);
+
+        for(Volo v : voli){
+
+            if(v.getClass().getSimpleName().equals("VoloInPartenza")){
+
+                tipologia = "in partenza per";
+                localita = v.getDestinazione();
+                numGate = String.valueOf(((VoloInPartenza)v).getNumGate());
+                if(numGate.equals("0"))
+                    numGate="-";
+            }
+
+            else {
+
+                tipologia = "in arrivo da";
+                localita = v.getOrigine();
+                numGate= "";
+            }
+
+            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
+        }
+
+        table1.setModel(model);
+
 
         button1.addActionListener(new ActionListener() {
             @Override

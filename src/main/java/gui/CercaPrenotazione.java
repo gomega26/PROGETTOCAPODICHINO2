@@ -5,8 +5,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import model.Passeggero;
 import model.Prenotazione;
 import controller.Controller;
+import model.Volo;
 
 public class CercaPrenotazione {
 
@@ -50,41 +53,49 @@ public class CercaPrenotazione {
 
                 model.setRowCount(0);
 
-                ArrayList<Prenotazione> lista = new ArrayList<>();
+                ArrayList<Prenotazione> listaPrenotazioni = new ArrayList<>();
+                ArrayList<Volo> listaVoli = new ArrayList<>();
+                ArrayList<Passeggero> listaPasseggeri = new ArrayList<>();
 
-                if(controller.getUser().getClass().getSimpleName().equals("UtenteGenerico"))
-                    lista = controller.cercaPrenotazioneUtenteGenerico(codiceVolo, dataVolo, orarioPartenza);
+                controller.cercaPrenotazione(listaPrenotazioni, listaVoli, listaPasseggeri, codiceVolo, dataVolo, orarioPartenza);
 
-                else
-                    lista = controller.cercaPrenotazioneAmministratore(codiceVolo, dataVolo, orarioPartenza);
+                model.setRowCount(0);
 
-                for (Prenotazione p : lista) {
+                String tipologia;
+                String localita;
 
-                    String tipologia;
-                    String localita;
+                for (int i = 0; i < listaPasseggeri.size(); i++) {
+                    Passeggero p = listaPasseggeri.get(i);
+                    Prenotazione pr = listaPrenotazioni.get(i);
+                    Volo v = listaVoli.get(i);
 
-                    if(p.getClass().getSimpleName().equals("VoloInArrivo")) {
-                        tipologia = "in arrivo da";
-                        localita = p.getVolo().getOrigine();
-                    }
-                    else {
+                    if (v.getClass().getSimpleName().equals("VoloInPartenza")) {
+
                         tipologia = "in partenza per";
-                        localita = p.getVolo().getDestinazione();
+                        localita = v.getDestinazione();
+                    } else {
+
+                        tipologia = "in arrivo da";
+                        localita = v.getOrigine();
                     }
 
-                    model.addRow(new Object[]{p.getPasseggero().getNome(),
-                                                p.getPasseggero().getCognome(),
-                                                p.getVolo().getCodice(),
-                                                tipologia,
-                                                localita,
-                                                p.getVolo().getDataPartenza(),
-                                                p.getVolo().getOrarioPartenza(),
-                                                p.getVolo().getOrarioArrivo(),
-                                                p.getVolo().getStato().toString().toUpperCase(),
-                                                p.getClasseVolo().toString(),
-                                                p.getPosto(),
-                                                p.getBagagli().size()});
-                                                p.getStatoPrenotazione().toString().toUpperCase();
+                    Object[] riga = {
+                            p.getNome(),
+                            p.getCognome(),
+                            v.getCodice(),
+                            tipologia,
+                            localita,
+                            v.getDataPartenza(),
+                            v.getOrarioPartenza(),
+                            v.getOrarioArrivo(),
+                            v.getStato().toString().toUpperCase(),
+                            pr.getClasseVolo().toString(),
+                            pr.getPosto(),
+                            pr.getNumBagagli(),
+                            pr.getStatoPrenotazione().toString().toUpperCase()
+                    };
+
+                    model.addRow(riga);
                 }
             }
         });

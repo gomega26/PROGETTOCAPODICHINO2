@@ -96,35 +96,6 @@ public class CercaPasseggero {
 
                     model.addRow(riga);
                 }
-
-
-
-
-                /*for (Prenotazione p : risultati) {
-
-                    if(p.getVolo().getClass().getSimpleName().equals("VoloInPartenza")){
-
-                        tipologia = "in partenza per";
-                        localita = p.getVolo().getDestinazione();
-                    }
-
-                    else {
-
-                        tipologia = "in arrivo da";
-                        localita = p.getVolo().getOrigine();
-                    }
-
-                    model.addRow(new Object[]{p.getPasseggero().getNome(),
-                                                p.getPasseggero().getCognome(),
-                                                p.getPasseggero().getNumDocumento(),
-                                                p.getPasseggero().getSesso(),
-                                                p.getId(),
-                                                p.getStatoPrenotazione(),
-                                                p.getVolo().getCodice(),
-                                                tipologia,
-                                                localita,
-                                                p.getVolo().getDataPartenza()});
-                }*/
             }
         });
     }

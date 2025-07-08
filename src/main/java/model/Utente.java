@@ -10,80 +10,15 @@ public class Utente {
         protected int id;
 
         //COSTRUTTORE
-        public Utente(String login, String password, String email){
+        public Utente(int id, String login, String password, String email){
 
+                this.id=id;
                 this.login = login;
                 this.password = password;
                 this.email = email;
         }
 
         public Utente(){};
-
-        //LOG-IN
-        /*public boolean logIn(String login, String password) {
-
-                if((this.login.equals(login) || this.email.equals(login)) && this.password.equals(password))
-                        this.autenticato=true;
-
-                return (this.login.equals(login) || this.email.equals(login)) && this.password.equals(password);
-        }*/
-
-        //RICERCA VOLO
-        public ArrayList<Volo> ricercaVolo(ArrayList<Volo> voli, String tipo, String compagniaAerea, String codice, String dataPartenza, String destinazione){
-
-                ArrayList<Volo> voliTrovati = new ArrayList<Volo>();
-
-                for(Volo v : voli){
-
-                        if(!tipo.isEmpty() && !v.getClass().getSimpleName().equals(tipo))
-                                continue;
-                        if(!compagniaAerea.isEmpty() && !v.getCompagniaAerea().equals(compagniaAerea))
-                                continue;
-                        if(!codice.isEmpty() && !v.getCodice().equals(codice))
-                                continue;
-                        if(!dataPartenza.isEmpty() && !v.getDataPartenza().equals(dataPartenza))
-                                continue;
-                        if(!destinazione.isEmpty() && !v.getDestinazione().equals(destinazione))
-                                continue;
-
-                        voliTrovati.add(v);
-                }
-
-                return voliTrovati;
-        }
-
-        //MONITORA LO STATO DEL BAGAGLIO
-        /*public Bagaglio monitoraBagaglio(ArrayList<Bagaglio> bagagli, int codice) {
-
-                for (Bagaglio b : bagagli) {
-
-                        if (b.getCodice() == codice) {
-
-                                return b;
-                        }
-                }
-
-                return null;
-        }*/
-
-        //CERCA UNA PRENOTAZIONE
-        public ArrayList<Prenotazione> cercaPrenotazione(ArrayList<Prenotazione> prenotazioni, String codiceVolo, String dataVolo, String orarioPartenza) {
-
-                ArrayList<Prenotazione> prenotazioniTrovate = new ArrayList<Prenotazione>();
-
-                for (Prenotazione p : prenotazioni) {
-                        if (!codiceVolo.isEmpty() && !p.getVolo().getCodice().equals(codiceVolo))
-                                continue;
-                        if(!dataVolo.isEmpty() && !p.getVolo().getDataPartenza().equals(dataVolo))
-                                continue;
-                        if(!orarioPartenza.isEmpty() && !p.getVolo().getOrarioPartenza().equals(orarioPartenza))
-                                continue;
-
-                        prenotazioniTrovate.add(p);
-                }
-
-                return prenotazioniTrovate;
-        }
 
         //SETTERS E GETTERS
         public void setEmail(String email) {

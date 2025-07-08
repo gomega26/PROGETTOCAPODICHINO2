@@ -24,6 +24,12 @@ public class Passeggero {
         this.dataNascita = dataNascita;
     }
 
+    @Override
+    public String toString() {
+
+        return "Mr./Ms. " + this.getNome() +" " +this.getCognome();
+    }
+
     //SETTERS E GETTERS
     public String getNome() {
         return nome;

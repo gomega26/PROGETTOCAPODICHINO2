@@ -3,6 +3,7 @@ package ImplementazioneDAO;
 import dao.PasseggeroDAO;
 import db.ConnessioneDatabase;
 import model.Passeggero;
+import model.Prenotazione;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
 
     private Connection connection;
-    private static int id = 0;
 
     public ImplementazionePasseggeroDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -25,18 +26,33 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO passeggeri " +
-                            "(\"id\", \"nome\", \"cognome\", \"telefono\", \"documento\", \"sesso\", \"data_nascita\") " +
-                            "VALUES (" + id + ", '" + nome + "', '" + cognome + "', '" + numTelefono + "', '" +
-                            numDocumento + "', '" + sesso + "', '" + dataNascita + "');"
+                            "(\"nome\", \"cognome\", \"num_telefono\", \"num_documento\", \"sesso\", \"data_nascita\") " +
+                            "VALUES ('" + nome + "', '" + cognome + "', '" + numTelefono + "', '" +
+                            numDocumento + "', '" + sesso + "', '" + dataNascita + "');",
+                    Statement.RETURN_GENERATED_KEYS
             );
+
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                rs.close();
+                ps.close();
+                connection.close();
+                return id;
+            }
+
+            rs.close();
+            ps.close();
             connection.close();
-            id++;
+
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
-        return id;
+        return -1;
     }
 
     @Override
@@ -44,12 +60,13 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "UPDATE passeggeri SET nome = '" + nome + "', cognome = '" + cognome +
-                            "', documento = '" + numDocumentoPasseggero + "', sesso = '" + sesso +
+                            "', num_documento = '" + numDocumentoPasseggero + "', sesso = '" + sesso +
                             "' WHERE id IN (SELECT id_passeggero FROM prenotazioni WHERE id = " + codicePrenotazione + ");"
             );
             ps.executeUpdate();
             connection.close();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -62,41 +79,55 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
 
             while (rs.next()) {
                 Passeggero p = new Passeggero(
-                                rs.getInt("id"),
-                                rs.getString("nome"),
-                                rs.getString("cognome"),
-                                rs.getString("num_telefono"),
-                                rs.getString("num_documento"),
-                                rs.getString("sesso").charAt(0),
-                                rs.getString("data_nascita")
-                                );
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("cognome"),
+                        rs.getString("num_telefono"),
+                        rs.getString("num_documento"),
+                        rs.getString("sesso").charAt(0),
+                        rs.getString("data_nascita")
+                );
 
                 passeggeri.add(p);
             }
 
             connection.close();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
     @Override
-    public int getIdPrenotazione(int idPasseggero) {
-        int idPrenotazione = 0;
+    public Passeggero getPerId(int id) {
+        Passeggero p = null;
+
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "SELECT id FROM prenotazioni WHERE id_passeggero = " + idPasseggero + ";"
+                    "SELECT * FROM prenotazioni WHERE id = " + id + ";"
             );
 
             if (rs.next()) {
-                idPrenotazione = rs.getInt("id");
+                p = new Passeggero(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("cognome"),
+                        rs.getString("num_telefono"),
+                        rs.getString("num_documento"),
+                        rs.getString("sesso").charAt(0),
+                        rs.getString("data_nascita")
+                );
             }
 
             connection.close();
+
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
-        return idPrenotazione;
+
+        return p;
     }
+
 }

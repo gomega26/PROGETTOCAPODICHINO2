@@ -1,10 +1,14 @@
 package gui;
 
 import controller.Controller;
+import model.Volo;
+import model.VoloInPartenza;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class AssegnaGate {
 
@@ -13,6 +17,7 @@ public class AssegnaGate {
     private JTextField textField2;
     private JButton button1;
     private JButton assegnaButton;
+    private JTable table1;
     private static JFrame frame;
 
     public AssegnaGate(JFrame frameChiamante, Controller controller) {
@@ -22,6 +27,31 @@ public class AssegnaGate {
         frame.pack();
         frame.setVisible(true);
         frame.setSize(800, 800);
+
+        //INIZIALIZZA TABELLA
+
+        String[] colonne = {"Volo", "compagnia aerea", "destinazione", "data", "orario partenza", "orario arrivo", "durata", "stato", "R", "Gate"};
+
+        DefaultTableModel model = new DefaultTableModel(colonne, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+
+        ArrayList<VoloInPartenza> voli=new ArrayList<>();
+
+        controller.getVoliInPartenza(voli);
+
+        for(VoloInPartenza v : voli){
+
+            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), v.getNumGate()});
+        }
+
+        table1.setModel(model);
+
+
 
         button1.addActionListener(new ActionListener() {
             @Override

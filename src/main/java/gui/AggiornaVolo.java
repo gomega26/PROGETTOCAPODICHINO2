@@ -54,7 +54,7 @@ public class AggiornaVolo {
                 String dataPartenza = datatext.getText();
                 String durata = duratatext.getText();
                 int ritardo = Integer.parseInt(ritardotext.getText());
-                StatoVolo statoDelVolo = StatoVolo.valueOf(comboBox1.getSelectedItem().toString());
+                String statoDelVolo = comboBox1.getSelectedItem().toString();
                 String luogo = luogotext.getText();
 
                 boolean esito = controller.aggiornaVolo(codiceVolo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
