@@ -58,7 +58,7 @@ public class PrenotaVolo {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setSize(600, 900);
+        frame.setSize(600, 600);
 
 
 

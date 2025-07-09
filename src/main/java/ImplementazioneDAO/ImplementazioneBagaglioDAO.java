@@ -61,7 +61,6 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
                 b.setStatoBagaglio(StatoBagaglio.valueOf(rs.getString("stato")));
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -92,7 +91,6 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
                 b.setStatoBagaglio(StatoBagaglio.valueOf(rs.getString("stato")));
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -109,12 +107,12 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
      */
     @Override
     public void setStato(int codiceBagaglio, String stato) {
+
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(
                     "UPDATE bagagli SET stato = '" + stato + "' WHERE id = " + codiceBagaglio + ";"
             );
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -134,7 +132,6 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
                     "INSERT INTO bagagli (id_prenotazione, stato) VALUES (" + id_prenotazione + ", 'Ritirabile');"
             );
             ps.executeUpdate();
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -149,6 +146,7 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
      */
     @Override
     public void getSmarriti(ArrayList<Bagaglio> bagagliSmarriti) {
+
         try {
             Statement stmt = connection.createStatement();
             String query = "SELECT * FROM bagagli WHERE stato = 'SMARRITO';";
@@ -158,12 +156,13 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
             while (rs.next()) {
                 Bagaglio b = new Bagaglio();
                 b.setCodice(rs.getInt("id"));
+
                 bagagliSmarriti.add(b);
             }
 
             rs.close();
             stmt.close();
-            connection.close();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -195,10 +194,10 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
                 stmt.executeUpdate(
                         "UPDATE bagagli SET stato = 'SMARRITO' WHERE id = " + codice + ";"
                 );
+
                 return true;
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -215,6 +214,7 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
      * @param bagagli lista da riempire con i bagagli trovati
      */
     public void getBagagliPerAmministratore(int idAmministratore, ArrayList<Bagaglio> bagagli) {
+
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
@@ -233,12 +233,13 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
                 bagagli.add(b);
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Chiude la connessione al database se ancora attiva.
@@ -246,17 +247,19 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
      * Utile per liberare risorse manualmente o in fase di terminazione applicazione.
      * </p>
      */
+
     public void closeConnection() {
         if (connection != null) {
             try {
                 if (!connection.isClosed()) {
                     connection.close();
-                    System.out.println("Connessione chiusa correttamente.");
                 }
-            }catch (SQLException e) {
+            } catch (SQLException e) {
                 System.err.println("Errore durante la chiusura della connessione:");
                 e.printStackTrace();
             }
         }
     }
+
+
 }

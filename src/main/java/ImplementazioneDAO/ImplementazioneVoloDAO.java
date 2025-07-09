@@ -84,8 +84,6 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                     voli.add(v);
                 }
             }
-
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -121,7 +119,6 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                 voli.add(v);
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -149,9 +146,9 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                 String origine = rs.getString("origine");
                 String destinazione = rs.getString("destinazione");
 
-                if ("IN PARTENZA".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(origine)) {
+                if ("InPartenza".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(origine)) {
                     v = new VoloInPartenza();
-                } else if ("IN ARRIVO".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(destinazione)) {
+                } else if ("InArrivo".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(destinazione)) {
                     v = new VoloInArrivo();
                 }
 
@@ -168,8 +165,6 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                     v.setStato(StatoVolo.valueOf(rs.getString("stato")));
                 }
             }
-
-            connection.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -214,7 +209,6 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                     "VALUES ('" + codice + "', '" + compagniaAerea + "', '" + origine + "', '" + destinazione + "', '" + orarioPartenza + "', '" + orarioArrivo + "', '" + dataPartenza + "', '" + durata + "', " + ritardo + ", '" + statoVoloString + "', '" + tipologia + "');";
 
             stmt.executeUpdate(query);
-            connection.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -229,11 +223,12 @@ public class ImplementazioneVoloDAO implements VoloDAO {
      */
 
     @Override
-    public void getVoliPerAmministratore(int idUser, ArrayList<Volo> voli) { //FATTO
+    public void getVoliPerAmministratore(int idUser, ArrayList<Volo> voli) {
+
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "SELECT * FROM voli WHERE codice IN (SELECT id_volo FROM gestione WHERE id_amministratore = " + idUser + ");"
+                    "SELECT * FROM voli v JOIN gestione g ON v.codice = g.id_volo WHERE g.id_amministratore = " + idUser + ";"
             );
 
             while (rs.next()) {
@@ -243,9 +238,9 @@ public class ImplementazioneVoloDAO implements VoloDAO {
 
                 Volo v = null;
 
-                if ("IN PARTENZA".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(origine)) {
+                if ("InPartenza".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(origine)) {
                     v = new VoloInPartenza();
-                } else if ("IN ARRIVO".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(destinazione)) {
+                } else if ("InArrivo".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(destinazione)) {
                     v = new VoloInArrivo();
                 }
 
@@ -264,8 +259,6 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                 }
             }
 
-            connection.close();
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -279,11 +272,12 @@ public class ImplementazioneVoloDAO implements VoloDAO {
      */
 
     @Override
-    public void setGate(String codiceVolo, int gate) { //FATTO
+    public void setGate(String codiceVolo, int gate) {
+
+
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("UPDATE voli SET gate = " + gate + " WHERE codice = '" + codiceVolo + "';");
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -308,32 +302,72 @@ public class ImplementazioneVoloDAO implements VoloDAO {
     public void aggiornaVolo(String tipologia, String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo,
                              String dataPartenza, String durata, int ritardo, String statoDelVolo) {
         try {
-
             Statement stmt = connection.createStatement();
 
             String colonna;
-
-            if(tipologia.equals("InPartenza"))
+            if (tipologia.equals("InPartenza"))
                 colonna = "destinazione";
-
             else
                 colonna = "origine";
 
-            stmt.executeQuery("UPDATE voli SET "
-                    + colonna + " = '" + luogo + "', "
-                    + "orario_partenza = '" + orarioPartenza + "', "
-                    + "orario_arrivo = '" + orarioArrivo + "', "
-                    + "data= '" + dataPartenza + "', "
-                    + "durata = '" + durata + "', "
-                    + "ritardo = " + ritardo + ", "
-                    + "stato = '" + statoDelVolo+ "' "
-                    + "WHERE codice = '" + codiceVolo + "';");
+            StringBuilder query = new StringBuilder("UPDATE voli SET ");
 
-            connection.close();
+            boolean first = true;
+
+            if (luogo != null && !luogo.isEmpty()) {
+                query.append(colonna).append(" = '").append(luogo).append("'");
+                first = false;
+            }
+            if (orarioPartenza != null && !orarioPartenza.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("orario_partenza = '").append(orarioPartenza).append("'");
+                first = false;
+            }
+            if (orarioArrivo != null && !orarioArrivo.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("orario_arrivo = '").append(orarioArrivo).append("'");
+                first = false;
+            }
+            if (dataPartenza != null && !dataPartenza.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("data = '").append(dataPartenza).append("'");
+                first = false;
+            }
+            if (durata != null && !durata.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("durata = '").append(durata).append("'");
+                first = false;
+            }
+            if (ritardo >= 0) {
+                if (!first) query.append(", ");
+                query.append("ritardo = ").append(ritardo);
+                first = false;
+            }
+            if (statoDelVolo != null && !statoDelVolo.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("stato = '").append(statoDelVolo).append("'");
+            }
+
+            query.append(" WHERE codice = '").append(codiceVolo).append("';");
+
+            stmt.executeUpdate(query.toString());
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Errore durante la chiusura della connessione:");
+                e.printStackTrace();
+            }
         }
     }
     /**
@@ -342,17 +376,4 @@ public class ImplementazioneVoloDAO implements VoloDAO {
      * Utile per liberare risorse manualmente, se necessario.
      * </p>
      */
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                if (!connection.isClosed()) {
-                    connection.close();
-                    System.out.println("Connessione chiusa correttamente.");
-                }
-            } catch (SQLException e) {
-                System.err.println("Errore durante la chiusura della connessione:");
-                e.printStackTrace();
-            }
-        }
-    }
 }

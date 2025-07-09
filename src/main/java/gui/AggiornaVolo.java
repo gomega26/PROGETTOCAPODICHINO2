@@ -2,10 +2,14 @@ package gui;
 
 import controller.Controller;
 import model.StatoVolo;
+import model.Volo;
+import model.VoloInPartenza;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Finestra grafica che consente a un amministratore di aggiornare i dati di un volo esistente.
@@ -32,6 +36,7 @@ public class AggiornaVolo {
     private JTextField ritardotext; // Ritardo in minuti
     private JTextField datatext; // Data del volo
     private JComboBox comboBox2; // Tipologia di volo: Origine o Destinazione
+    private JTable table1;
     private static JFrame frame; // Finestra corrente
     private static JFrame frameChiamante; // Finestra precedente da riattivare
     private Controller controller; // Controller dell'app per la logica di aggiornamento
@@ -48,8 +53,8 @@ public class AggiornaVolo {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
-        this.controller = controller; // Inizializzazione del controller
+        frame.setSize(800, 700);
+        this.controller = controller;
 
         // Popola la comboBox con stringhe invece di StatoVolo
         comboBox1.addItem("Programmato");
@@ -62,6 +67,48 @@ public class AggiornaVolo {
         comboBox2.addItem("Destinazione");
     // Listener per il pulsante "Modifica":
         // Preleva i dati inseriti e invia la richiesta di aggiornamento al controller.
+
+        String localita;
+        String tipologia;
+        String numGate;
+
+        String[] colonne = {"Volo", "compagnia aerea", "tipologia", "località", "data", "orario partenza", "orario arrivo", "durata", "stato", "R", "Gate"};
+
+        DefaultTableModel model = new DefaultTableModel(colonne, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+
+        ArrayList<Volo> voli=new ArrayList<>();
+
+        controller.getVoliGestiti(voli);
+
+        for(Volo v : voli){
+
+            if(v.getClass().getSimpleName().equals("VoloInPartenza")){
+
+                tipologia = "in partenza per";
+                localita = v.getDestinazione();
+                numGate = String.valueOf(((VoloInPartenza)v).getNumGate());
+                if(numGate.equals("0"))
+                    numGate="-";
+            }
+
+            else {
+
+                tipologia = "in arrivo da";
+                localita = v.getOrigine();
+                numGate= "";
+            }
+
+            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
+        }
+
+        table1.setModel(model);
+
         modificaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,9 +118,12 @@ public class AggiornaVolo {
                 String orarioArrivo = orarioarrivotext.getText();
                 String dataPartenza = datatext.getText();
                 String durata = duratatext.getText();
-                int ritardo = Integer.parseInt(ritardotext.getText());
+                int ritardo = -1;
                 String statoDelVolo = comboBox1.getSelectedItem().toString();
                 String luogo = luogotext.getText();
+
+                if(!ritardotext.getText().isEmpty())
+                    ritardo=Integer.parseInt(ritardotext.getText());
 
                 boolean esito = controller.aggiornaVolo(codiceVolo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
 

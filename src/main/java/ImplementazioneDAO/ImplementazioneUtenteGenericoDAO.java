@@ -60,7 +60,6 @@ public class ImplementazioneUtenteGenericoDAO implements UtenteGenericoDAO {
                             password + "');"
             );
             saveUtentePS.executeUpdate();
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -93,7 +92,6 @@ public class ImplementazioneUtenteGenericoDAO implements UtenteGenericoDAO {
             if (rs.next())
                 user = new UtenteGenerico(rs.getInt("id"), rs.getString("login"), rs.getString("password"), rs.getString("email"));
 
-            connection.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -113,7 +111,6 @@ public class ImplementazioneUtenteGenericoDAO implements UtenteGenericoDAO {
             try {
                 if (!connection.isClosed()) {
                     connection.close();
-                    System.out.println("Connessione chiusa correttamente.");
                 }
             } catch (SQLException e) {
                 System.err.println("Errore durante la chiusura della connessione:");

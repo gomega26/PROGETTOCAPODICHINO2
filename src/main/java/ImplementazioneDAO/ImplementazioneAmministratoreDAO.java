@@ -65,7 +65,6 @@ public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
                             password + "');"
             );
             saveAmministratorePS.executeUpdate();
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -94,8 +93,6 @@ public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
                 user = new Amministratore(rs.getInt("id"), rs.getString("login"), rs.getString("password"), rs.getString("email"));
 
 
-            connection.close();
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -123,7 +120,6 @@ public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
                             idVolo + "');"
             );
             ps.executeUpdate();
-            connection.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -142,11 +138,10 @@ public class ImplementazioneAmministratoreDAO implements AmministratoreDAO {
             try {
                 if (!connection.isClosed()) {
                     connection.close();
-                    System.out.println("Connessione chiusa correttamente.");
                 }
             } catch (SQLException e) {
-                System.err.println("Errore durante la chiusura della connessione:");
                 e.printStackTrace();
+                System.out.println("Errore: " + e.getMessage());
             }
         }
     }

@@ -72,7 +72,6 @@ public class Volo {
      * Instantiates a new Volo.
      */
     public Volo(){};
-
     /**
      * Instantiates a new Volo.
      *

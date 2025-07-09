@@ -43,7 +43,7 @@ public class AssegnaGate {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(800, 800);
+        frame.setSize(800, 700);
 
         //INIZIALIZZA TABELLA
 
@@ -57,13 +57,14 @@ public class AssegnaGate {
         };
 
         // Recupera i voli in partenza tramite il controller
-        ArrayList<VoloInPartenza> voli=new ArrayList<>();
+        ArrayList<Volo> voli=new ArrayList<>();
 
-        controller.getVoliInPartenza(voli);
+        controller.getVoliGestiti(voli);
         // Popola la tabella con i dati dei voli
-        for(VoloInPartenza v : voli){
+        for(Volo v : voli){
 
-            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), v.getNumGate()});
+            if(v.getClass().getSimpleName().equals("InPartenza"))
+                model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), ((VoloInPartenza)v).getNumGate()});
         }
 
         table1.setModel(model);

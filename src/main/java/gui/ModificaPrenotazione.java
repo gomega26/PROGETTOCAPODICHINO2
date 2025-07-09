@@ -21,17 +21,18 @@ import java.awt.event.ActionListener;
 public class ModificaPrenotazione {
 
     private JPanel panel1;
-    private JTextField numeroPrenotazioneTextField; // Campo per inserire il numero della prenotazione
-    private JTextField postoTextField; // Campo per il numero del posto
-    private JTextField classeVoloTextField; // (Non utilizzato visivamente, potrebbe essere rimosso)
-    private JTextField nomePasseggeroTextField; // Nome del passeggero
-    private JTextField cognomePasseggeroTextField; // Cognome del passeggero
-    private JTextField numeroDocumentoPasseggeroTextField; // Documento identificativo del passeggero
-    private JButton buttonModificaPrenotazione; // Pulsante per confermare la modifica
-    private JComboBox comboBox1; // Selezione del sesso (M/F)
-    private JButton button1; // Pulsante per tornare alla schermata precedente
-    private JComboBox comboBox2; // Selezione della classe di volo
-    private JTextField textField1; // Numero di bagagli
+    private JTextField numeroPrenotazioneTextField;
+    private JTextField postoTextField;
+    private JTextField classeVoloTextField;
+    private JTextField nomePasseggeroTextField;
+    private JTextField cognomePasseggeroTextField;
+    private JTextField numeroDocumentoPasseggeroTextField;
+    private JButton buttonModificaPrenotazione;
+    private JComboBox comboBox1;
+    private JButton button1;
+    private JComboBox comboBox2;
+    private JTextField textField1;
+    private JTable table1;
     private JFrame frame;
 
     /**
@@ -67,7 +68,10 @@ public class ModificaPrenotazione {
                 String classeVolo = comboBox2.getSelectedItem().toString();
                 String numDocumento = numeroDocumentoPasseggeroTextField.getText().trim();
                 char sesso = comboBox1.getSelectedItem().toString().charAt(0);
-                int bagaglio = Integer.parseInt(textField1.getText());
+                int bagaglio = -1;
+
+                if(!textField1.getText().isEmpty())
+                    bagaglio=Integer.parseInt(textField1.getText());
 
                 boolean esito = controller.modificaPrenotazione(numeroPrenotazione, posto, classeVolo, nome, cognome, numDocumento, sesso, bagaglio);
 

@@ -63,8 +63,6 @@ public class CercaPrenotazione {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                System.out.println("Entrato in cerca prenotaaione");
-
                 String codiceVolo = codiceVoloTextField.getText().trim();
                 String dataVolo = dataVoloTextField.getText().trim();
                 String orarioPartenza = orarioPartenzaTextField.getText().trim();

@@ -61,16 +61,14 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                int id = rs.getInt(1);
+                int id = rs.getInt("id");
                 rs.close();
                 ps.close();
-                connection.close();
                 return id;
             }
 
             rs.close();
             ps.close();
-            connection.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -92,13 +90,37 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
     @Override
     public void modifica(int codicePrenotazione, String nome, String cognome, String numDocumentoPasseggero, char sesso) {
         try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "UPDATE passeggeri SET nome = '" + nome + "', cognome = '" + cognome +
-                            "', num_documento = '" + numDocumentoPasseggero + "', sesso = '" + sesso +
-                            "' WHERE id IN (SELECT id_passeggero FROM prenotazioni WHERE id = " + codicePrenotazione + ");"
-            );
-            ps.executeUpdate();
-            connection.close();
+
+            Statement stmt = connection.createStatement();
+
+            StringBuilder query = new StringBuilder("UPDATE passeggeri SET ");
+
+            boolean first = true;
+
+            if (nome != null && !nome.isEmpty()) {
+                query.append("nome = '").append(nome).append("'");
+                first = false;
+            }
+            if (cognome != null && !cognome.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("cognome = '").append(cognome).append("'");
+                first = false;
+            }
+            if (numDocumentoPasseggero != null && !numDocumentoPasseggero.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("num_documento = '").append(numDocumentoPasseggero).append("'");
+                first = false;
+            }
+            if (sesso != '\0') {
+                if (!first) query.append(", ");
+                query.append("sesso = '").append(sesso).append("'");
+            }
+
+            query.append(" WHERE id IN (SELECT id_passeggero FROM prenotazioni WHERE id = ")
+                    .append(codicePrenotazione).append(");");
+
+            stmt.executeUpdate(query.toString());
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -130,7 +152,6 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
                 passeggeri.add(p);
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -165,8 +186,6 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
                 );
             }
 
-            connection.close();
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -186,7 +205,6 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
             try {
                 if (!connection.isClosed()) {
                     connection.close();
-                    System.out.println("Connessione chiusa correttamente.");
                 }
             } catch (SQLException e) {
                 System.err.println("Errore durante la chiusura della connessione:");

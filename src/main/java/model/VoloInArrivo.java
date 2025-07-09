@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 /**
  * Rappresenta un volo in arrivo all'aeroporto di Napoli.
  * <p>
@@ -19,7 +18,7 @@ public class VoloInArrivo extends Volo {
     /**
      * Instantiates a new Volo in arrivo.
      */
-    public VoloInArrivo(){};
+    public VoloInArrivo(){} //Costruttore vuoto; le informazioni verranno aggiunte dal database
 
     /**
      * Crea un oggetto {@code VoloInArrivo} con i dati forniti.
@@ -35,12 +34,5 @@ public class VoloInArrivo extends Volo {
      * @param ritardo ritardo previsto in minuti
      * @param statoDelVolo stato attuale del volo (es. ATTIVO, RITARDATO)
      */
-
-    public VoloInArrivo(String compagniaAerea, String codice, String origine, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, StatoVolo statoDelVolo){
-    // Inizializza i campi comuni tramite il costruttore della superclasse
-        super(compagniaAerea,codice,orarioPartenza,orarioArrivo,dataPartenza,durata, ritardo, statoDelVolo);
-        this.origine = origine;
-        this.destinazione = "Napoli";
-    }
 }
 

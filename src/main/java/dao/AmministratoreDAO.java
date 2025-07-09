@@ -46,4 +46,5 @@ public interface AmministratoreDAO {
      */
 
     void inserisciVolo(int idUser, String idVolo);
+    void closeConnection();
 }

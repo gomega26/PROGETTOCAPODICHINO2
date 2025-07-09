@@ -19,9 +19,10 @@ import java.awt.event.ActionListener;
  */
 public class CheckIn {
     private JPanel panel1;
-    private JTextField textFieldNumeroPrenotazione; // Campo per inserire il numero di prenotazione
-    private JButton buttonCheckIn; // Pulsante per confermare il check-in
-    private JButton button1; // Pulsante per tornare indietro
+    private JTextField textFieldNumeroPrenotazione;
+    private JButton buttonCheckIn;
+    private JButton button1;
+    private JTable table1;
     private JFrame frame;
 
 

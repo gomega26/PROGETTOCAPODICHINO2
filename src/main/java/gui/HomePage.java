@@ -55,17 +55,6 @@ public class HomePage {
 
         controller = new Controller();
 
-        /*controller.getVoli().add(new VoloInPartenza("Ryanair", "FR9021", "Madrid", "09:45", "12:15", "15/06/2025", "2 ore 30 min", 15, StatoVolo.Atterrato, 4));
-        controller.getVoli().add(new VoloInPartenza("Lufthansa", "LH2210", "Berlino", "07:10", "09:20", "15/06/2025", "2 ore 10 min", 0, StatoVolo.Decollato, 5));
-        controller.getVoli().add(new VoloInPartenza("ITA Airways", "AZ1403", "Milano", "18:00", "19:10", "15/06/2025", "1 ora 10 min", 0, StatoVolo.Programmato, 3));
-        controller.getVoli().add(new VoloInPartenza("Air France", "AF1624", "Parigi", "13:20", "15:30", "15/06/2025", "2 ore 10 min", 0, StatoVolo.Programmato, 1));
-        controller.getVoli().add(new VoloInPartenza("KLM", "KL1810", "Amsterdam", "06:45", "09:00", "15/06/2025", "2 ore 15 min", 5, StatoVolo.Decollato, 2));
-        controller.getVoli().add(new VoloInArrivo("Vueling", "VY7332", "Barcellona", "10:30", "12:35", "15/06/2025", "2 ore 5 min", 0, StatoVolo.Programmato));
-        controller.getVoli().add(new VoloInArrivo("British Airways", "BA407", "Londra", "16:15", "18:35", "15/06/2025", "2 ore 20 min", 10, StatoVolo.Programmato));
-        controller.getVoli().add(new VoloInArrivo("Wizz Air", "W68412", "Bucarest", "08:00", "10:40", "15/06/2025", "2 ore 40 min", 0, StatoVolo.Programmato));
-        controller.getVoli().add(new VoloInArrivo("TAP Air Portugal", "TP851", "Lisbona", "11:50", "14:20", "15/06/2025", "2 ore 30 min", 0, StatoVolo.Cancellato));
-        controller.getVoli().add(new VoloInArrivo("Swiss", "LX1712", "Zurigo", "17:30", "19:00", "15/06/2025", "1 ora 30 min", 0, StatoVolo.Programmato));
-        */
         comboBox1.setModel(new DefaultComboBoxModel(new Object[]{" ", "VoloInPartenza", "VoloInArrivo"}));
 
         //INIZIALIZZA TABELLA
@@ -102,7 +91,7 @@ public class HomePage {
                 numGate= "";
             }
 
-                model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
+            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
         }
 
         table1.setModel(model);

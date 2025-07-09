@@ -91,4 +91,6 @@ public interface VoloDAO {
      * @throws IllegalArgumentException se i parametri sono incoerenti
      */
     void aggiornaVolo(String tipologia, String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoDelVolo);
+
+    void closeConnection();
 }

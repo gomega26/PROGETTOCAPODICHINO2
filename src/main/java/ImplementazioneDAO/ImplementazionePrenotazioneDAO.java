@@ -59,7 +59,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
                 prenotazioni.add(p);
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -86,8 +85,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
                 );
                 prenotazioni.add(p);
             }
-
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -112,10 +109,9 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
                     "INSERT INTO prenotazioni " +
                             "(\"posto\", \"classe_volo\", \"id_passeggero\", \"codice_volo\", \"id_utente_generico\", \"stato\", \"num_bagagli\") " +
                             "VALUES ('" + posto + "', '" + classe + "', " +
-                            id_passeggero + ", '" + id_volo + "', " + idUser + ", 'IN ATTESA', "+numBagagli+");"
+                            id_passeggero + ", '" + id_volo + "', " + idUser + ", 'InAttesa', "+numBagagli+");"
             );
             ps.executeUpdate();
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -148,8 +144,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
                         rs.getString("stato")
                 );
             }
-
-            connection.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -185,7 +179,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
                 );
             }
 
-            connection.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -213,7 +206,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             if (rs.next())
                 idVolo = rs.getString("codice_volo");
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -241,7 +233,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             if (rs.next())
                 idPasseggero = rs.getInt("id_passeggero");
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -264,7 +255,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
                     "UPDATE prenotazioni SET stato = 'CONFERMATA', num_biglietto = " + numBiglietto +
                             " WHERE id = " + idPrenotazione + ";"
             );
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -281,12 +271,32 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
     @Override
     public void modifica(int codicePrenotazione, String posto, String classeVolo, int numBagagli) {
         try {
+
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate(
-                    "UPDATE prenotazioni SET posto = '" + posto + "', classe_volo = '" + classeVolo + "', num_bagagli = " + numBagagli+
-                            "WHERE id = " + codicePrenotazione + ";"
-            );
-            connection.close();
+
+            StringBuilder query = new StringBuilder("UPDATE prenotazioni SET ");
+
+            boolean first = true;
+
+            if (posto != null && !posto.isEmpty()) {
+                query.append("posto = '").append(posto).append("'");
+                first = false;
+            }
+            if (classeVolo != null && !classeVolo.isEmpty()) {
+                if (!first) query.append(", ");
+                query.append("classe_volo = '").append(classeVolo).append("'");
+                first = false;
+            }
+            if (numBagagli >= 0) {
+                if (!first) query.append(", ");
+                query.append("num_bagagli = ").append(numBagagli);
+                first = false;
+            }
+
+            query.append(" WHERE id = ").append(codicePrenotazione).append(";");
+
+            stmt.executeUpdate(query.toString());
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -311,7 +321,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
                 idPrenotazione = rs.getInt("id");
             }
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -329,7 +338,6 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             try {
                 if (!connection.isClosed()) {
                     connection.close();
-                    System.out.println("Connessione chiusa correttamente.");
                 }
             } catch (SQLException e) {
                 System.err.println("Errore durante la chiusura della connessione:");

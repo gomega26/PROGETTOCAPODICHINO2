@@ -36,7 +36,7 @@ public class ConnessioneDatabase {
      * ⚠️ Nota: per motivi di sicurezza, è preferibile non hardcodare le credenziali,
      * ma caricarle da variabili d'ambiente o da un file esterno.
      */
-    private String password = "FedericoII04!";
+    private String password = "Password123";
 
     /**
      * URL JDBC utilizzato per la connessione al database PostgreSQL.

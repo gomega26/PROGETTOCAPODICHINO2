@@ -47,19 +47,21 @@ public class Controller {
 
         VoloDAO v = new ImplementazioneVoloDAO();
         v.getAll(voli);
+        v.closeConnection();
     }
 
-    //RESTITUISCE TUTTI I VOLI IN PARTENZA
+    //RESTITUISCE TUTTI I VOLI GESTITI DALL'AMMINISTRATORE
 
     /**
      * Recupera tutti i voli attualmente in partenza.
      *
      * @param voli lista da riempire con i voli in partenza
      */
-    public void getVoliInPartenza(ArrayList<VoloInPartenza> voli){ //TESTATO -COMPLETO
+    public void getVoliGestiti(ArrayList<Volo> voli){ //TESTATO -COMPLETO
 
         VoloDAO v = new ImplementazioneVoloDAO();
-        v.getVoliInPartenza(voli);
+        v.getVoliPerAmministratore(user.getId(), voli);
+        v.closeConnection();
     }
 
     //SIGN IN UTENTE GENERICO - //TESTATO -COMPLETO
@@ -75,7 +77,7 @@ public class Controller {
 
         UtenteGenericoDAO u = new ImplementazioneUtenteGenericoDAO();
         u.signIn(email, login, password);
-
+        u.closeConnection();
     }
 
     //SIGN IN AMMINISTRATORE - //TESTATO -COMPLETO
@@ -95,6 +97,7 @@ public class Controller {
 
             AmministratoreDAO a = new ImplementazioneAmministratoreDAO();
             a.signIn(email, login, password);
+            a.closeConnection();
 
             return true;
         }
@@ -162,11 +165,13 @@ public class Controller {
 
         AmministratoreDAO a = new ImplementazioneAmministratoreDAO();
         user = a.logIn(login, password);
+        a.closeConnection();
 
         if(user==null){
 
             UtenteGenericoDAO ug = new ImplementazioneUtenteGenericoDAO();
             user = ug.logIn(login, password);
+            ug.closeConnection();
         }
 
         if(user!=null)
@@ -225,6 +230,7 @@ public class Controller {
             voliTrovati.add(v);
         }
 
+        voloDAO.closeConnection();
         return voliTrovati;
     }
 
@@ -243,6 +249,8 @@ public class Controller {
         BagaglioDAO b = new ImplementazioneBagaglioDAO();
         bagaglio = b.getBagagliPerUtenteGenerico(user.getId(), codice);
 
+        b.closeConnection();
+
         return bagaglio;
     }
 
@@ -259,6 +267,8 @@ public class Controller {
         BagaglioDAO b = new ImplementazioneBagaglioDAO();
         bagaglio = b.getBagagliPerAmministartore(codice);
 
+        b.closeConnection();
+
         return bagaglio;
     }
 
@@ -273,12 +283,12 @@ public class Controller {
      *
      * @param listaPrenotazioni lista risultante di prenotazioni corrispondenti
      * @param listaVoli lista risultante dei voli corrispondenti
-     * @param listaPaseggeri lista risultante dei passeggeri associati
+     * @param listaPasseggeri lista risultante dei passeggeri associati
      * @param codiceVolo codice del volo cercato
      * @param dataVolo data di partenza del volo
      * @param orarioPartenza orario di partenza previsto
      */
-    public void cercaPrenotazione(ArrayList<Prenotazione> listaPrenotazioni, ArrayList<Volo> listaVoli, ArrayList<Passeggero> listaPaseggeri, String codiceVolo, String dataVolo, String orarioPartenza){
+    public void cercaPrenotazione(ArrayList<Prenotazione> listaPrenotazioni, ArrayList<Volo> listaVoli, ArrayList<Passeggero> listaPasseggeri, String codiceVolo, String dataVolo, String orarioPartenza){
 
         ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
         ArrayList<Volo> voli = new ArrayList<>();
@@ -300,11 +310,11 @@ public class Controller {
 
         for(Volo volo: voli){
 
-            if(!volo.getCodice().equals(codiceVolo))
+            if(!volo.getCodice().equals(codiceVolo) && !codiceVolo.isEmpty())
                 continue;
-            if(!volo.getDataPartenza().equals(dataVolo))
+            if(!volo.getDataPartenza().equals(dataVolo) && !dataVolo.isEmpty())
                 continue;
-            if(volo.getOrarioPartenza().equals(orarioPartenza))
+            if(!volo.getOrarioPartenza().equals(orarioPartenza) && !orarioPartenza.isEmpty())
                 continue;
 
             voliTrovati.add(volo);
@@ -319,10 +329,14 @@ public class Controller {
                     listaVoli.add(v.getVoloPerId(volo.getCodice()));
 
                     idPasseggro=p.getIdPasseggero(prenotazione.getId());
-                    listaPaseggeri.add(pas.getPerId(idPasseggro));
+                    listaPasseggeri.add(pas.getPerId(idPasseggro));
                 }
             }
         }
+
+        p.closeConnection();
+        v.closeConnection();
+        pas.closeConnection();
     }
 
     //UTENTE GENERICO
@@ -357,7 +371,7 @@ public class Controller {
         volo = v.getVoloPerId(codiceVolo);
 
 
-        if (volo != null)
+        if (volo == null)
 
             codice = 0;
 
@@ -376,16 +390,24 @@ public class Controller {
 
             PrenotazioneDAO p = new ImplementazionePrenotazioneDAO();
             p.create(posto, classe, id_passeggero, codiceVolo, user.getId(), numBagagli);
+
             id_prenotazione= p.getIdPerPasseggero(id_passeggero);
 
             BagaglioDAO bagaglio = new ImplementazioneBagaglioDAO();
 
-            for (int i = 0; i < numBagagli; i++)
+            for (int i = 0; i < numBagagli; i++){
+
                 bagaglio.create(id_prenotazione);
+            }
 
             codice = id_prenotazione;
 
+            p.closeConnection();
+            bagaglio.closeConnection();
+            passeggero.closeConnection();
         }
+
+        v.closeConnection();
 
         return codice;
     }
@@ -410,9 +432,6 @@ public class Controller {
         String idVolo="";
         int idPasseggero=0;
 
-        VoloDAO v = new ImplementazioneVoloDAO();
-        PasseggeroDAO pas = new ImplementazionePasseggeroDAO();
-
         PrenotazioneDAO p = new ImplementazionePrenotazioneDAO();
         prenotazione= p.getPerIdUtenteGenerico(user.getId(), codicePrenotazione);
 
@@ -424,16 +443,28 @@ public class Controller {
             num_biglietto++;
 
             idVolo=p.getIdVolo(prenotazione.getId());
+
             idPasseggero=p.getIdPasseggero(prenotazione.getId());
 
+            VoloDAO v = new ImplementazioneVoloDAO();
             volo = v.getVoloPerId(idVolo);
+
+            PasseggeroDAO pas = new ImplementazionePasseggeroDAO();
             passeggero = pas.getPerId(idPasseggero);
+
+
+            p.closeConnection();
+            v.closeConnection();
+            pas.closeConnection();
 
             return passeggero.toString() + prenotazione.toString() + volo.toString() ;
         }
 
-        else
+        else{
+
+            p.closeConnection();
             return " ";
+        }
     }
 
     //SEGNALA SMARRIMENTO - fatto con DAO
@@ -449,11 +480,15 @@ public class Controller {
 
         BagaglioDAO b = new ImplementazioneBagaglioDAO();
 
-        if(b.segnalaSmarrimento(user.getId(), codice))
+        if(b.segnalaSmarrimento(user.getId(), codice)) {
+            b.closeConnection();
             return true;
+        }
 
-        else
+        else {
+            b.closeConnection();
             return false;
+        }
     }
 
     //MODIFICA PRENOTAZIONE - fatto con DAO
@@ -491,11 +526,17 @@ public class Controller {
             for(int i=0; i<numbagagli; i++)
                 bagaglio.create(codicePrenotazione);
 
+            p.closeConnection();
+            passeggero.closeConnection();
+            bagaglio.closeConnection();
+
             return true;
         }
 
-        else
+        else {
+            p.closeConnection();
             return false;
+        }
     }
 
 
@@ -545,6 +586,9 @@ public class Controller {
             voli.add(volo.getVoloPerId(id_volo));
         }
 
+        prenotazione.closeConnection();
+        pas.closeConnection();
+        volo.closeConnection();
     }
 
     //INSERISCI VOLO - fatto con DAO
@@ -579,10 +623,11 @@ public class Controller {
             VoloDAO v = new ImplementazioneVoloDAO();
 
             v.create(compagniaAerea,  codice,  origine,  destinazione,  orarioPartenza,  orarioArrivo,  dataPartenza,  durata,  ritardo,  stato);
-
+            v.closeConnection();
 
             AmministratoreDAO a = new ImplementazioneAmministratoreDAO();
             a.inserisciVolo(user.getId(), codice);
+            a.closeConnection();
 
             return true;
         }
@@ -590,7 +635,7 @@ public class Controller {
         return false;
     }
 
-    //MODIFICA VOLO - fatto con DAO
+    //MODIFICA VOLO - TESTATO COMPLETO
 
     /**
      * Aggiorna i dati di un volo esistente, se è stato inserito dall'amministratore attuale.
@@ -627,10 +672,15 @@ public class Controller {
                 tipologia= volo.getClass().getSimpleName();
 
                 v.aggiornaVolo(tipologia, codiceVolo, luogo, orarioPartenza, orarioArrivo, dataPartenza, durata, ritardo, statoDelVolo);
+
+                v.closeConnection();
+
                 return true;
 
             }
         }
+
+        v.closeConnection();
 
         return false;
     }
@@ -647,21 +697,21 @@ public class Controller {
      */
     public boolean assegnaGate(String codiceVolo, int gate) {
 
-        ArrayList<Volo> voli= new ArrayList<>();
+        ArrayList<Volo> voli = new ArrayList<>();
 
         VoloDAO v = new ImplementazioneVoloDAO();
         v.getVoliPerAmministratore(user.getId(), voli);
 
+        for (Volo volo : voli) {
 
-        for(Volo volo: voli){
-
-            if(volo.getCodice().equals(codiceVolo)) {
-
+            if (volo.getCodice().trim().equalsIgnoreCase(codiceVolo.trim())) {
                 v.setGate(codiceVolo, gate);
+                v.closeConnection();
                 return true;
-
             }
         }
+
+        v.closeConnection();
 
         return false;
     }
@@ -691,6 +741,8 @@ public class Controller {
             if(bagaglio.getCodice()==codice)
                 b.setStato(codice, statoBagaglio);
         }
+
+        b.closeConnection();
     }
 
     //VISUALIZZA SMARRIMENTI - fatto con DAO
@@ -707,6 +759,8 @@ public class Controller {
         BagaglioDAO b = new ImplementazioneBagaglioDAO();
 
         b.getSmarriti(bagagliSmarriti);
+
+        b.closeConnection();
 
         return bagagliSmarriti;
     }

@@ -60,4 +60,5 @@ public interface PasseggeroDAO {
      */
 
     Passeggero getPerId(int id);
+    void closeConnection();
 }

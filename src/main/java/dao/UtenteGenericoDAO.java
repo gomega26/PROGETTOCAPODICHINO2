@@ -40,4 +40,6 @@ public interface UtenteGenericoDAO {
      * @throws IllegalArgumentException se i parametri forniti sono {@code null} o vuoti
      */
     UtenteGenerico logIn(String login, String password);
+
+    void closeConnection();
 }

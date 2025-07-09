@@ -49,7 +49,7 @@ public class CercaPasseggero {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(900, 700);
         // Inizializza comboBox per sesso
         comboBox1.addItem(" ");
         comboBox1.addItem("M");

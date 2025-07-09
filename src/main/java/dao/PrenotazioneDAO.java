@@ -111,4 +111,6 @@ public interface PrenotazioneDAO {
      * @throws IllegalArgumentException se uno dei parametri è invalido o nullo
      */
     void modifica(int codicePrenotazione, String posto, String classeVolo, int numBagagli);
+
+    void closeConnection();
 }
