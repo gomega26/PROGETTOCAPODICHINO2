@@ -11,21 +11,38 @@ import model.Prenotazione;
 import controller.Controller;
 import model.Volo;
 
+/**
+ * Finestra grafica per la ricerca di prenotazioni in base a codice volo, data e orario di partenza.
+ * <p>
+ * L'interfaccia consente a un operatore o amministratore di visualizzare i passeggeri associati
+ * a un volo specifico e i dettagli relativi a ciascuna prenotazione. I risultati vengono mostrati in una tabella.
+ * </p>
+ * @author Gianmarco Minei
+ * @author Stefano Luongo
+ * @author Alessandro Esposito
+
+ */
 public class CercaPrenotazione {
 
 
     private JPanel panel1;
-    private JTextField codiceVoloTextField;
-    private JTextField dataVoloTextField;
-    private JTextField orarioPartenzaTextField;
-    private JButton buttonCercaPrenotazione;
-    private JButton button1;
-    private JTable tablePrenotazioni;
+    private JTextField codiceVoloTextField; // Campo per inserire il codice del volo
+    private JTextField dataVoloTextField; // Campo per la data del volo
+    private JTextField orarioPartenzaTextField; // Campo per l’orario di partenza
+    private JButton buttonCercaPrenotazione; // Pulsante "Cerca"
+    private JButton button1; // Pulsante "Indietro"
+    private JTable tablePrenotazioni; // Tabella che mostra i risultati
     private JScrollPane scrollPane1;
 
     private JFrame frame;
-    private DefaultTableModel model;
+    private DefaultTableModel model; // Modello dati della tabella
 
+    /**
+     * Costruisce e visualizza l'interfaccia per cercare prenotazioni legate a un volo specifico.
+     *
+     * @param frameChiamante finestra chiamante da riattivare al termine
+     * @param controller controller per delegare la logica di business
+     */
     public CercaPrenotazione(JFrame frameChiamante, Controller controller) {
 
 
@@ -40,7 +57,8 @@ public class CercaPrenotazione {
 
         model = new DefaultTableModel(new String[]{"Nome", "Cognome", "Codice Volo", "Tipologia", "Località", "Data", "Orario partenza", "Orario arrivo","Stato volo", "Classe", "Posto", "Bagagli", "Stato prenotazione"}, 0);
         tablePrenotazioni.setModel(model);
-
+// Listener per il pulsante "Cerca":
+        // Recupera codice volo, data e orario; esegue la ricerca e aggiorna la tabella.
         buttonCercaPrenotazione.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,7 +77,7 @@ public class CercaPrenotazione {
 
                 controller.cercaPrenotazione(listaPrenotazioni, listaVoli, listaPasseggeri, codiceVolo, dataVolo, orarioPartenza);
 
-                model.setRowCount(0);
+                model.setRowCount(0);// Pulisce righe precedenti
 
                 String tipologia;
                 String localita;
@@ -99,7 +117,8 @@ public class CercaPrenotazione {
                 }
             }
         });
-
+        // Listener per il pulsante "Indietro":
+        // Chiude la finestra corrente e riattiva quella chiamante.
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

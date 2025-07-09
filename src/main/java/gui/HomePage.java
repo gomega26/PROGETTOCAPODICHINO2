@@ -13,19 +13,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Finestra principale dell'applicazione per la consultazione dei voli.
+ * <p>
+ * Mostra una tabella riepilogativa con tutti i voli attivi (sia in arrivo che in partenza)
+ * e permette di filtrare i risultati tramite parametri come compagnia aerea, codice volo,
+ * destinazione e data. Dalla home è anche possibile accedere all'interfaccia utente o amministratore.
+ * </p>
+ *  @author Gianmarco Minei
+ *  @author Stefano Luongo
+ *  @author Alessandro Esposito
+ */
 public class HomePage {
 
-    private JButton homePageButton;
+    private JButton homePageButton; // Pulsante per accedere al login o pagina profilo
     private JPanel panel1;
-    private JTable table1;
+    private JTable table1; // Tabella che mostra i voli
     private JLabel label2;
     private JLabel label3;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JComboBox comboBox1;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JButton cercaButton;
+    private JTextField textField1; // Codice volo
+    private JTextField textField2; // Compagnia aerea
+    private JComboBox comboBox1; // Tipologia volo: partenza/arrivo
+    private JTextField textField3; // Località
+    private JTextField textField4; // Data partenza
+    private JButton cercaButton; // Pulsante per eseguire ricerca voli
     private JLabel lable4;
     private JLabel lable5;
     private static JFrame frame;
@@ -36,6 +47,10 @@ public class HomePage {
     private String localita;
     private String numGate;
 
+    /**
+     * Costruisce la finestra home e inizializza tutti i componenti dell'interfaccia.
+     * Popola automaticamente la tabella con i voli disponibili tramite il {@link Controller}.
+     */
     public HomePage() {
 
         controller = new Controller();
@@ -91,7 +106,8 @@ public class HomePage {
         }
 
         table1.setModel(model);
-
+        // Listener per il pulsante "homePageButton":
+        // Se non autenticato, apre il login. Altrimenti reindirizza alla homepage utente o admin.
         homePageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,7 +134,8 @@ public class HomePage {
                 frame.setVisible(false);
             }
         });
-
+// Listener per il pulsante "Cerca":
+        // Filtra i voli in base ai criteri inseriti dall’utente
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -162,10 +179,21 @@ public class HomePage {
         });
     }
 
+    /**
+     * Restituisce il frame della homepage.
+     *
+     * @return oggetto {@link JFrame} della finestra principale
+     */
     public static JFrame getFrame() {
         return frame;
     }
 
+
+    /**
+     * Punto di ingresso dell'applicazione.
+     *
+     * @param args eventuali argomenti da riga di comando (non utilizzati)
+     */
     public static void main(String[] args) {
         frame = new JFrame("HomePage");
         frame.setContentPane(new HomePage().panel1);

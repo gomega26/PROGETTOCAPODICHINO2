@@ -10,16 +10,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Finestra grafica che consente a un amministratore di assegnare un gate a un volo in partenza.
+ * <p>
+ * Mostra una tabella dei voli disponibili e permette di specificare codice volo e numero di gate
+ * tramite appositi campi di input. L'operazione viene trasmessa al {@link Controller} e notificata
+ * tramite un messaggio a schermo.
+ * </p>
+ * @author Gianmarco Minei
+ * @author Stefano Luongo
+ * @author Alessandro Esposito
+ */
 public class AssegnaGate {
 
     private JPanel panel1;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JButton button1;
-    private JButton assegnaButton;
-    private JTable table1;
-    private static JFrame frame;
+    private JTextField textField1; // Campo per inserire il codice del volo
+    private JTextField textField2; // Campo per inserire il numero del gate
+    private JButton button1; // Pulsante per tornare indietro
+    private JButton assegnaButton; // Pulsante per confermare l'assegnazione
+    private JTable table1; // Tabella che elenca i voli in partenza
+    private static JFrame frame; // Finestra corrente
 
+    /**
+     * Costruisce e visualizza l'interfaccia per assegnare un gate a un volo.
+     *
+     * @param frameChiamante finestra precedente da riattivare
+     * @param controller controller dell'applicazione per delegare l'operazione
+     */
     public AssegnaGate(JFrame frameChiamante, Controller controller) {
         frame = new JFrame("AssegnaGate");
         frame.setContentPane(panel1);
@@ -39,11 +56,11 @@ public class AssegnaGate {
             }
         };
 
-
+        // Recupera i voli in partenza tramite il controller
         ArrayList<VoloInPartenza> voli=new ArrayList<>();
 
         controller.getVoliInPartenza(voli);
-
+        // Popola la tabella con i dati dei voli
         for(VoloInPartenza v : voli){
 
             model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), v.getNumGate()});
@@ -52,6 +69,8 @@ public class AssegnaGate {
         table1.setModel(model);
 
 
+        // Listener per il pulsante "Indietro":
+        // Nasconde la finestra corrente e riporta visibile quella chiamante.
 
         button1.addActionListener(new ActionListener() {
             @Override
@@ -61,7 +80,8 @@ public class AssegnaGate {
                 frameChiamante.setVisible(true);
             }
         });
-
+        // Listener per il pulsante "Assegna":
+        // Ottiene i dati inseriti, chiama il controller e mostra il risultato all'utente.
         assegnaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

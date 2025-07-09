@@ -7,17 +7,33 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Finestra grafica che consente di monitorare lo stato di un bagaglio.
+ * <p>
+ * Gli utenti possono inserire un codice identificativo per visualizzare lo stato attuale del bagaglio.
+ * Se l’utente è un {@code Amministratore}, può anche aggiornare manualmente lo stato del bagaglio
+ * tramite un pulsante dedicato.
+ * </p>
+ *  @author Gianmarco Minei
+ *  @author Stefano Luongo
+ *  @author Alessandro Esposito
+ */
 public class MonitoraBagaglio {
-    private JTextField textField1;
+    private JTextField textField1; // Campo per inserire il codice del bagaglio
     private JPanel panel1;
-    private JButton button1;
-    private JButton monitoraBagaglioButton;
-    private JTextArea textArea1;
-    private JButton modificaButton;
+    private JButton button1; // Pulsante per tornare alla schermata precedente
+    private JButton monitoraBagaglioButton; // Avvia la ricerca del bagaglio
+    private JTextArea textArea1; // Serve per mostrare lo stato del bagaglio
+    private JButton modificaButton; // Pulsante per modificare lo stato (solo per amministratori)
     private Bagaglio b = null;
-
     private JFrame frame;
 
+    /**
+     * Costruisce e mostra la finestra per il monitoraggio dei bagagli.
+     *
+     * @param frameChiamante finestra precedente da riattivare
+     * @param controller controller per l’interazione con il modello
+     */
     public MonitoraBagaglio(JFrame frameChiamante, Controller controller) {
 
         frame = new JFrame("Monitora Bagaglio");
@@ -27,7 +43,8 @@ public class MonitoraBagaglio {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setSize(400, 400);
-
+// Listener per il pulsante "Monitora":
+        // Recupera lo stato del bagaglio tramite il controller
         monitoraBagaglioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -51,7 +68,8 @@ public class MonitoraBagaglio {
 
             }
         });
-
+// Listener per il pulsante "Indietro":
+        // Torna alla finestra chiamante
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,10 +79,10 @@ public class MonitoraBagaglio {
             }
         });
 
-        modificaButton.setVisible(false);
+        modificaButton.setVisible(false);// Visibile solo per amministratori
 
-        //DISPONIBILE SOLO SE USER E' UN AMMINISTRATORE
-
+        //DISPONIBILE SOLO SE USER È UN AMMINISTRATORE
+// Abilita il pulsante "Modifica" se l'utente è un amministratore
         if(controller.getUser().getClass().getSimpleName().equals("Amministratore")){
 
             modificaButton.setVisible(true);
@@ -73,7 +91,8 @@ public class MonitoraBagaglio {
             if(b!=null)
                 modificaButton.setEnabled(true);
         }
-
+        // Listener per il pulsante "Modifica":
+        // Apre la finestra per aggiornare lo stato del bagaglio selezionato
         modificaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

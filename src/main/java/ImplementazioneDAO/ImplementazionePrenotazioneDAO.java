@@ -6,11 +6,26 @@ import model.Prenotazione;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Implementazione concreta dell'interfaccia {@link PrenotazioneDAO}
+ * per la gestione delle prenotazioni nel sistema aeroportuale.
+ * <p>
+ * Fornisce funzionalità C.R.U.D. = Create, Read, Update, Delete per la tabella {@code prenotazioni},
+ * interagendo con il database PostgresSQL tramite JDBC.
+ * </p>
+ * @author Gianmarco Minei
+ * @author Stefano Luongo
+ * @author Alessandro Esposito
+ */
 public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Implementazione prenotazione dao.
+     */
     public ImplementazionePrenotazioneDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
@@ -19,9 +34,14 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Recupera tutte le prenotazioni associate a un utente generico.
+     *
+     * @param idUser identificativo dell’utente generico
+     * @param prenotazioni lista da riempire con le prenotazioni trovate
+     */
     @Override
-    public void getPrenotazioniPerUtenteGenerico(int idUser, ArrayList<Prenotazione> prenotazioni) {
+    public void getPrenotazioniPerUtenteGenerico(int idUser, List<Prenotazione> prenotazioni) {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
@@ -45,7 +65,11 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Recupera tutte le prenotazioni presenti nel sistema.
+     *
+     * @param prenotazioni lista da riempire con tutte le prenotazioni trovate
+     */
     @Override
     public void getAll(ArrayList<Prenotazione> prenotazioni) {
         try {
@@ -70,6 +94,17 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
         }
     }
 
+    /**
+     * Crea una nuova prenotazione per un passeggero e un volo specifico.
+     * Lo stato iniziale è impostato su "IN ATTESA".
+     *
+     * @param posto posto assegnato
+     * @param classe classe del volo
+     * @param id_passeggero identificativo del passeggero
+     * @param id_volo codice volo
+     * @param idUser identificativo dell’utente generico
+     * @param numBagagli numero di bagagli associati
+     */
     @Override
     public void create(String posto, String classe, int id_passeggero, String id_volo, int idUser, int numBagagli) {
         try {
@@ -86,7 +121,13 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Recupera una prenotazione di uno specifico utente generico in base al codice fornito.
+     *
+     * @param idUser identificativo dell’utente generico
+     * @param codicePrenotazione codice identificativo della prenotazione
+     * @return oggetto {@link Prenotazione} se trovato, altrimenti {@code null}
+     */
     @Override
     public Prenotazione getPerIdUtenteGenerico(int idUser, int codicePrenotazione) {
         Prenotazione p = null;
@@ -118,6 +159,12 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
         return p;
     }
 
+    /**
+     * Restituisce una prenotazione tramite il suo ID.
+     *
+     * @param codicePrenotazione codice identificativo della prenotazione
+     * @return oggetto {@link Prenotazione} se trovato, altrimenti {@code null}
+     */
     @Override
     public Prenotazione getPerId(int codicePrenotazione) {
         Prenotazione p = null;
@@ -147,7 +194,12 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
 
         return p;
     }
-
+    /**
+     * Restituisce il codice volo associato a una prenotazione.
+     *
+     * @param idPrenotazione identificativo della prenotazione
+     * @return codice del volo corrispondente
+     */
     @Override
     public String getIdVolo(int idPrenotazione) {
         String idVolo="";
@@ -169,7 +221,12 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
 
         return idVolo;
     }
-
+    /**
+     * Restituisce l'ID del passeggero associato a una prenotazione.
+     *
+     * @param idPrenotazione identificativo della prenotazione
+     * @return ID del passeggero corrispondente
+     */
     @Override
     public int getIdPasseggero(int idPrenotazione) {
 
@@ -192,7 +249,13 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
 
         return idPasseggero;
     }
-
+    /**
+     * Esegue il check-in per una prenotazione, aggiornando lo stato a "CONFERMATA"
+     * e assegnando un numero di biglietto.
+     *
+     * @param idPrenotazione identificativo della prenotazione
+     * @param numBiglietto numero del biglietto assegnato
+     */
     @Override
     public void checkIn(int idPrenotazione, int numBiglietto) {
         try {
@@ -207,7 +270,14 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Modifica i dati di una prenotazione esistente nel sistema.
+     *
+     * @param codicePrenotazione identificativo della prenotazione da aggiornare
+     * @param posto nuovo posto assegnato
+     * @param classeVolo nuova classe del volo (es. ECONOMY, BUSINESS)
+     * @param numBagagli nuovo numero di bagagli da registrare
+     */
     @Override
     public void modifica(int codicePrenotazione, String posto, String classeVolo, int numBagagli) {
         try {
@@ -222,7 +292,12 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Restituisce l'identificativo della prenotazione associata a un determinato passeggero.
+     *
+     * @param idPasseggero identificativo del passeggero
+     * @return identificativo della prenotazione corrispondente, oppure 0 se non trovata
+     */
     public int getIdPerPasseggero(int idPasseggero){
 
         int idPrenotazione = 0;
@@ -242,5 +317,24 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
             e.printStackTrace();
         }
         return idPrenotazione;
+    }
+    /**
+     * Chiude la connessione al database, se ancora attiva.
+     * <p>
+     * Utile per liberare risorse manualmente, se necessario.
+     * </p>
+     */
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    connection.close();
+                    System.out.println("Connessione chiusa correttamente.");
+                }
+            } catch (SQLException e) {
+                System.err.println("Errore durante la chiusura della connessione:");
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -8,23 +8,38 @@ import model.Prenotazione;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/**
+ * Finestra grafica che consente all'utente di modificare i dati di una prenotazione esistente.
+ * <p>
+ * L'interfaccia permette di aggiornare le informazioni del passeggero, il posto, la classe di volo e il numero di bagagli.
+ * La modifica viene eseguita tramite il {@link Controller} e restituisce un messaggio in base all’esito.
+ * </p>
+ *  @author Gianmarco Minei
+ *  @author Stefano Luongo
+ *  @author Alessandro Esposito
+ */
 public class ModificaPrenotazione {
 
     private JPanel panel1;
-    private JTextField numeroPrenotazioneTextField;
-    private JTextField postoTextField;
-    private JTextField classeVoloTextField;
-    private JTextField nomePasseggeroTextField;
-    private JTextField cognomePasseggeroTextField;
-    private JTextField numeroDocumentoPasseggeroTextField;
-    private JButton buttonModificaPrenotazione;
-    private JComboBox comboBox1;
-    private JButton button1;
-    private JComboBox comboBox2;
-    private JTextField textField1;
+    private JTextField numeroPrenotazioneTextField; // Campo per inserire il numero della prenotazione
+    private JTextField postoTextField; // Campo per il numero del posto
+    private JTextField classeVoloTextField; // (Non utilizzato visivamente, potrebbe essere rimosso)
+    private JTextField nomePasseggeroTextField; // Nome del passeggero
+    private JTextField cognomePasseggeroTextField; // Cognome del passeggero
+    private JTextField numeroDocumentoPasseggeroTextField; // Documento identificativo del passeggero
+    private JButton buttonModificaPrenotazione; // Pulsante per confermare la modifica
+    private JComboBox comboBox1; // Selezione del sesso (M/F)
+    private JButton button1; // Pulsante per tornare alla schermata precedente
+    private JComboBox comboBox2; // Selezione della classe di volo
+    private JTextField textField1; // Numero di bagagli
     private JFrame frame;
 
+    /**
+     * Costruisce e mostra l'interfaccia per modificare una prenotazione.
+     *
+     * @param frameChiamante la finestra da riattivare al termine dell'operazione
+     * @param controller controller dell’applicazione per gestire la logica di modifica
+     */
     public ModificaPrenotazione(JFrame frameChiamante, Controller controller) {
 
         frame = new JFrame("Modifica Prenotazione");
@@ -34,11 +49,12 @@ public class ModificaPrenotazione {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setSize(400, 1000);
-
+        // Inizializza combo box del sesso
         comboBox1.setModel(new DefaultComboBoxModel<>(new String[]{" ", "M", "F"}));
-
+        // Inizializza combo box della classe volo
         comboBox2.setModel(new DefaultComboBoxModel<>(new String[]{"Economy", "Business", "FirstClass"}));
-
+// Listener per il pulsante "Modifica":
+        // Preleva i dati inseriti e invoca il controller per effettuare la modifica
         buttonModificaPrenotazione.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,7 +82,8 @@ public class ModificaPrenotazione {
 
             }
         });
-
+// Listener per il pulsante "Indietro":
+        // Torna alla finestra chiamante senza eseguire modifiche
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

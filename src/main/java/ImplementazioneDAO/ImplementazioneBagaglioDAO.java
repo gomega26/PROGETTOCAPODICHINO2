@@ -8,10 +8,24 @@ import model.StatoBagaglio;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Implementazione dell'interfaccia {@link BagaglioDAO} per la gestione dei bagagli tramite JDBC.
+ * <p>
+ * Consente operazioni CRUD e operazioni specifiche legate al tracciamento dei bagagli
+ * nel contesto aeroportuale.
+ * </p>
+ * @author Gianmarco Minei
+ * @author Stefano Luongo
+ * @author Alessandro Esposito
+ */
 public class ImplementazioneBagaglioDAO implements BagaglioDAO {
 
     private Connection connection;
 
+    /**
+     * Costruisce un'istanza dell'implementazione DAO e inizializza la connessione al database.
+     * La connessione è ottenuta tramite il singleton {@link ConnessioneDatabase}.
+     */
     public ImplementazioneBagaglioDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
@@ -21,6 +35,13 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
         }
     }
 
+    /**
+     * Restituisce un bagaglio associato a un utente generico, se presente nel database.
+     *
+     * @param idUser identificativo dell'utente generico
+     * @param codiceBagaglio codice identificativo del bagaglio
+     * @return bagaglio trovato oppure {@code null} se non esiste corrispondenza
+     */
     @Override
     public Bagaglio getBagagliPerUtenteGenerico(int idUser, int codiceBagaglio) {
         Bagaglio b = null;
@@ -49,6 +70,12 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
         return b;
     }
 
+    /**
+     * Recupera un bagaglio specifico sulla base del codice, accessibile da un amministratore.
+     *
+     * @param codiceBagaglio codice univoco del bagaglio
+     * @return oggetto {@link Bagaglio} se presente, altrimenti {@code null}
+     */
     @Override
     public Bagaglio getBagagliPerAmministartore(int codiceBagaglio) {
         Bagaglio b = null;
@@ -74,9 +101,14 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
         return b;
     }
 
+    /**
+     * Aggiorna lo stato di un determinato bagaglio.
+     *
+     * @param codiceBagaglio identificativo del bagaglio da aggiornare
+     * @param stato nuovo stato da assegnare (es. "RITIRABILE", "SMARRITO")
+     */
     @Override
     public void setStato(int codiceBagaglio, String stato) {
-
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(
@@ -89,6 +121,12 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
         }
     }
 
+    /**
+     * Crea un nuovo bagaglio associato a una prenotazione.
+     * Il bagaglio viene inizializzato con stato "RITIRABILE".
+     *
+     * @param id_prenotazione ID della prenotazione a cui associare il bagaglio
+     */
     @Override
     public void create(int id_prenotazione) {
         try {
@@ -103,9 +141,14 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
         }
     }
 
+    /**
+     * Recupera tutti i bagagli attualmente smarriti (stato "SMARRITO")
+     * e li inserisce nella lista fornita.
+     *
+     * @param bagagliSmarriti lista da riempire con i bagagli smarriti trovati
+     */
     @Override
     public void getSmarriti(ArrayList<Bagaglio> bagagliSmarriti) {
-
         try {
             Statement stmt = connection.createStatement();
             String query = "SELECT * FROM bagagli WHERE stato = 'SMARRITO';";
@@ -115,20 +158,26 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
             while (rs.next()) {
                 Bagaglio b = new Bagaglio();
                 b.setCodice(rs.getInt("id"));
-
                 bagagliSmarriti.add(b);
             }
 
             rs.close();
             stmt.close();
             connection.close();
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
+    /**
+     * Permette a un amministratore di segnalare come smarrito un bagaglio,
+     * solo se il volo associato è sotto la sua gestione.
+     *
+     * @param idAmministratore ID dell’amministratore che segnala lo smarrimento
+     * @param codice ID del bagaglio da aggiornare
+     * @return {@code true} se l’operazione ha avuto successo, altrimenti {@code false}
+     */
     @Override
     public boolean segnalaSmarrimento(int idAmministratore, int codice) {
         try {
@@ -146,7 +195,6 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
                 stmt.executeUpdate(
                         "UPDATE bagagli SET stato = 'SMARRITO' WHERE id = " + codice + ";"
                 );
-
                 return true;
             }
 
@@ -159,8 +207,14 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
         return false;
     }
 
+    /**
+     * Recupera tutti i bagagli relativi ai voli gestiti da un amministratore
+     * e li aggiunge alla lista specificata.
+     *
+     * @param idAmministratore ID dell’amministratore
+     * @param bagagli lista da riempire con i bagagli trovati
+     */
     public void getBagagliPerAmministratore(int idAmministratore, ArrayList<Bagaglio> bagagli) {
-
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
@@ -184,6 +238,25 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Chiude la connessione al database se ancora attiva.
+     * <p>
+     * Utile per liberare risorse manualmente o in fase di terminazione applicazione.
+     * </p>
+     */
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    connection.close();
+                    System.out.println("Connessione chiusa correttamente.");
+                }
+            }catch (SQLException e) {
+                System.err.println("Errore durante la chiusura della connessione:");
+                e.printStackTrace();
+            }
+        }
     }
 }

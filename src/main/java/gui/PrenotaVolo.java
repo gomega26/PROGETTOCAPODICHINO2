@@ -11,25 +11,41 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Finestra grafica che consente a un utente di prenotare un volo disponibile.
+ * <p>
+ * Viene mostrata una tabella con tutti i voli attivi e un form di compilazione per inserire
+ * i dati del passeggero, il numero di posto e la classe di volo.
+ * Al termine, la prenotazione viene confermata tramite il {@link Controller}.
+ * </p>
+ *  @author Gianmarco Minei
+ *  @author Stefano Luongo
+ *  @author Alessandro Esposito
+ */
 public class PrenotaVolo {
     private JPanel panel1;
-    private JTextField textFieldCodiceVolo;
-    private JTextField textFieldPosto;
-    private JTextField textFieldClasseVolo;
-    private JTextField textFieldNome;
-    private JTextField textFieldCognome;
-    private JTextField textFieldNumerodiTelefono;
-    private JTextField textFieldDocumento;
-    private JTextField textFieldDatadiNascita;
-    private JComboBox<String> comboBox1;
-    private JButton button1;
-    private JButton confermaPrenotazioneButton;
-    private JTextField textField1;
-    private JComboBox comboBox2;
-    private JTable table1;
-
+    private JTextField textFieldCodiceVolo; // Codice del volo da prenotare
+    private JTextField textFieldPosto; // Posto desiderato
+    private JTextField textFieldClasseVolo; // (non utilizzato visivamente)
+    private JTextField textFieldNome; // Nome passeggero
+    private JTextField textFieldCognome; // Cognome passeggero
+    private JTextField textFieldNumerodiTelefono; // Telefono di contatto
+    private JTextField textFieldDocumento; // Numero documento passeggero
+    private JTextField textFieldDatadiNascita; // Data di nascita
+    private JComboBox<String> comboBox1; // Sesso del passeggero (M/F)
+    private JButton button1; // Pulsante "Indietro"
+    private JButton confermaPrenotazioneButton; // Conferma prenotazione
+    private JTextField textField1; // Numero di bagagli
+    private JComboBox comboBox2; // Classe di volo (Economy, Business, FirstClass)
+    private JTable table1; // Tabella che mostra tutti i voli disponibili
     private JFrame frame;
 
+    /**
+     * Costruisce e mostra la finestra per prenotare un volo.
+     *
+     * @param frameChiamante finestra precedente da riattivare al termine
+     * @param controller controller centrale per l'interazione logica con il sistema
+     */
     public PrenotaVolo(JFrame frameChiamante, Controller controller) {
 
         comboBox1.setModel(new DefaultComboBoxModel<>(new String[]{" ", "M", "F"}));
@@ -46,7 +62,7 @@ public class PrenotaVolo {
 
 
 
-        //INIZIALIZZA TABELLA
+        //INIZIALIZZA TABELLA DEI VOLI
 
         String[] colonne = {"Volo", "compagnia aerea", "tipologia", "località", "data", "orario partenza", "orario arrivo", "durata", "stato", "R", "Gate"};
 

@@ -10,10 +10,28 @@ import model.VoloInPartenza;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Costruisce un'istanza dell'implementazione DAO per i voli e stabilisce
+ * una connessione con il database dell'applicazione aeroportuale.
+ * <p>
+ * La connessione è ottenuta tramite il singleton {@link ConnessioneDatabase},
+ * garantendo un accesso condiviso e centralizzato alla risorsa JDBC.
+ * Questo costruttore è fondamentale per abilitare tutte le operazioni
+ * di lettura, scrittura e aggiornamento sui dati relativi ai voli.
+ * </p>
+ *
+ * @author Gianmarco Minei
+ * @author Stefano Luongo
+ * @author Alessandro Esposito
+ */
+
 public class ImplementazioneVoloDAO implements VoloDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Implementazione volo dao.
+     */
     public ImplementazioneVoloDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
@@ -22,6 +40,14 @@ public class ImplementazioneVoloDAO implements VoloDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Recupera tutti i voli presenti nel sistema e li aggiunge alla lista specificata.
+     * <p>
+     * I voli vengono istanziati come {@link VoloInPartenza} o {@link VoloInArrivo}
+     * in base alla tipologia e alla città di riferimento.
+     *
+     * @param voli lista da riempire con i voli recuperati
+     */
 
     @Override
     public void getAll(ArrayList<Volo> voli) { //FATTO
@@ -65,6 +91,11 @@ public class ImplementazioneVoloDAO implements VoloDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Recupera tutti i voli in partenza presenti nel database.
+     *
+     * @param voli lista da riempire con i voli in partenza
+     */
 
     @Override
     public void getVoliInPartenza(ArrayList<VoloInPartenza> voli) {
@@ -96,6 +127,14 @@ public class ImplementazioneVoloDAO implements VoloDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Recupera un volo specifico in base al suo codice identificativo.
+     * <p>
+     * Il volo restituito può essere una sottoclasse {@link VoloInPartenza} o {@link VoloInArrivo}.
+     *
+     * @param codiceVolo codice univoco del volo
+     * @return oggetto {@link Volo} se trovato, altrimenti {@code null}
+     */
 
     @Override
     public Volo getVoloPerId(String codiceVolo) { //FATTO
@@ -139,6 +178,21 @@ public class ImplementazioneVoloDAO implements VoloDAO {
 
         return v;
     }
+    /**
+     * Crea un nuovo volo nel database, assegnandogli automaticamente la tipologia
+     * in base alla città di origine o destinazione.
+     *
+     * @param compagniaAerea compagnia aerea del volo
+     * @param codice codice identificativo del volo
+     * @param origine città di partenza
+     * @param destinazione città di arrivo
+     * @param orarioPartenza orario previsto per la partenza
+     * @param orarioArrivo orario previsto per l’arrivo
+     * @param dataPartenza data del volo
+     * @param durata durata del volo
+     * @param ritardo minuti di ritardo
+     * @param statoVoloString stato attuale del volo (es. "IN ORARIO", "IN RITARDO")
+     */
 
     @Override
     public void create(String compagniaAerea, String codice, String origine, String destinazione,
@@ -167,6 +221,12 @@ public class ImplementazioneVoloDAO implements VoloDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Recupera tutti i voli gestiti da un amministratore specifico.
+     *
+     * @param idUser identificativo dell’amministratore
+     * @param voli lista da riempire con i voli gestiti
+     */
 
     @Override
     public void getVoliPerAmministratore(int idUser, ArrayList<Volo> voli) { //FATTO
@@ -211,6 +271,12 @@ public class ImplementazioneVoloDAO implements VoloDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Imposta il numero del gate associato a un volo.
+     *
+     * @param codiceVolo codice identificativo del volo
+     * @param gate numero del gate da assegnare
+     */
 
     @Override
     public void setGate(String codiceVolo, int gate) { //FATTO
@@ -223,6 +289,20 @@ public class ImplementazioneVoloDAO implements VoloDAO {
             e.printStackTrace();
         }
     }
+    /**
+     * Aggiorna i dati principali di un volo esistente, inclusi luogo, orari, data,
+     * ritardo e stato corrente. L’attributo modificato per il luogo dipende dalla tipologia del volo.
+     *
+     * @param tipologia tipo di volo ("InPartenza" o "InArrivo")
+     * @param codiceVolo codice del volo da aggiornare
+     * @param luogo nuova città di destinazione (se in partenza) o origine (se in arrivo)
+     * @param orarioPartenza nuovo orario di partenza
+     * @param orarioArrivo nuovo orario di arrivo
+     * @param dataPartenza nuova data di partenza
+     * @param durata nuova durata prevista del volo
+     * @param ritardo nuovo valore del ritardo in minuti
+     * @param statoDelVolo nuovo stato del volo (es. "IN RITARDO", "CANCELLATO")
+     */
 
     @Override
     public void aggiornaVolo(String tipologia, String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo,
@@ -254,6 +334,25 @@ public class ImplementazioneVoloDAO implements VoloDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
+        }
+    }
+    /**
+     * Chiude la connessione al database, se ancora attiva.
+     * <p>
+     * Utile per liberare risorse manualmente, se necessario.
+     * </p>
+     */
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    connection.close();
+                    System.out.println("Connessione chiusa correttamente.");
+                }
+            } catch (SQLException e) {
+                System.err.println("Errore durante la chiusura della connessione:");
+                e.printStackTrace();
+            }
         }
     }
 }

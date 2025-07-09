@@ -9,14 +9,27 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+/**
+ * Classe di controllo centrale dell'applicazione.
+ * <p>
+ * Si occupa di orchestrare l'interazione tra l'interfaccia grafica, il livello DAO
+ * e i modelli di dominio. Gestisce autenticazione, registrazione, validazione e
+ * recupero dati da utilizzare nelle viste.
+ * </p>
+ * @author Gianmarco Minei
+ * @author Stefano Luongo
+ * @author Alessandro Esposito
+ */
 public class Controller {
 
-    private int codice; //CODICE DI SICUREZZA PER AMMINISTRATORI
+    private int codice; // Codice di sicurezza richiesto per registrare un amministratore
+    private static int num_biglietto = 0; // Contatore per l'emissione progressiva dei biglietti
+    private Utente user; // Utente attualmente autenticato (può essere null)
 
-    private static int num_biglietto=0;
-
-    private Utente user;
-
+    /**
+     * Costruisce un nuovo {@code Controller} inizializzando lo stato interno.
+     * Imposta il codice di sicurezza per gli amministratori.
+     */
     public Controller () {
 
         user = null;
@@ -25,6 +38,11 @@ public class Controller {
 
     //RESTITUISCE TUTTI I VOLI
 
+    /**
+     * Recupera l'elenco completo dei voli presenti nel sistema.
+     *
+     * @param voli lista da riempire con i voli estratti dal database
+     */
     public void getVoli(ArrayList<Volo> voli){ //TESTATO -COMPLETO
 
         VoloDAO v = new ImplementazioneVoloDAO();
@@ -33,6 +51,11 @@ public class Controller {
 
     //RESTITUISCE TUTTI I VOLI IN PARTENZA
 
+    /**
+     * Recupera tutti i voli attualmente in partenza.
+     *
+     * @param voli lista da riempire con i voli in partenza
+     */
     public void getVoliInPartenza(ArrayList<VoloInPartenza> voli){ //TESTATO -COMPLETO
 
         VoloDAO v = new ImplementazioneVoloDAO();
@@ -41,6 +64,13 @@ public class Controller {
 
     //SIGN IN UTENTE GENERICO - //TESTATO -COMPLETO
 
+    /**
+     * Registra un nuovo utente generico nel sistema.
+     *
+     * @param login nome utente scelto
+     * @param password password associata all'account
+     * @param email indirizzo email dell'utente
+     */
     public void inizializzaUtenteGenerico(String login, String password, String email) {
 
         UtenteGenericoDAO u = new ImplementazioneUtenteGenericoDAO();
@@ -50,6 +80,15 @@ public class Controller {
 
     //SIGN IN AMMINISTRATORE - //TESTATO -COMPLETO
 
+    /**
+     * Registra un nuovo amministratore se il codice di sicurezza è corretto.
+     *
+     * @param codice codice di sicurezza fornito
+     * @param login nome utente scelto
+     * @param password password dell'amministratore
+     * @param email indirizzo email
+     * @return {@code true} se il codice era valido e l'inserimento ha avuto successo, {@code false} altrimenti
+     */
     public boolean inizializzaAmministratore(int codice, String login, String password, String email) {
 
         if(codice==this.codice) {
@@ -66,6 +105,13 @@ public class Controller {
 
     //CONTROLLI SU DATA E ORARI -TESTATO -COMPLETO
 
+
+    /**
+     * Verifica se una stringa rappresenta una data valida.
+     *
+     * @param date stringa in formato ISO (es. "2025-06-15")
+     * @return {@code true} se la stringa è una data valida, {@code false} in caso di errore
+     */
     public boolean isDate(String date){
 
         try {
@@ -77,6 +123,13 @@ public class Controller {
         }
     }
 
+
+    /**
+     * Verifica se una stringa rappresenta un orario valido.
+     *
+     * @param time stringa nel formato "HH:mm"
+     * @return {@code true} se il formato dell'orario è valido, {@code false} altrimenti
+     */
     public boolean isTime(String time){
 
         try {
@@ -94,6 +147,17 @@ public class Controller {
 
     //LOG-IN - TESTATO -COMPLETO
 
+    /**
+     * Esegue il login dell’utente.
+     * <p>
+     * Tenta prima l'autenticazione come amministratore e, in caso fallisca, come utente generico.
+     * In caso di successo, imposta l’attributo {@code user}.
+     * </p>
+     *
+     * @param login nome utente
+     * @param password password utente
+     * @return {@code true} se l’autenticazione ha avuto successo, altrimenti {@code false}
+     */
     public boolean logIn(String login, String password) {
 
         AmministratoreDAO a = new ImplementazioneAmministratoreDAO();
@@ -114,6 +178,12 @@ public class Controller {
 
     //LOG-OUT - TESTATO -COMPLETO
 
+    /**
+     * Esegue il logout dell’utente.
+     * <p>
+     * Annulla l’utente autenticato rimuovendolo dal campo {@code user}.
+     * </p>
+     */
     public void logOut(){
 
         user=null;
@@ -121,6 +191,17 @@ public class Controller {
 
     //RICERCA VOLO - TESTATO -COMPLETO
 
+    /**
+     * Filtra i voli in base ai parametri specificati.
+     *
+     * @param voliTrovati lista in cui verranno inseriti i voli che soddisfano i criteri
+     * @param tipo tipo di volo (es. {@code VoloInPartenza}, {@code VoloInArrivo})
+     * @param compagniaAerea nome della compagnia aerea
+     * @param codice codice identificativo del volo
+     * @param dataPartenza data di partenza
+     * @param destinazione destinazione del volo
+     * @return la lista {@code voliTrovati} filtrata
+     */
     public ArrayList<Volo> ricercaVoli(ArrayList<Volo> voliTrovati, String tipo, String compagniaAerea, String codice, String dataPartenza, String destinazione) {
 
         ArrayList<Volo> voli = new ArrayList<>();
@@ -149,6 +230,12 @@ public class Controller {
 
     //MONITORA BAGAGLIO - fatto con DAO
 
+    /**
+     * Permette a un utente generico di monitorare lo stato di un proprio bagaglio.
+     *
+     * @param codice codice identificativo del bagaglio
+     * @return l'oggetto {@link Bagaglio} se trovato, altrimenti {@code null}
+     */
     public Bagaglio monitoraBagaglioUtenteGenerico(int codice){ //UTENTE GENERICO
 
         Bagaglio bagaglio=null;
@@ -159,6 +246,12 @@ public class Controller {
         return bagaglio;
     }
 
+    /**
+     * Permette a un amministratore di accedere a qualsiasi bagaglio.
+     *
+     * @param codice codice identificativo del bagaglio
+     * @return oggetto {@link Bagaglio} corrispondente, oppure {@code null}
+     */
     public Bagaglio monitoraBagaglioAmministratore(int codice){ //AMMINISTRATORE
 
         Bagaglio bagaglio=null;
@@ -171,6 +264,20 @@ public class Controller {
 
     //CERCA PRENOTAZIONE - fatto con DAO
 
+    /**
+     * Cerca le prenotazioni corrispondenti ai parametri specificati.
+     * I risultati trovati vengono aggiunti alle liste fornite:
+     * - {@code listaPrenotazioni} contiene le prenotazioni trovate
+     * - {@code listaVoli} contiene i voli associati
+     * - {@code listaPasseggeri} contiene i passeggeri legati alle prenotazioni
+     *
+     * @param listaPrenotazioni lista risultante di prenotazioni corrispondenti
+     * @param listaVoli lista risultante dei voli corrispondenti
+     * @param listaPaseggeri lista risultante dei passeggeri associati
+     * @param codiceVolo codice del volo cercato
+     * @param dataVolo data di partenza del volo
+     * @param orarioPartenza orario di partenza previsto
+     */
     public void cercaPrenotazione(ArrayList<Prenotazione> listaPrenotazioni, ArrayList<Volo> listaVoli, ArrayList<Passeggero> listaPaseggeri, String codiceVolo, String dataVolo, String orarioPartenza){
 
         ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
@@ -222,6 +329,25 @@ public class Controller {
 
     //PRENOTA UN VOLO - fatto con DAO
 
+    /**
+     * Prenota un volo per l’utente attualmente autenticato.
+     * <p>
+     * Crea un nuovo passeggero, una prenotazione associata e genera i bagagli legati alla prenotazione.
+     * Se il volo non è programmato o non esiste, restituisce un codice di errore.
+     * </p>
+     *
+     * @param codiceVolo codice del volo da prenotare
+     * @param posto posto selezionato
+     * @param classe classe di volo (es. Economy, Business)
+     * @param nome nome del passeggero
+     * @param cognome cognome del passeggero
+     * @param numTelefono numero di telefono
+     * @param numDocumento documento identificativo del passeggero
+     * @param sesso genere ('M', 'F'...)
+     * @param dataNascita data di nascita
+     * @param numBagagli numero di bagagli da associare
+     * @return ID della prenotazione se completata, 0 se il volo non esiste, -1 se lo stato del volo non è programmato
+     */
     public int prenotaVolo(String codiceVolo, String posto, String classe, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita, int numBagagli) {
 
         Volo volo = null;
@@ -266,6 +392,15 @@ public class Controller {
 
     //CHECK IN - fatto con DAO
 
+    /**
+     * Esegue il check-in per una prenotazione associata all’utente autenticato.
+     * <p>
+     * Assegna un numero di biglietto, aggiorna lo stato della prenotazione e restituisce un riepilogo.
+     * </p>
+     *
+     * @param codicePrenotazione codice identificativo della prenotazione
+     * @return stringa contenente i dettagli del passeggero, della prenotazione e del volo, oppure stringa vuota se non valida
+     */
     public String checkIn(int codicePrenotazione) {
 
         Prenotazione prenotazione = null;
@@ -303,6 +438,13 @@ public class Controller {
 
     //SEGNALA SMARRIMENTO - fatto con DAO
 
+
+    /**
+     * Permette di segnalare lo smarrimento di un bagaglio.
+     *
+     * @param codice codice identificativo del bagaglio
+     * @return {@code true} se l’operazione ha avuto successo, {@code false} in caso contrario
+     */
     public boolean segnalaSmarrimento(int codice) {
 
         BagaglioDAO b = new ImplementazioneBagaglioDAO();
@@ -316,6 +458,22 @@ public class Controller {
 
     //MODIFICA PRENOTAZIONE - fatto con DAO
 
+    /**
+     * Modifica una prenotazione esistente con i nuovi dati forniti.
+     * <p>
+     * Aggiorna il posto, la classe e i dati del passeggero. Genera eventuali nuovi bagagli.
+     * </p>
+     *
+     * @param codicePrenotazione identificativo della prenotazione da modificare
+     * @param posto nuovo posto assegnato
+     * @param classeVolo nuova classe di volo
+     * @param nomePasseggero nuovo nome del passeggero
+     * @param cognomePasseggero nuovo cognome
+     * @param numDocumentoPasseggero nuovo numero documento
+     * @param sessoPasseggero nuovo valore del sesso
+     * @param numbagagli nuovo numero di bagagli
+     * @return {@code true} se l’operazione ha avuto successo, altrimenti {@code false}
+     */
     public boolean modificaPrenotazione(int codicePrenotazione, String posto, String classeVolo, String nomePasseggero, String cognomePasseggero, String numDocumentoPasseggero, char sessoPasseggero, int numbagagli ) {
 
         PrenotazioneDAO p = new ImplementazionePrenotazioneDAO();
@@ -345,6 +503,21 @@ public class Controller {
 
     //CERCA PASSEGGERO - fatto con DAO
 
+    /**
+     * Cerca un passeggero nel sistema in base ai parametri anagrafici forniti.
+     * <p>
+     * Recupera i passeggeri che corrispondono ai criteri e associa automaticamente
+     * le relative prenotazioni e voli. Richiede privilegi da amministratore.
+     * </p>
+     *
+     * @param passeggeri lista da riempire con i passeggeri trovati
+     * @param prenotazioni lista da riempire con le prenotazioni associate
+     * @param voli lista da riempire con i voli collegati alle prenotazioni
+     * @param nome nome del passeggero
+     * @param cognome cognome del passeggero
+     * @param numDocumento numero documento del passeggero
+     * @param sesso genere del passeggero (es. 'M', 'F')
+     */
     public void cercaPasseggero(ArrayList<Passeggero> passeggeri, ArrayList<Prenotazione> prenotazioni, ArrayList<Volo> voli, String nome, String cognome, String numDocumento, char sesso) {
 
         ArrayList<Passeggero> passeggeriTotali = new ArrayList<>();
@@ -375,6 +548,29 @@ public class Controller {
     }
 
     //INSERISCI VOLO - fatto con DAO
+    /**
+     * Inserisce un nuovo volo nel sistema se i parametri forniti risultano validi.
+     * <p>
+     * La creazione del volo avviene solo se:
+     * - la stringa {@code dataPartenza} rappresenta una data valida nel formato {@code yyyy-MM-dd};
+     * - le stringhe {@code orarioPartenza} e {@code orarioArrivo} sono orari validi nel formato {@code HH:mm};
+     * - almeno uno tra {@code origine} o {@code destinazione} è uguale a "Napoli".
+     * <p>
+     * Se tutte le condizioni sono rispettate, il volo viene registrato nel database
+     * e associato all'amministratore attualmente autenticato.
+     *
+     * @param compagniaAerea la compagnia aerea che opera il volo
+     * @param codice codice identificativo univoco del volo
+     * @param origine aeroporto o città di partenza
+     * @param destinazione aeroporto o città di arrivo
+     * @param orarioPartenza orario previsto di partenza (formato {@code HH:mm})
+     * @param orarioArrivo orario previsto di arrivo (formato {@code HH:mm})
+     * @param dataPartenza data di partenza del volo (formato {@code yyyy-MM-dd})
+     * @param durata durata complessiva del volo (es. "2h30m")
+     * @param ritardo ritardo previsto in minuti (0 se puntuale)
+     * @param stato stato iniziale del volo (es. "Programmato", "Decollato", "Cancellato")
+     * @return {@code true} se l’inserimento è andato a buon fine, {@code false} altrimenti
+     */
 
     public boolean inserisciVolo(String compagniaAerea, String codice, String origine, String destinazione, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String stato) {
 
@@ -396,6 +592,25 @@ public class Controller {
 
     //MODIFICA VOLO - fatto con DAO
 
+    /**
+     * Aggiorna i dati di un volo esistente, se è stato inserito dall'amministratore attuale.
+     * <p>
+     * Ricerca il volo tra quelli creati dall’amministratore autenticato,
+     * poi aggiorna i campi forniti: orari, data, durata, ritardo e stato.
+     * Rileva anche se il volo è un {@code VoloInPartenza} o {@code VoloInArrivo}
+     * per passare correttamente la tipologia al DAO.
+     * </p>
+     *
+     * @param codiceVolo codice identificativo del volo
+     * @param luogo nuova località (origine/destinazione) in base alla tipologia
+     * @param orarioPartenza nuovo orario di partenza
+     * @param orarioArrivo nuovo orario di arrivo
+     * @param dataPartenza nuova data del volo
+     * @param durata nuova durata
+     * @param ritardo nuovo ritardo
+     * @param statoDelVolo nuovo stato del volo
+     * @return {@code true} se il volo è stato trovato e aggiornato, {@code false} altrimenti
+     */
     public boolean aggiornaVolo(String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoDelVolo) {
 
         ArrayList<Volo> voli= new ArrayList<>();
@@ -422,6 +637,14 @@ public class Controller {
 
     //ASSEGNA GATE - fatto con DAO
 
+
+    /**
+     * Assegna un gate fisico a un volo in partenza.
+     *
+     * @param codiceVolo codice del volo
+     * @param gate numero del gate da assegnare
+     * @return {@code true} se l’assegnazione ha avuto successo, altrimenti {@code false}
+     */
     public boolean assegnaGate(String codiceVolo, int gate) {
 
         ArrayList<Volo> voli= new ArrayList<>();
@@ -445,6 +668,16 @@ public class Controller {
 
     //AGGIORNA STATO BAGAGLIO - fatto con DAO
 
+    /**
+     * Aggiorna manualmente lo stato di un bagaglio specifico.
+     * <p>
+     * Disponibile solo per amministratori che abbiano accesso a quel bagaglio.
+     * La modifica viene effettuata solo se il bagaglio appartiene a un volo gestito dall’amministratore corrente.
+     * </p>
+     *
+     * @param codice codice identificativo del bagaglio da aggiornare
+     * @param statoBagaglio nuovo stato da assegnare al bagaglio (es. "SMARRITO", "RITIRATO")
+     */
     public void aggiornaStatoBagaglio(int codice, String statoBagaglio) {
 
         ArrayList<Bagaglio> bagagli = new ArrayList<>();
@@ -462,6 +695,11 @@ public class Controller {
 
     //VISUALIZZA SMARRIMENTI - fatto con DAO
 
+    /**
+     * Restituisce la lista di tutti i bagagli attualmente smarriti.
+     *
+     * @return lista di oggetti {@link Bagaglio} in stato "Smarrito"
+     */
     public ArrayList<Bagaglio> visualizzaBagagliSmarriti() {
 
         ArrayList<Bagaglio> bagagliSmarriti = new ArrayList<>();
@@ -473,10 +711,20 @@ public class Controller {
         return bagagliSmarriti;
     }
 
+    /**
+     * Restituisce l’utente attualmente autenticato nel sistema.
+     *
+     * @return oggetto {@link Utente} attivo oppure {@code null}
+     */
     public Utente getUser() {
         return user;
     }
 
+    /**
+     * Imposta l’utente attualmente attivo nel sistema.
+     *
+     * @param user oggetto {@link Utente} da registrare
+     */
     public void setUser(Utente user) {
         this.user = user;
     }
