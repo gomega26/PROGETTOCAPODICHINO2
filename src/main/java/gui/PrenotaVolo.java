@@ -137,12 +137,18 @@ public class PrenotaVolo {
 
                 else if(esito==0) {
                     JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Inserire Volo esistente");
+                }
+
+                else if (esito==-2){
+                    JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Inserire data di nascita valida");
+                }
+
+                else {
+                    JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Prenotazione effettuata - Codice :" + esito);
+
                     frame.setVisible(false);
                     frameChiamante.setVisible(true);
                 }
-
-                else
-                    JOptionPane.showMessageDialog(confermaPrenotazioneButton, "Prenotazione effettuata - Codice :" + esito);
             }
         });
     }

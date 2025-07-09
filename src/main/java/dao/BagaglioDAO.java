@@ -74,5 +74,10 @@ public interface BagaglioDAO {
      * @param bagagli lista da riempire con i bagagli trovati
      */
     void getBagagliPerAmministratore(int idAmministratore, ArrayList<Bagaglio> bagagli);
+
+    /**
+     *
+     * Chiude la connessione al database
+     */
     void closeConnection();
 }

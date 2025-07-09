@@ -3,6 +3,7 @@ package gui;
 import controller.Controller;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,15 +20,14 @@ import java.awt.event.ActionListener;
  */
 public class HomePageUtenteGenerico {
     private JPanel panel1;
-    private JButton segnalaSmarrimentoButton; // Segnala un bagaglio smarrito
     private JButton prenotaVoloButton; // Prenota un nuovo volo
     private JButton modificaPrenotazioneButton; // Modifica una prenotazione esistente
     private JButton checkInButton; // Effettua il check-in per una prenotazione
     private JButton cercaPrenotazioneButton; // Cerca informazioni su una prenotazione
     private JButton buttonIndietro; // Torna alla finestra precedente
     private JButton buttonMonitoraBagaglio; // Consulta lo stato di un bagaglio
-    private JLabel label1; // Etichetta di benvenuto
     private JButton logOutButton; // Esegue il logout
+    private JLabel lable1;
     private JFrame frame;
 
     /**
@@ -38,7 +38,8 @@ public class HomePageUtenteGenerico {
      */
     public HomePageUtenteGenerico(JFrame frameChiamante, Controller controller) {
 
-        label1.setText("BENVENUTO " + controller.getUser().getLogin());
+        lable1.setText("BENVEUTO " + controller.getUser().getLogin());
+        lable1.setFont(new Font("Courier", Font.PLAIN, 18));
 
         // Crea e mostra il frame
         frame = new JFrame("Home Page Utente");
@@ -47,7 +48,7 @@ public class HomePageUtenteGenerico {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setSize(800, 800);
+        frame.setSize(600, 600);
 
         // Listener per prenotazione volo
         prenotaVoloButton.addActionListener(e -> {
@@ -63,11 +64,6 @@ public class HomePageUtenteGenerico {
         modificaPrenotazioneButton.addActionListener(e -> {
             frame.setVisible(false);
             ModificaPrenotazione frame3 = new ModificaPrenotazione(frame, controller);
-        });
-//Listener per segnalare smarrimento del bagaglio
-        segnalaSmarrimentoButton.addActionListener(e -> {
-            frame.setVisible(false);
-            SegnalaSmarrimento frame4 = new SegnalaSmarrimento(frame, controller);
         });
 // Listener per Check-In
         checkInButton.addActionListener(e -> {

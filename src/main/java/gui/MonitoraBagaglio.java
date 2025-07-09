@@ -25,8 +25,11 @@ public class MonitoraBagaglio {
     private JButton monitoraBagaglioButton; // Avvia la ricerca del bagaglio
     private JTextArea textArea1; // Serve per mostrare lo stato del bagaglio
     private JButton modificaButton; // Pulsante per modificare lo stato (solo per amministratori)
+    private JLabel lable1;
+    private JLabel lable2;
     private Bagaglio b = null;
     private JFrame frame;
+    private JComboBox comboBox1;
 
     /**
      * Costruisce e mostra la finestra per il monitoraggio dei bagagli.
@@ -43,6 +46,37 @@ public class MonitoraBagaglio {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setSize(400, 400);
+
+        comboBox1.addItem(" ");
+        comboBox1.addItem("Caricato");
+        comboBox1.addItem("Ritirabile");
+        comboBox1.addItem("Smarrito");
+
+        modificaButton.setEnabled(false);
+
+        // Visibile solo per amministratori
+        comboBox1.setVisible(false);
+        lable1.setVisible(false);
+        lable2.setVisible(false);
+        textArea1.setEditable(false);
+
+
+        //DISPONIBILE SOLO SE USER È UN AMMINISTRATORE
+// Abilita il pulsante "Modifica" se l'utente è un amministratore
+        if(controller.getUser().getClass().getSimpleName().equals("Amministratore")){
+
+            comboBox1.setVisible(true);
+            comboBox1.setEnabled(false);
+            lable1.setVisible(true);
+            lable2.setVisible(true);
+        }
+
+        //disponibile solo se lo user è un utente generico- abilita il bottone per segnalare uno smrrimento
+
+        else
+            modificaButton.setText("Segnala smarrimento");
+
+
 // Listener per il pulsante "Monitora":
         // Recupera lo stato del bagaglio tramite il controller
         monitoraBagaglioButton.addActionListener(new ActionListener() {
@@ -62,12 +96,14 @@ public class MonitoraBagaglio {
                 if(b==null)
                     JOptionPane.showMessageDialog(monitoraBagaglioButton, "Bagaglio non trovato");
 
-                else
+                else {
                     textArea1.setText("Codice bagaglio: " + b.getCodice() + " - " + b.getStato());
-
-
+                    modificaButton.setEnabled(true);
+                    comboBox1.setEnabled(true);
+                }
             }
         });
+
 // Listener per il pulsante "Indietro":
         // Torna alla finestra chiamante
         button1.addActionListener(new ActionListener() {
@@ -79,26 +115,41 @@ public class MonitoraBagaglio {
             }
         });
 
-        modificaButton.setVisible(false);// Visibile solo per amministratori
-
-        //DISPONIBILE SOLO SE USER È UN AMMINISTRATORE
-// Abilita il pulsante "Modifica" se l'utente è un amministratore
-        if(controller.getUser().getClass().getSimpleName().equals("Amministratore")){
-
-            modificaButton.setVisible(true);
-            modificaButton.setEnabled(false);
-
-            if(b!=null)
-                modificaButton.setEnabled(true);
-        }
         // Listener per il pulsante "Modifica":
         // Apre la finestra per aggiornare lo stato del bagaglio selezionato
         modificaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                AggiornaStatoBagaglio frame7 = new AggiornaStatoBagaglio(frame, controller, b.getCodice());
-                frame.setVisible(false);
+                //Segnala lo smarrimento per utente generico
+
+                if(controller.getUser().getClass().getSimpleName().equals("UtenteGenerico")){
+
+                    boolean esito = controller.segnalaSmarrimento(b.getCodice());
+
+                    if(esito) {
+                        JOptionPane.showMessageDialog(modificaButton, "Smarrimento segnalato");
+                        frame.setVisible(false);
+                        frameChiamante.setVisible(true);
+                    }
+                    else
+                        JOptionPane.showMessageDialog(modificaButton, "Inserire codice bagaglio valido!");
+                }
+
+
+                //Modifica lo statodel bagaglio per amministratore
+
+                else {
+
+                    String stato = comboBox1.getSelectedItem().toString();
+
+                    controller.aggiornaStatoBagaglio(b.getCodice(), stato);
+
+                    JOptionPane.showMessageDialog(modificaButton, "Operazione completata con successo");
+
+                    frame.setVisible(false);
+                    frameChiamante.setVisible(true);
+                }
             }
         });
     }

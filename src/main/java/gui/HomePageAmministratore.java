@@ -1,9 +1,9 @@
 package gui;
 
 import controller.Controller;
-import model.Amministratore;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,7 +26,6 @@ public class HomePageAmministratore {
     private JButton assegnaGateButton; // Assegna un gate a un volo in partenza
     private JButton visualizzaSmarrimentiButton; // Mostra la lista dei bagagli smarriti
     private JButton monitoraBagaglioButton; // Traccia un bagaglio inserendo il codice
-    private JButton aggiornaStatoBagaglioButton; // (se previsto) aggiorna manualmente lo stato di un bagaglio
     private JButton indietroButton; // Torna alla schermata precedente
     private JLabel lable1; // Label di benvenuto
     private JButton logOutButton; // Esegue il logout dell’utente
@@ -44,9 +43,10 @@ public class HomePageAmministratore {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(800, 800);
+        frame.setSize(600, 600);
     // Mostra messaggio di benvenuto personalizzato
-        lable1.setText("BENVENUTO " + ((Amministratore)controller.getUser()).getLogin());
+        lable1.setText("BENVEUTO " + controller.getUser().getLogin());
+        lable1.setFont(new Font("Courier", Font.PLAIN, 18));
         // Apre finestra per cercare passeggeri
         cercaPasseggeroButton.addActionListener(new ActionListener() {
             @Override
@@ -79,7 +79,7 @@ public class HomePageAmministratore {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                AssegnaGate frame4 = new AssegnaGate(frame, controller);
+                new AssegnaGate(frame, controller);
                 frame.setVisible(false);
             }
         });
@@ -88,7 +88,7 @@ public class HomePageAmministratore {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                VisualizzaSmarrimenti frame5 = new VisualizzaSmarrimenti(frame, controller);
+                VisualizzaBagagliSmarriti frame5 = new VisualizzaBagagliSmarriti(frame, controller);
                 frame.setVisible(false);
             }
         });

@@ -20,11 +20,10 @@ import java.util.ArrayList;
  *  @author Stefano Luongo
  *  @author Alessandro Esposito
  */
-public class VisualizzaSmarrimenti {
+public class VisualizzaBagagliSmarriti {
 
     private JPanel panel1;
     private JButton button1; // Pulsante "Indietro"
-    private JButton visualizzaButton; // (non utilizzato visivamente, potrebbe essere rimosso o valorizzato)
     private JTable table1; // Tabella per mostrare i codici dei bagagli smarriti
     private static JFrame frame;
 
@@ -34,17 +33,17 @@ public class VisualizzaSmarrimenti {
      * @param frameChiamante finestra chiamante da riattivare al termine
      * @param controller controller dell'applicazione per il recupero dei dati
      */
-    public VisualizzaSmarrimenti(JFrame frameChiamante, Controller controller) {
-        frame = new JFrame("VisualizzaSmarrimenti");
+    public VisualizzaBagagliSmarriti(JFrame frameChiamante, Controller controller) {
+        frame = new JFrame("VisualizzaBagagliSmarriti");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
+        frame.setSize(300, 300);
 
         DefaultTableModel model;
         // Inizializza tabella con intestazione
-        String[] colonne = {"Bagagli"};
+        String[] colonne = {"codice bagaglio"};
 
         model= new DefaultTableModel(colonne, 0);
         // Recupera bagagli smarriti tramite il controller

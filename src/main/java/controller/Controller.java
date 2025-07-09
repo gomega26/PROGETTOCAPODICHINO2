@@ -64,6 +64,34 @@ public class Controller {
         v.closeConnection();
     }
 
+    /**
+     * Fornisce tutte le prenotazioni per l'utente registrato, con relativi voli e info passeggero
+     *
+     * @param prenotazioni
+     * @param voli
+     * @param passeggeri
+     */
+
+    public void getPrenotazioniPerUtenteGenerico( ArrayList<Prenotazione> prenotazioni, ArrayList<Volo> voli, ArrayList<Passeggero> passeggeri){
+
+       VoloDAO v = new ImplementazioneVoloDAO();
+       PrenotazioneDAO p= new ImplementazionePrenotazioneDAO();
+       PasseggeroDAO pas = new ImplementazionePasseggeroDAO();
+
+       String idVolo;
+       int idPasseggero;
+
+       p.getPrenotazioniPerUtenteGenerico(user.getId(), prenotazioni);
+
+       for(Prenotazione prenotazione : prenotazioni){
+
+           idVolo = p.getIdVolo(prenotazione.getId());
+           voli.add(v.getVoloPerId(idVolo));
+           idPasseggero=p.getIdPasseggero(prenotazione.getId());
+           passeggeri.add(pas.getPerId(idPasseggero));
+       }
+    }
+
     //SIGN IN UTENTE GENERICO - //TESTATO -COMPLETO
 
     /**
@@ -189,7 +217,7 @@ public class Controller {
      * Annulla l’utente autenticato rimuovendolo dal campo {@code user}.
      * </p>
      */
-    public void logOut(){
+    public void logOut(){ //TESTATO COMPLETO
 
         user=null;
     }
@@ -234,7 +262,7 @@ public class Controller {
         return voliTrovati;
     }
 
-    //MONITORA BAGAGLIO - fatto con DAO
+    //MONITORA BAGAGLIO -
 
     /**
      * Permette a un utente generico di monitorare lo stato di un proprio bagaglio.
@@ -260,7 +288,7 @@ public class Controller {
      * @param codice codice identificativo del bagaglio
      * @return oggetto {@link Bagaglio} corrispondente, oppure {@code null}
      */
-    public Bagaglio monitoraBagaglioAmministratore(int codice){ //AMMINISTRATORE
+    public Bagaglio monitoraBagaglioAmministratore(int codice){
 
         Bagaglio bagaglio=null;
 
@@ -272,7 +300,7 @@ public class Controller {
         return bagaglio;
     }
 
-    //CERCA PRENOTAZIONE - fatto con DAO
+    //CERCA PRENOTAZIONE -
 
     /**
      * Cerca le prenotazioni corrispondenti ai parametri specificati.
@@ -341,7 +369,7 @@ public class Controller {
 
     //UTENTE GENERICO
 
-    //PRENOTA UN VOLO - fatto con DAO
+    //PRENOTA UN VOLO -
 
     /**
      * Prenota un volo per l’utente attualmente autenticato.
@@ -379,7 +407,7 @@ public class Controller {
 
             codice = -1;
 
-        else {
+        else if(this.isDate(dataNascita)){
 
             int id_passeggero;
             int id_prenotazione;
@@ -407,12 +435,15 @@ public class Controller {
             passeggero.closeConnection();
         }
 
+        else
+            codice=-2;
+
         v.closeConnection();
 
         return codice;
     }
 
-    //CHECK IN - fatto con DAO
+    //CHECK IN -
 
     /**
      * Esegue il check-in per una prenotazione associata all’utente autenticato.
@@ -467,7 +498,7 @@ public class Controller {
         }
     }
 
-    //SEGNALA SMARRIMENTO - fatto con DAO
+    //SEGNALA SMARRIMENTO -
 
 
     /**
@@ -491,7 +522,7 @@ public class Controller {
         }
     }
 
-    //MODIFICA PRENOTAZIONE - fatto con DAO
+    //MODIFICA PRENOTAZIONE -
 
     /**
      * Modifica una prenotazione esistente con i nuovi dati forniti.
@@ -542,7 +573,7 @@ public class Controller {
 
     //AMMINISTRATORE
 
-    //CERCA PASSEGGERO - fatto con DAO
+    //CERCA PASSEGGERO -
 
     /**
      * Cerca un passeggero nel sistema in base ai parametri anagrafici forniti.
@@ -591,7 +622,7 @@ public class Controller {
         volo.closeConnection();
     }
 
-    //INSERISCI VOLO - fatto con DAO
+    //INSERISCI VOLO -
     /**
      * Inserisce un nuovo volo nel sistema se i parametri forniti risultano validi.
      * <p>
@@ -685,7 +716,7 @@ public class Controller {
         return false;
     }
 
-    //ASSEGNA GATE - fatto con DAO
+    //ASSEGNA GATE -
 
 
     /**
@@ -716,7 +747,7 @@ public class Controller {
         return false;
     }
 
-    //AGGIORNA STATO BAGAGLIO - fatto con DAO
+    //AGGIORNA STATO BAGAGLIO - TESTATO COMPLETO
 
     /**
      * Aggiorna manualmente lo stato di un bagaglio specifico.
@@ -745,7 +776,7 @@ public class Controller {
         b.closeConnection();
     }
 
-    //VISUALIZZA SMARRIMENTI - fatto con DAO
+    //VISUALIZZA SMARRIMENTI -
 
     /**
      * Restituisce la lista di tutti i bagagli attualmente smarriti.

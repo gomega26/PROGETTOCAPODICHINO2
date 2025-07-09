@@ -149,7 +149,7 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
 
         try {
             Statement stmt = connection.createStatement();
-            String query = "SELECT * FROM bagagli WHERE stato = 'SMARRITO';";
+            String query = "SELECT * FROM bagagli WHERE stato = 'Smarrito';";
 
             ResultSet rs = stmt.executeQuery(query);
 

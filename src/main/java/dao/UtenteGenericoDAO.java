@@ -41,5 +41,10 @@ public interface UtenteGenericoDAO {
      */
     UtenteGenerico logIn(String login, String password);
 
+    /**
+     *
+     * Chiude la connessione al database
+     */
+
     void closeConnection();
 }

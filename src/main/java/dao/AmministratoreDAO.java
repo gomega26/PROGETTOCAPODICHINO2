@@ -46,5 +46,11 @@ public interface AmministratoreDAO {
      */
 
     void inserisciVolo(int idUser, String idVolo);
+
+    /**
+     *
+     * Chiude la connessione al database
+     */
+
     void closeConnection();
 }

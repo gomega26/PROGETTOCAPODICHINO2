@@ -1,7 +1,6 @@
 package dao;
 
 import model.Prenotazione;
-import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +39,7 @@ public interface PrenotazioneDAO {
      * @param prenotazioni lista da popolare con le prenotazioni recuperate
      * @throws NullPointerException se la lista fornita è {@code null}
      */
-    void getPrenotazioniPerUtenteGenerico(int idUser, List<Prenotazione> prenotazioni);
+    void getPrenotazioniPerUtenteGenerico(int idUser, ArrayList<Prenotazione> prenotazioni);
 
     /**
      * Recupera tutte le prenotazioni presenti nel sistema.
@@ -112,5 +111,9 @@ public interface PrenotazioneDAO {
      */
     void modifica(int codicePrenotazione, String posto, String classeVolo, int numBagagli);
 
+    /**
+     *
+     * Chiude la connessione al database
+     */
     void closeConnection();
 }

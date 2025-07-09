@@ -6,7 +6,6 @@ import model.Prenotazione;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implementazione concreta dell'interfaccia {@link PrenotazioneDAO}
@@ -41,7 +40,7 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
      * @param prenotazioni lista da riempire con le prenotazioni trovate
      */
     @Override
-    public void getPrenotazioniPerUtenteGenerico(int idUser, List<Prenotazione> prenotazioni) {
+    public void getPrenotazioniPerUtenteGenerico(int idUser, ArrayList<Prenotazione> prenotazioni) {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
@@ -252,7 +251,7 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(
-                    "UPDATE prenotazioni SET stato = 'CONFERMATA', num_biglietto = " + numBiglietto +
+                    "UPDATE prenotazioni SET stato = 'Confermata', num_biglietto = " + numBiglietto +
                             " WHERE id = " + idPrenotazione + ";"
             );
         } catch (SQLException e) {

@@ -92,5 +92,9 @@ public interface VoloDAO {
      */
     void aggiornaVolo(String tipologia, String codiceVolo, String luogo, String orarioPartenza, String orarioArrivo, String dataPartenza, String durata, int ritardo, String statoDelVolo);
 
+    /**
+     *
+     * Chiude la connessione al database
+     */
     void closeConnection();
 }

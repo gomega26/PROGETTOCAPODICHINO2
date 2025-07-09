@@ -2,12 +2,15 @@ package ImplementazioneDAO;
 
 import dao.VoloDAO;
 import db.ConnessioneDatabase;
-import model.Volo;
 import model.StatoVolo;
+import model.Volo;
 import model.VoloInArrivo;
 import model.VoloInPartenza;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -66,23 +69,23 @@ public class ImplementazioneVoloDAO implements VoloDAO {
 
                 if ("InPartenza".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(origine)) {
                     v = new VoloInPartenza();
-                } else if ("InArrivo".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(destinazione)) {
+                    ((VoloInPartenza)v).setNumGate(rs.getInt("gate"));
+                } else
                     v = new VoloInArrivo();
-                }
 
-                if (v != null) {
-                    v.setCodice(rs.getString("codice"));
-                    v.setCompagniaAerea(rs.getString("compagnia_aerea"));
-                    v.setOrigine(origine);
-                    v.setDestinazione(destinazione);
-                    v.setDataPartenza(rs.getString("data"));
-                    v.setOrarioPartenza(rs.getString("orario_partenza"));
-                    v.setOrarioArrivo(rs.getString("orario_arrivo"));
-                    v.setDurata(rs.getString("durata"));
-                    v.setRitardo(rs.getInt("ritardo"));
-                    v.setStato(StatoVolo.valueOf(rs.getString("stato")));
-                    voli.add(v);
-                }
+
+                v.setCodice(rs.getString("codice"));
+                v.setCompagniaAerea(rs.getString("compagnia_aerea"));
+                v.setOrigine(origine);
+                v.setDestinazione(destinazione);
+                v.setDataPartenza(rs.getString("data"));
+                v.setOrarioPartenza(rs.getString("orario_partenza"));
+                v.setOrarioArrivo(rs.getString("orario_arrivo"));
+                v.setDurata(rs.getString("durata"));
+                v.setRitardo(rs.getInt("ritardo"));
+                v.setStato(StatoVolo.valueOf(rs.getString("stato")));
+                voli.add(v);
+
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -116,6 +119,7 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                 v.setDurata(rs.getString("durata"));
                 v.setRitardo(rs.getInt("ritardo"));
                 v.setStato(StatoVolo.valueOf(rs.getString("stato")));
+                v.setNumGate(rs.getInt("gate"));
                 voli.add(v);
             }
 
@@ -135,8 +139,8 @@ public class ImplementazioneVoloDAO implements VoloDAO {
 
     @Override
     public Volo getVoloPerId(String codiceVolo) { //FATTO
-        Volo v = null;
 
+        Volo v = null;
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM voli WHERE codice = '" + codiceVolo + "';");
@@ -146,33 +150,34 @@ public class ImplementazioneVoloDAO implements VoloDAO {
                 String origine = rs.getString("origine");
                 String destinazione = rs.getString("destinazione");
 
-                if ("InPartenza".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(origine)) {
+
+                if ("InPartenza".equalsIgnoreCase(tipologia)) {
                     v = new VoloInPartenza();
-                } else if ("InArrivo".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(destinazione)) {
+                    ((VoloInPartenza)v).setNumGate(rs.getInt("gate"));
+                } else
                     v = new VoloInArrivo();
-                }
 
-                if (v != null) {
-                    v.setCodice(rs.getString("codice"));
-                    v.setCompagniaAerea(rs.getString("compagnia_aerea"));
-                    v.setOrigine(origine);
-                    v.setDestinazione(destinazione);
-                    v.setDataPartenza(rs.getString("data"));
-                    v.setOrarioPartenza(rs.getString("orario_partenza"));
-                    v.setOrarioArrivo(rs.getString("orario_arrivo"));
-                    v.setDurata(rs.getString("durata"));
-                    v.setRitardo(rs.getInt("ritardo"));
-                    v.setStato(StatoVolo.valueOf(rs.getString("stato")));
-                }
+                v.setCodice(rs.getString("codice"));
+                v.setCompagniaAerea(rs.getString("compagnia_aerea"));
+                v.setOrigine(origine);
+                v.setDestinazione(destinazione);
+                v.setDataPartenza(rs.getString("data"));
+                v.setOrarioPartenza(rs.getString("orario_partenza"));
+                v.setOrarioArrivo(rs.getString("orario_arrivo"));
+                v.setDurata(rs.getString("durata"));
+                v.setRitardo(rs.getInt("ritardo"));
+                v.setStato(StatoVolo.valueOf(rs.getString("stato")));
             }
+        }
 
-        } catch (SQLException e) {
+         catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
         return v;
     }
+
     /**
      * Crea un nuovo volo nel database, assegnandogli automaticamente la tipologia
      * in base alla città di origine o destinazione.
@@ -238,25 +243,23 @@ public class ImplementazioneVoloDAO implements VoloDAO {
 
                 Volo v = null;
 
-                if ("InPartenza".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(origine)) {
+                if ("InPartenza".equalsIgnoreCase(tipologia)) {
                     v = new VoloInPartenza();
-                } else if ("InArrivo".equalsIgnoreCase(tipologia) && "Napoli".equalsIgnoreCase(destinazione)) {
+                    ((VoloInPartenza)v).setNumGate(rs.getInt("gate"));
+                } else
                     v = new VoloInArrivo();
-                }
 
-                if (v != null) {
-                    v.setCodice(rs.getString("codice"));
-                    v.setCompagniaAerea(rs.getString("compagnia_aerea"));
-                    v.setOrigine(origine);
-                    v.setDestinazione(destinazione);
-                    v.setDataPartenza(rs.getString("data"));
-                    v.setOrarioPartenza(rs.getString("orario_partenza"));
-                    v.setOrarioArrivo(rs.getString("orario_arrivo"));
-                    v.setDurata(rs.getString("durata"));
-                    v.setRitardo(rs.getInt("ritardo"));
-                    v.setStato(StatoVolo.valueOf(rs.getString("stato")));
-                    voli.add(v);
-                }
+                v.setCodice(rs.getString("codice"));
+                v.setCompagniaAerea(rs.getString("compagnia_aerea"));
+                v.setOrigine(origine);
+                v.setDestinazione(destinazione);
+                v.setDataPartenza(rs.getString("data"));
+                v.setOrarioPartenza(rs.getString("orario_partenza"));
+                v.setOrarioArrivo(rs.getString("orario_arrivo"));
+                v.setDurata(rs.getString("durata"));
+                v.setRitardo(rs.getInt("ritardo"));
+                v.setStato(StatoVolo.valueOf(rs.getString("stato")));
+                voli.add(v);
             }
 
         } catch (SQLException e) {
@@ -273,6 +276,8 @@ public class ImplementazioneVoloDAO implements VoloDAO {
 
     @Override
     public void setGate(String codiceVolo, int gate) {
+
+        System.out.println("ENTRA NELL'IMPLEMENTAZIONE DAO");
 
 
         try {
@@ -358,6 +363,13 @@ public class ImplementazioneVoloDAO implements VoloDAO {
         }
     }
 
+    /**
+     * Chiude la connessione al database, se ancora attiva.
+     * <p>
+     * Utile per liberare risorse manualmente, se necessario.
+     * </p>
+     */
+
     public void closeConnection() {
         if (connection != null) {
             try {
@@ -370,10 +382,6 @@ public class ImplementazioneVoloDAO implements VoloDAO {
             }
         }
     }
-    /**
-     * Chiude la connessione al database, se ancora attiva.
-     * <p>
-     * Utile per liberare risorse manualmente, se necessario.
-     * </p>
-     */
 }
+
+

@@ -60,5 +60,10 @@ public interface PasseggeroDAO {
      */
 
     Passeggero getPerId(int id);
+
+    /**
+     *
+     * Chiude la connessione al database
+     */
     void closeConnection();
 }

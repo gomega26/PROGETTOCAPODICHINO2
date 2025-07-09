@@ -171,7 +171,7 @@ public class ImplementazionePasseggeroDAO implements PasseggeroDAO {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "SELECT * FROM prenotazioni WHERE id = " + id + ";"
+                    "SELECT * FROM passeggeri WHERE id = " + id + ";"
             );
 
             if (rs.next()) {

@@ -60,11 +60,13 @@ public class AssegnaGate {
         ArrayList<Volo> voli=new ArrayList<>();
 
         controller.getVoliGestiti(voli);
+
         // Popola la tabella con i dati dei voli
         for(Volo v : voli){
 
-            if(v.getClass().getSimpleName().equals("InPartenza"))
+            if(v.getOrigine().equals("Napoli"))
                 model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), v.getDestinazione(), v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), ((VoloInPartenza)v).getNumGate()});
+
         }
 
         table1.setModel(model);
