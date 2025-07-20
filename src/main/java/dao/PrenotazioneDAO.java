@@ -66,12 +66,12 @@ public interface PrenotazioneDAO {
     Prenotazione getPerId(int codicePrenotazione);
 
     /**
-     * Restituisce l'id della prenotazione associata a un passeggero.
+     * Restituisce la prenotazione associata a un passeggero.
      *
      * @param idPasseggero identificativo del passeggero
-     * @return l'identificativo della prenotazione
+     * @return la prenotazione
      */
-    int getIdPerPasseggero(int idPasseggero);
+    Prenotazione getPerIdPasseggero(int idPasseggero);
 
     /**
      * Restituisce l'identificativo del volo associato alla prenotazione.

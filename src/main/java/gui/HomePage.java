@@ -1,14 +1,11 @@
 package gui;
 
 import controller.Controller;
-import model.StatoVolo;
 import model.Volo;
-import model.VoloInArrivo;
 import model.VoloInPartenza;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

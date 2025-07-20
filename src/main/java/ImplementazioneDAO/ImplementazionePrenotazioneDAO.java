@@ -302,29 +302,34 @@ public class ImplementazionePrenotazioneDAO implements PrenotazioneDAO {
         }
     }
     /**
-     * Restituisce l'identificativo della prenotazione associata a un determinato passeggero.
+     * Restituisce la prenotazione associata a un determinato passeggero.
      *
      * @param idPasseggero identificativo del passeggero
-     * @return identificativo della prenotazione corrispondente, oppure 0 se non trovata
+     * @return  prenotazione corrispondente, oppure null se non trovata
      */
-    public int getIdPerPasseggero(int idPasseggero){
+    public Prenotazione getPerIdPasseggero(int idPasseggero){
 
-        int idPrenotazione = 0;
+        Prenotazione p =null;
+
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "SELECT id FROM prenotazioni WHERE id_passeggero = " + idPasseggero + ";"
+                    "SELECT * FROM prenotazioni WHERE id_passeggero = " + idPasseggero + ";"
             );
 
             if (rs.next()) {
-                idPrenotazione = rs.getInt("id");
+                p = new Prenotazione(rs.getInt("id"),
+                                                    rs.getInt("num_bagagli"),
+                                                    rs.getString("posto"),
+                                                    rs.getString("classe_volo"),
+                                                    rs.getString("stato"));
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-        return idPrenotazione;
+        return p;
     }
     /**
      * Chiude la connessione al database, se ancora attiva.

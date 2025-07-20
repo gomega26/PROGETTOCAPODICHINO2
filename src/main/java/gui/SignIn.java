@@ -42,7 +42,7 @@ public class SignIn {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(800, 800);
+        frame.setSize(600, 600);
 
         comboBox1.setModel(new DefaultComboBoxModel(new Object[]{" ", "Amministratore", "Utente generico"}));
 

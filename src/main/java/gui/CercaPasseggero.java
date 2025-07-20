@@ -34,7 +34,6 @@ public class CercaPasseggero {
     private JTable table1; // Tabella risultati
     private JButton cercaButton; // Pulsante "Cerca"
     private static JFrame frame;
-    private DefaultTableModel model; // Modello tabella
 
 
     /**
@@ -49,11 +48,42 @@ public class CercaPasseggero {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(900, 700);
+        frame.setSize(700, 600);
         // Inizializza comboBox per sesso
         comboBox1.addItem(" ");
         comboBox1.addItem("M");
         comboBox1.addItem("F");
+
+        //TABELLA
+
+        String[] colonne = {"Nome", "Cognome", "sesso", "Num. documento", "Num. telefono", "Data di nascita", "Prenotazione", "stato prenotazione"};
+
+        DefaultTableModel model = new DefaultTableModel(colonne, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
+        ArrayList<Passeggero> passeggeri = new ArrayList<>();
+
+        controller.getPasseggeri(prenotazioni, passeggeri);
+
+        for(int i=0; i<passeggeri.size(); i++){
+
+            try {
+                Prenotazione p = prenotazioni.get(i);
+                Passeggero pas = passeggeri.get(i);
+
+                model.addRow(new Object[]{pas.getNome(), pas.getCognome(), pas.getSesso(), pas.getNumDocumento(), pas.getNumTelefono(), pas.getDataNascita(), p.getId(), p.getStato()});
+            }
+            catch(NullPointerException e){
+                System.out.println("Errore: "+e.getMessage());
+            }
+        }
+
+        table1.setModel(model);
 
         // Listener pulsante "Indietro":
         // Torna alla finestra precedente
@@ -66,10 +96,6 @@ public class CercaPasseggero {
             }
         });
 
-        // Inizializza tabella con intestazioni colonne
-        String[] colonne = {"Nome", "Cognome", "Numero documento", "Sesso", "Prenotazione", "Stato prenotazione", "Volo", "Tipologia", "Localita", "Data"};
-
-        model = new DefaultTableModel(colonne, 0);
         // Listener per pulsante "Cerca":
         // Recupera i criteri inseriti e aggiorna la tabella con i risultati
         cercaButton.addActionListener(new ActionListener() {
@@ -82,42 +108,21 @@ public class CercaPasseggero {
                 char sesso = comboBox1.getSelectedItem().toString().charAt(0);
 
                 ArrayList<Prenotazione> prenotazioni= new ArrayList<>();
-                ArrayList<Volo> voli=new ArrayList<>();
                 ArrayList<Passeggero> passeggeri = new ArrayList<>();
 
-                controller.cercaPasseggero(passeggeri, prenotazioni, voli, nome, cognome, numeroDocumento, sesso);
+                controller.cercaPasseggero(passeggeri, prenotazioni, nome, cognome, numeroDocumento, sesso);
 
-                model.setRowCount(0);// Pulisce righe precedenti
+                model.setRowCount(0);
 
-                String tipologia;
-                String localita;
+                for(int i=0; i<passeggeri.size(); i++){
 
-                for (int i = 0; i < passeggeri.size(); i++) {
-                    Passeggero p = passeggeri.get(i);
-                    Prenotazione pr = prenotazioni.get(i);
-                    Volo v = voli.get(i);
+                    Prenotazione p = prenotazioni.get(i);
+                    Passeggero pas = passeggeri.get(i);
 
-                    if(v.getClass().getSimpleName().equals("VoloInPartenza")){
-
-                        tipologia = "in partenza per";
-                        localita = v.getDestinazione();
-                    }
-
-                    else {
-
-                        tipologia = "in arrivo da";
-                        localita = v.getOrigine();
-                    }
-
-
-                    Object[] riga = {
-                            p.getNome(), p.getCognome(), p.getNumDocumento(), p.getSesso(),
-                            pr.getId(), pr.getStatoPrenotazione(),
-                            v.getCodice(), tipologia, localita, v.getDataPartenza()
-                    };
-
-                    model.addRow(riga);
+                    model.addRow(new Object[]{pas.getNome(), pas.getCognome(), pas.getSesso(), pas.getNumDocumento(), pas.getNumTelefono(), pas.getDataNascita(), p.getId(), p.getStato()});
                 }
+
+                table1.setModel(model);
             }
         });
     }

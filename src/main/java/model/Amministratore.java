@@ -41,23 +41,4 @@ public class Amministratore extends Utente {
      * @param sesso sesso del passeggero da cercare (es. 'M' o 'F'); se {@code '-'} viene ignorato
      * @return lista di {@link Passeggero} che soddisfano i criteri specificati
      */
-    public ArrayList<Passeggero> cercaPasseggero(ArrayList<Passeggero> passeggeri, String nome, String cognome, String numDocumento, char sesso) {
-
-        ArrayList<Passeggero> passeggeriTrovati = new ArrayList<>();
-
-        for (Passeggero p : passeggeri) {
-            if (!nome.isEmpty() && !p.getNome().equals(nome))
-                continue;
-            if (!cognome.isEmpty() && !p.getCognome().equals(cognome))
-                continue;
-            if (!numDocumento.isEmpty() && !p.getNumDocumento().equals(numDocumento))
-                continue;
-            if (sesso != '-' && p.getSesso() != sesso)
-                continue;
-
-            passeggeriTrovati.add(p);
-        }
-
-        return passeggeriTrovati;
-    }
 }

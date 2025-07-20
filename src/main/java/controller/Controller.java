@@ -30,7 +30,7 @@ public class Controller {
      * Costruisce un nuovo {@code Controller} inizializzando lo stato interno.
      * Imposta il codice di sicurezza per gli amministratori.
      */
-    public Controller () {
+    public Controller() {
 
         user = null;
         codice = 123;
@@ -65,34 +65,58 @@ public class Controller {
     }
 
     /**
+     * Fornisce tutti i passeggeri e le relative prenotazioni
+     * @param prenotazioni
+     * @param passeggeri
+     */
+
+    public void getPasseggeri(ArrayList<Prenotazione> prenotazioni, ArrayList<Passeggero> passeggeri){
+
+        PasseggeroDAO pas = new ImplementazionePasseggeroDAO();
+        PrenotazioneDAO p= new ImplementazionePrenotazioneDAO();
+
+        pas.getAll(passeggeri);
+
+        for(Passeggero passeggero: passeggeri) {
+
+            prenotazioni.add(p.getPerIdPasseggero(passeggero.getId()));
+        }
+
+        p.closeConnection();
+        pas.closeConnection();
+    }
+
+    /**
      * Fornisce tutte le prenotazioni per l'utente registrato, con relativi voli e info passeggero
      *
      * @param prenotazioni
      * @param voli
      * @param passeggeri
+     *
+     *
      */
 
     public void getPrenotazioniPerUtenteGenerico( ArrayList<Prenotazione> prenotazioni, ArrayList<Volo> voli, ArrayList<Passeggero> passeggeri){
 
-       VoloDAO v = new ImplementazioneVoloDAO();
-       PrenotazioneDAO p= new ImplementazionePrenotazioneDAO();
-       PasseggeroDAO pas = new ImplementazionePasseggeroDAO();
+        VoloDAO v = new ImplementazioneVoloDAO();
+        PrenotazioneDAO p= new ImplementazionePrenotazioneDAO();
+        PasseggeroDAO pas = new ImplementazionePasseggeroDAO();
 
-       String idVolo;
-       int idPasseggero;
+        String idVolo;
+        int idPasseggero;
 
-       p.getPrenotazioniPerUtenteGenerico(user.getId(), prenotazioni);
+        p.getPrenotazioniPerUtenteGenerico(user.getId(), prenotazioni);
 
-       for(Prenotazione prenotazione : prenotazioni){
+        for(Prenotazione prenotazione : prenotazioni){
 
-           idVolo = p.getIdVolo(prenotazione.getId());
-           voli.add(v.getVoloPerId(idVolo));
-           idPasseggero=p.getIdPasseggero(prenotazione.getId());
-           passeggeri.add(pas.getPerId(idPasseggero));
-       }
+            idVolo = p.getIdVolo(prenotazione.getId());
+            voli.add(v.getVoloPerId(idVolo));
+            idPasseggero=p.getIdPasseggero(prenotazione.getId());
+            passeggeri.add(pas.getPerId(idPasseggero));
+        }
     }
 
-    //SIGN IN UTENTE GENERICO - //TESTATO -COMPLETO
+//SIGN IN UTENTE GENERICO - //TESTATO -COMPLETO
 
     /**
      * Registra un nuovo utente generico nel sistema.
@@ -108,7 +132,7 @@ public class Controller {
         u.closeConnection();
     }
 
-    //SIGN IN AMMINISTRATORE - //TESTATO -COMPLETO
+//SIGN IN AMMINISTRATORE - //TESTATO -COMPLETO
 
     /**
      * Registra un nuovo amministratore se il codice di sicurezza è corretto.
@@ -134,7 +158,7 @@ public class Controller {
             return false;
     }
 
-    //CONTROLLI SU DATA E ORARI -TESTATO -COMPLETO
+//CONTROLLI SU DATA E ORARI -TESTATO -COMPLETO
 
 
     /**
@@ -173,10 +197,10 @@ public class Controller {
     }
 
 
-    //UTENTE
+//UTENTE
 
 
-    //LOG-IN - TESTATO -COMPLETO
+//LOG-IN - TESTATO -COMPLETO
 
     /**
      * Esegue il login dell’utente.
@@ -209,7 +233,7 @@ public class Controller {
             return false;
     }
 
-    //LOG-OUT - TESTATO -COMPLETO
+//LOG-OUT - TESTATO -COMPLETO
 
     /**
      * Esegue il logout dell’utente.
@@ -222,7 +246,7 @@ public class Controller {
         user=null;
     }
 
-    //RICERCA VOLO - TESTATO -COMPLETO
+//RICERCA VOLO - TESTATO -COMPLETO
 
     /**
      * Filtra i voli in base ai parametri specificati.
@@ -262,7 +286,7 @@ public class Controller {
         return voliTrovati;
     }
 
-    //MONITORA BAGAGLIO -
+//MONITORA BAGAGLIO -
 
     /**
      * Permette a un utente generico di monitorare lo stato di un proprio bagaglio.
@@ -293,14 +317,14 @@ public class Controller {
         Bagaglio bagaglio=null;
 
         BagaglioDAO b = new ImplementazioneBagaglioDAO();
-        bagaglio = b.getBagagliPerAmministartore(codice);
+        bagaglio = b.getBagaglioPerAmministratore(codice);
 
         b.closeConnection();
 
         return bagaglio;
     }
 
-    //CERCA PRENOTAZIONE -
+//CERCA PRENOTAZIONE -
 
     /**
      * Cerca le prenotazioni corrispondenti ai parametri specificati.
@@ -367,9 +391,9 @@ public class Controller {
         pas.closeConnection();
     }
 
-    //UTENTE GENERICO
+//UTENTE GENERICO
 
-    //PRENOTA UN VOLO -
+//PRENOTA UN VOLO -
 
     /**
      * Prenota un volo per l’utente attualmente autenticato.
@@ -403,7 +427,7 @@ public class Controller {
 
             codice = 0;
 
-        else if (!volo.getStato().equals(StatoVolo.Programmato))
+        else if (!volo.getStato().equals(StatoVolo.Programmato) || volo.getDestinazione().equals("Napoli"))
 
             codice = -1;
 
@@ -419,16 +443,16 @@ public class Controller {
             PrenotazioneDAO p = new ImplementazionePrenotazioneDAO();
             p.create(posto, classe, id_passeggero, codiceVolo, user.getId(), numBagagli);
 
-            id_prenotazione= p.getIdPerPasseggero(id_passeggero);
+            Prenotazione prenotazione =  p.getPerIdPasseggero(id_passeggero);
 
             BagaglioDAO bagaglio = new ImplementazioneBagaglioDAO();
 
             for (int i = 0; i < numBagagli; i++){
 
-                bagaglio.create(id_prenotazione);
+                bagaglio.create(prenotazione.getId());
             }
 
-            codice = id_prenotazione;
+            codice = prenotazione.getId();
 
             p.closeConnection();
             bagaglio.closeConnection();
@@ -443,7 +467,7 @@ public class Controller {
         return codice;
     }
 
-    //CHECK IN -
+//CHECK IN -
 
     /**
      * Esegue il check-in per una prenotazione associata all’utente autenticato.
@@ -494,11 +518,11 @@ public class Controller {
         else{
 
             p.closeConnection();
-            return " ";
+            return "";
         }
     }
 
-    //SEGNALA SMARRIMENTO -
+//SEGNALA SMARRIMENTO -
 
 
     /**
@@ -522,7 +546,7 @@ public class Controller {
         }
     }
 
-    //MODIFICA PRENOTAZIONE -
+//MODIFICA PRENOTAZIONE -
 
     /**
      * Modifica una prenotazione esistente con i nuovi dati forniti.
@@ -571,9 +595,9 @@ public class Controller {
     }
 
 
-    //AMMINISTRATORE
+//AMMINISTRATORE
 
-    //CERCA PASSEGGERO -
+//CERCA PASSEGGERO -
 
     /**
      * Cerca un passeggero nel sistema in base ai parametri anagrafici forniti.
@@ -584,45 +608,44 @@ public class Controller {
      *
      * @param passeggeri lista da riempire con i passeggeri trovati
      * @param prenotazioni lista da riempire con le prenotazioni associate
-     * @param voli lista da riempire con i voli collegati alle prenotazioni
      * @param nome nome del passeggero
      * @param cognome cognome del passeggero
      * @param numDocumento numero documento del passeggero
      * @param sesso genere del passeggero (es. 'M', 'F')
      */
-    public void cercaPasseggero(ArrayList<Passeggero> passeggeri, ArrayList<Prenotazione> prenotazioni, ArrayList<Volo> voli, String nome, String cognome, String numDocumento, char sesso) {
+    public void cercaPasseggero(ArrayList<Passeggero> passeggeri, ArrayList<Prenotazione> prenotazioni, String nome, String cognome, String numDocumento, char sesso) {
 
         ArrayList<Passeggero> passeggeriTotali = new ArrayList<>();
 
+        PrenotazioneDAO prenotazione = new ImplementazionePrenotazioneDAO();
         PasseggeroDAO pas = new ImplementazionePasseggeroDAO();
+
         pas.getAll(passeggeriTotali);
 
-        PrenotazioneDAO prenotazione = new ImplementazionePrenotazioneDAO();
-        VoloDAO volo = new ImplementazioneVoloDAO();
+        for (Passeggero p : passeggeriTotali) {
+            if (!nome.isEmpty() && !p.getNome().equals(nome))
+                continue;
+            if (!cognome.isEmpty() && !p.getCognome().equals(cognome))
+                continue;
+            if (!numDocumento.isEmpty() && !p.getNumDocumento().equals(numDocumento))
+                continue;
+            if (sesso != ' ' && p.getSesso() != sesso)
+                continue;
 
-        passeggeri= ((Amministratore) user).cercaPasseggero(passeggeriTotali, nome, cognome, numDocumento, sesso);
-
-        int id_prenotazione;
-        String id_volo;
-
-        for(Passeggero p: passeggeri){
-
-            id_prenotazione= prenotazione.getIdPerPasseggero(p.getId());
-            prenotazioni.add(prenotazione.getPerId(id_prenotazione));
+            passeggeri.add(p);
         }
 
-        for(Prenotazione pr : prenotazioni){
+        for(Passeggero passeggero: passeggeri)
 
-            id_volo= prenotazione.getIdVolo(pr.getId());
-            voli.add(volo.getVoloPerId(id_volo));
-        }
+            prenotazioni.add(prenotazione.getPerIdPasseggero(passeggero.getId()));
+
+        System.out.println("DIMNESIONE ARRAY PASSEGGERI "+ passeggeri.size()+ "\nDIMENSIONE ARRAY PRENOTAZIONI "+prenotazioni.size());
 
         prenotazione.closeConnection();
         pas.closeConnection();
-        volo.closeConnection();
     }
 
-    //INSERISCI VOLO -
+//INSERISCI VOLO -
     /**
      * Inserisce un nuovo volo nel sistema se i parametri forniti risultano validi.
      * <p>
@@ -666,7 +689,7 @@ public class Controller {
         return false;
     }
 
-    //MODIFICA VOLO - TESTATO COMPLETO
+//MODIFICA VOLO - TESTATO COMPLETO
 
     /**
      * Aggiorna i dati di un volo esistente, se è stato inserito dall'amministratore attuale.
@@ -716,7 +739,7 @@ public class Controller {
         return false;
     }
 
-    //ASSEGNA GATE -
+//ASSEGNA GATE -
 
 
     /**
@@ -747,7 +770,7 @@ public class Controller {
         return false;
     }
 
-    //AGGIORNA STATO BAGAGLIO - TESTATO COMPLETO
+//AGGIORNA STATO BAGAGLIO - TESTATO COMPLETO
 
     /**
      * Aggiorna manualmente lo stato di un bagaglio specifico.
@@ -759,7 +782,7 @@ public class Controller {
      * @param codice codice identificativo del bagaglio da aggiornare
      * @param statoBagaglio nuovo stato da assegnare al bagaglio (es. "SMARRITO", "RITIRATO")
      */
-    public void aggiornaStatoBagaglio(int codice, String statoBagaglio) {
+    public boolean aggiornaStatoBagaglio(int codice, String statoBagaglio) {
 
         ArrayList<Bagaglio> bagagli = new ArrayList<>();
 
@@ -769,14 +792,18 @@ public class Controller {
 
         for(Bagaglio bagaglio : bagagli){
 
-            if(bagaglio.getCodice()==codice)
+            if(bagaglio.getCodice()==codice) {
                 b.setStato(codice, statoBagaglio);
+                return true;
+            }
         }
 
         b.closeConnection();
+
+        return false;
     }
 
-    //VISUALIZZA SMARRIMENTI -
+//VISUALIZZA SMARRIMENTI -
 
     /**
      * Restituisce la lista di tutti i bagagli attualmente smarriti.
@@ -813,4 +840,5 @@ public class Controller {
     public void setUser(Utente user) {
         this.user = user;
     }
+
 }

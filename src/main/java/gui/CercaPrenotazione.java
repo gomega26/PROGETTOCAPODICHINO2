@@ -10,6 +10,7 @@ import model.Passeggero;
 import model.Prenotazione;
 import controller.Controller;
 import model.Volo;
+import model.VoloInPartenza;
 
 /**
  * Finestra grafica per la ricerca di prenotazioni in base a codice volo, data e orario di partenza.
@@ -35,7 +36,7 @@ public class CercaPrenotazione {
     private JScrollPane scrollPane1;
 
     private JFrame frame;
-    private DefaultTableModel model; // Modello dati della tabella
+
 
     /**
      * Costruisce e visualizza l'interfaccia per cercare prenotazioni legate a un volo specifico.
@@ -49,13 +50,51 @@ public class CercaPrenotazione {
         frame = new JFrame("Cerca Prenotazione");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(800, 800);
+        frame.setSize(700, 600);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         //TABELLA
 
-        model = new DefaultTableModel(new String[]{"Nome", "Cognome", "Codice Volo", "Tipologia", "Località", "Data", "Orario partenza", "Orario arrivo","Stato volo", "Classe", "Posto", "Bagagli", "Stato prenotazione"}, 0);
+                String[] colonne = {"Prenotazione", "Nome passeggero", "Cognome passeggero", "Volo", "compagnia aerea", "tipologia", "località", "data", "stato prenotazione"};
+
+                DefaultTableModel model = new DefaultTableModel(colonne, 0){
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+
+                String tipologia;
+                String localita;
+
+                ArrayList<Volo> voli=new ArrayList<>();
+                ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
+                ArrayList<Passeggero> passeggeri = new ArrayList<>();
+
+                controller.getPrenotazioniPerUtenteGenerico(prenotazioni, voli, passeggeri);
+
+                for(int i=0; i<voli.size(); i++){
+
+                    Volo v =voli.get(i);
+                    Prenotazione p = prenotazioni.get(i);
+                    Passeggero pas = passeggeri.get(i);
+
+                    if(v.getClass().getSimpleName().equals("VoloInPartenza")){
+
+                        tipologia = "in partenza per";
+                        localita = v.getDestinazione();
+                    }
+
+                    else {
+
+                tipologia = "in arrivo da";
+                localita = v.getOrigine();
+            }
+
+            model.addRow(new Object[]{p.getId(), pas.getNome(), pas.getCognome(), v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), p.getStato().toString()});
+        }
+
         tablePrenotazioni.setModel(model);
 // Listener per il pulsante "Cerca":
         // Recupera codice volo, data e orario; esegue la ricerca e aggiorna la tabella.

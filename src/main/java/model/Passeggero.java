@@ -38,6 +38,7 @@ public class Passeggero {
 //COSTRUTTORE
     public Passeggero(int id, String nome, String cognome, String numTelefono, String numDocumento, char sesso, String dataNascita) {
 
+        this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.numTelefono = numTelefono;

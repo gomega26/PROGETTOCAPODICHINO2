@@ -143,12 +143,17 @@ public class MonitoraBagaglio {
 
                     String stato = comboBox1.getSelectedItem().toString();
 
-                    controller.aggiornaStatoBagaglio(b.getCodice(), stato);
+                    boolean esito = controller.aggiornaStatoBagaglio(b.getCodice(), stato);
 
-                    JOptionPane.showMessageDialog(modificaButton, "Operazione completata con successo");
+                    if(esito) {
+                        JOptionPane.showMessageDialog(modificaButton, "Operazione completata con successo");
 
-                    frame.setVisible(false);
-                    frameChiamante.setVisible(true);
+                        frame.setVisible(false);
+                        frameChiamante.setVisible(true);
+                    }
+
+                    else
+                        JOptionPane.showMessageDialog(modificaButton, "Non è possibile modificare questo bagaglio");
                 }
             }
         });

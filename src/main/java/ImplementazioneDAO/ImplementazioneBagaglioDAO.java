@@ -76,7 +76,7 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
      * @return oggetto {@link Bagaglio} se presente, altrimenti {@code null}
      */
     @Override
-    public Bagaglio getBagagliPerAmministartore(int codiceBagaglio) {
+    public Bagaglio getBagaglioPerAmministratore(int codiceBagaglio) {
         Bagaglio b = null;
 
         try {
@@ -173,26 +173,24 @@ public class ImplementazioneBagaglioDAO implements BagaglioDAO {
      * Permette a un amministratore di segnalare come smarrito un bagaglio,
      * solo se il volo associato è sotto la sua gestione.
      *
-     * @param idAmministratore ID dell’amministratore che segnala lo smarrimento
+     * @param idUtenteGenerico ID dell’amministratore che segnala lo smarrimento
      * @param codice ID del bagaglio da aggiornare
      * @return {@code true} se l’operazione ha avuto successo, altrimenti {@code false}
      */
     @Override
-    public boolean segnalaSmarrimento(int idAmministratore, int codice) {
+    public boolean segnalaSmarrimento(int idUtenteGenerico, int codice) {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(
                     "SELECT b.id " +
                             "FROM bagagli b " +
                             "JOIN prenotazioni p ON b.id_prenotazione = p.id " +
-                            "JOIN voli v ON p.codice_volo = v.codice " +
-                            "JOIN gestione g ON g.id_volo = v.codice " +
-                            "WHERE b.id = " + codice + " AND g.id_amministratore = " + idAmministratore + ";"
+                            "WHERE b.id = " + codice + " AND p.id_utente_generico = " + idUtenteGenerico + ";"
             );
 
             if (rs.next()) {
                 stmt.executeUpdate(
-                        "UPDATE bagagli SET stato = 'SMARRITO' WHERE id = " + codice + ";"
+                        "UPDATE bagagli SET stato = 'Smarrito' WHERE id = " + codice + ";"
                 );
 
                 return true;

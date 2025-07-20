@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.ArrayList;
-import java.util.List;
 import model.*;
 /**
  * Interfaccia per la gestione delle operazioni relative ai bagagli nel sistema aeroportuale.
@@ -31,7 +30,7 @@ public interface BagaglioDAO {
      * @param codiceBagaglio codice identificativo del bagaglio
      * @return oggetto {@link Bagaglio} trovato, oppure {@code null}
      */
-    Bagaglio getBagagliPerAmministartore(int codiceBagaglio);
+    Bagaglio getBagaglioPerAmministratore(int codiceBagaglio);
 
     /**
      * Imposta lo stato attuale del bagaglio.

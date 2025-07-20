@@ -1,13 +1,14 @@
 package gui; //finito
 
 import controller.Controller;
-import model.ClasseVolo;
-import model.Bagaglio;
-import model.Prenotazione;
+import model.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 /**
  * Finestra grafica che consente all'utente di modificare i dati di una prenotazione esistente.
  * <p>
@@ -49,11 +50,63 @@ public class ModificaPrenotazione {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setSize(400, 1000);
+        frame.setSize(700, 600);
         // Inizializza combo box del sesso
         comboBox1.setModel(new DefaultComboBoxModel<>(new String[]{" ", "M", "F"}));
         // Inizializza combo box della classe volo
         comboBox2.setModel(new DefaultComboBoxModel<>(new String[]{"Economy", "Business", "FirstClass"}));
+
+
+        //TABELLA
+
+        String[] colonne = {"Prenotazione", "Volo", "Nome passeggero", "Cognome passeggero",  "posto", "classe", "numero bagagli", "stato prenotazione"};
+
+        DefaultTableModel model = new DefaultTableModel(colonne, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        String tipologia;
+        String localita;
+        String numGate;
+
+        ArrayList<Volo> voli=new ArrayList<>();
+        ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
+        ArrayList<Passeggero> passeggeri = new ArrayList<>();
+
+        controller.getPrenotazioniPerUtenteGenerico(prenotazioni, voli, passeggeri);
+
+        for(int i=0; i<voli.size(); i++){
+
+            Volo v =voli.get(i);
+            Prenotazione p = prenotazioni.get(i);
+            Passeggero pas = passeggeri.get(i);
+
+            if(v.getClass().getSimpleName().equals("VoloInPartenza")){
+
+                tipologia = "in partenza per";
+                localita = v.getDestinazione();
+                numGate = String.valueOf(((VoloInPartenza)v).getNumGate());
+                if(numGate.equals("0"))
+                    numGate="-";
+            }
+
+            else {
+
+                tipologia = "in arrivo da";
+                localita = v.getOrigine();
+                numGate= "";
+            }
+
+            model.addRow(new Object[]{p.getId(), v.getCodice(), pas.getNome(), pas.getCognome(), p.getPosto(), p.getClasseVolo(), p.getNumBagagli(), p.getStato().toString()});
+        }
+
+        table1.setModel(model);
+
+
+
 // Listener per il pulsante "Modifica":
         // Preleva i dati inseriti e invoca il controller per effettuare la modifica
         buttonModificaPrenotazione.addActionListener(new ActionListener() {

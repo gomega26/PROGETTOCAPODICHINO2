@@ -58,7 +58,7 @@ public class PrenotaVolo {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setSize(600, 600);
+        frame.setSize(800, 600);
 
 
 
@@ -83,23 +83,17 @@ public class PrenotaVolo {
 
         for(Volo v : voli){
 
-            if(v.getClass().getSimpleName().equals("VoloInPartenza")){
+            if(v.getClass().getSimpleName().equals("VoloInPartenza")) {
 
                 tipologia = "in partenza per";
                 localita = v.getDestinazione();
-                numGate = String.valueOf(((VoloInPartenza)v).getNumGate());
-                if(numGate.equals("0"))
-                    numGate="-";
+                numGate = String.valueOf(((VoloInPartenza) v).getNumGate());
+                if (numGate.equals("0"))
+                    numGate = "-";
+
+
+                model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
             }
-
-            else {
-
-                tipologia = "in arrivo da";
-                localita = v.getOrigine();
-                numGate= "";
-            }
-
-            model.addRow(new Object[]{v.getCodice(), v.getCompagniaAerea(), tipologia, localita, v.getDataPartenza(), v.getOrarioPartenza(), v.getOrarioArrivo(), v.getDurata(), v.getStato().toString().toUpperCase(), v.getRitardo(), numGate});
         }
 
         table1.setModel(model);
